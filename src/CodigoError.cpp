@@ -1,8 +1,8 @@
 #include "CodigoError.h"
+#include <stdio.h>
 
 
-void DesplegarError(Error e) {
-
+void DesplegarError(CodigoError e) {
 
     switch (e) {
 

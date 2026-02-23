@@ -19,7 +19,6 @@ int strlar(String s)
         i++;
     return i;
 }
-
 void strcop(String &s1, String s2)
 {
     int i = 0;
@@ -39,7 +38,6 @@ void scan(String &s)
     String aux = new char[MAX];
     int i = 0;
     char c;
-    // fflush (stdin);
     scanf("%c", &c);
     while ((c != '\n' && i < MAX - 1))
     {
@@ -61,7 +59,6 @@ void print(String s)
         i++;
     }
 }
-
 Boolean streq(String s1, String s2)
 {
     int i = 0;
@@ -102,7 +99,6 @@ void LevantarString(String s, FILE *f)
         fwrite(&s[i], sizeof(char), 1, f);
         i++;
     }
-    // escribo el '\0'
     fwrite(&s[i], sizeof(char), 1, f);
 }
 

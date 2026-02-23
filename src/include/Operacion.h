@@ -9,4 +9,6 @@ typedef enum
     DIVISION
 } Operacion;
 
+char DevolverOperacion(Operacion o);
+
 #endif

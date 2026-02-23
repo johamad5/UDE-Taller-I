@@ -1,3 +1,6 @@
+#ifndef CODIGOERROR_H_INCLUDED
+#define CODIGOERROR_H_INCLUDED
+
 typedef enum {
     ERR_NINGUNO,
     ERR_COMANDO_VACIO,
@@ -18,3 +21,5 @@ typedef enum {
 
 // Muestra por pantalla un mensaje asociado al código de error pasado por parámetro.
 void MostrarError(CodigoError e);
+
+#endif

@@ -1,0 +1,1 @@
+typedef enum { Simple, Compuesta, Calcular, Mostrar, Recuperar, Guardar, Salir } TipoComando;

@@ -137,19 +137,24 @@ void ajustarIndicesABB(ExpresionABB &abb, int delta)
 
 ExpresionABB copiarArbol(ExpresionABB original)
 {
-    ExpresionABB copia = new NodoABB;
-    copia->indiceNodo = original->indiceNodo;
-    copia->tipo = original->tipo;
-
-    if (original->tipo == ENTERO)
-        copia->dato.num = original->dato.num;
+    if (original == NULL)
+        return NULL;
     else
-        copia->dato.simbolo = original->dato.simbolo;
+    {
+        ExpresionABB copia = new NodoABB;
+        copia->indiceNodo = original->indiceNodo;
+        copia->tipo = original->tipo;
 
-    copia->hizq = copiarArbol(original->hizq);
-    copia->hder = copiarArbol(original->hder);
+        if (original->tipo == ENTERO)
+            copia->dato.num = original->dato.num;
+        else
+            copia->dato.simbolo = original->dato.simbolo;
 
-    return copia;
+        copia->hizq = copiarArbol(original->hizq);
+        copia->hder = copiarArbol(original->hder);
+
+        return copia;
+    }
 }
 
 void insertarParentesisIzquierdo(ExpresionABB &abb)

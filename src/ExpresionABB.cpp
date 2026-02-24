@@ -72,7 +72,48 @@ Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b)
     }
 }
 
-void CalcularABB(ExpresionABB nodo, int &valorX, Boolean &errorDivision) {}
+int CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision)
+{
+
+    if (nodo == NULL)
+        return 0;
+
+    if (nodo->tipo == ENTERO)
+        return nodo->dato.num;
+
+    if (nodo->tipo == VARIABLE)
+        return valorX;
+
+    if (nodo->tipo == ABREPARENTESIS || nodo->tipo == CIERRAPARENTESIS)
+        return 0;
+
+    if (nodo->tipo == OPERADOR)
+    {
+        float izq = CalcularABB(nodo->hizq, valorX, errorDivision);
+        float der = CalcularABB(nodo->hder, valorX, errorDivision);
+
+        if (nodo->dato.simbolo == '+')
+            return izq + der;
+
+        if (nodo->dato.simbolo == '-')
+            return izq - der;
+
+        if (nodo->dato.simbolo == '*')
+            return izq * der;
+
+        if (nodo->dato.simbolo == '/')
+        {
+            if (der == 0)
+            {
+                errorDivision = TRUE;
+                return 0;
+            }
+            return izq / der;
+        }
+    }
+
+    return 0;
+}
 
 void DestruirABB(ExpresionABB &abb)
 {

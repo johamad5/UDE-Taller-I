@@ -6,5 +6,5 @@ void MostrarExpresion(Expresion exp) {}
 
 void DestruirExpresion(Expresion &exp)
 {
-    DestruirABB(exp->terminos);
+    DestruirABB(exp.terminos);
 }

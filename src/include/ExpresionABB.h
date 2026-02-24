@@ -24,6 +24,9 @@ ExpresionABB CrearExpresionSimpleX(char c);
 // Reserva memoria para un nodo ABB e inicializa sus enlaces.
 ExpresionABB CrearExpresionSimpleInt(int num);
 
+// Reserva memoria para un nodo ABB e inicializa sus enlaces.
+ExpresionABB CrearExpresionCompuesta(Operacion o, ExpresionABB a, ExpresionABB b);
+
 // Devuelve el índice máximo presente en el ABB.
 int indiceMaximoABB(ExpresionABB abb);
 
@@ -31,7 +34,7 @@ int indiceMaximoABB(ExpresionABB abb);
 Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b);
 
 // Calcula el resultado del ABB evaluando la variable x.
-int CalcularABB(ExpresionABB nodo, int &valorX, Boolean &errorDivision);
+int CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision);
 
 // Llibera toda la memoria del ABB.
 void DestruirABB(ExpresionABB &abb);

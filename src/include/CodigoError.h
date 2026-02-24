@@ -1,7 +1,9 @@
 #ifndef CODIGOERROR_H_INCLUDED
 #define CODIGOERROR_H_INCLUDED
+#include <stdio.h>
 
-typedef enum {
+typedef enum
+{
     ERR_NINGUNO,
     ERR_COMANDO_VACIO,
     ERR_COMANDO_INVALIDO,
@@ -14,10 +16,10 @@ typedef enum {
     ERR_NOMBRE_ARCHIVO_INVALIDO,
     ERR_ARCHIVO_EXISTE,
     ERR_ARCHIVO_NO_EXISTE,
-    ERR_LISTA_VACIA,
     ERR_ARCHIVO_INVALIDO,
-    ERR_ARCHIVO_NO_SE_PUEDE_ABRIR
-    } CodigoError;
+    ERR_ARCHIVO_NO_SE_PUEDE_ABRIR,
+    ERR_LISTA_VACIA
+} CodigoError;
 
 // Muestra por pantalla un mensaje asociado al código de error pasado por parámetro.
 void MostrarError(CodigoError e);

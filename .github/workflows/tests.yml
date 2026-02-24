@@ -27,7 +27,7 @@ jobs:
           g++ -I src/include \
               src/CodigoError.cpp \
               src/Expresion.cpp \
-              src/EXpresionABB.cpp \
+              src/ExpresionABB.cpp \
               src/Operacion.cpp \
               src/ListaExpresiones.cpp \
               src/String.cpp \

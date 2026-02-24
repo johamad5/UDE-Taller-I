@@ -1,7 +1,12 @@
 #ifndef BOOLEAN_H_INCLUDED
 #define BOOLEAN_H_INCLUDED
+#include <stdio.h>
 
-typedef enum {FALSE, TRUE} Boolean;
+typedef enum
+{
+    FALSE,
+    TRUE
+} Boolean;
 
 // Cargar valor boolean desde teclado
 void Cargar(Boolean &b);

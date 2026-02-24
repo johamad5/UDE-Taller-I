@@ -25,7 +25,6 @@ jobs:
       - name: Compile tests
         run: |
           g++ -I src/include \
-              src/Boolean.cpp \
               src/CodigoError.cpp \
               src/Expresion.cpp \
               src/EXpresionABB.cpp \

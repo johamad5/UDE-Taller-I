@@ -5,23 +5,23 @@
 
 typedef struct nodoA
 {
-TipoDato tipo;
-int indiceNodo;
-union {
-int num;
-char simbolo;
-} dato;
-nodoA *hizq;
-nodoA *hder;
+    TipoDato tipo;
+    int indiceNodo;
+    union
+    {
+        int num;
+        char simbolo;
+    } dato;
+    nodoA *hizq;
+    nodoA *hder;
 } NodoABB;
-typedef NodoABB* ExpresionABB;
+typedef NodoABB *ExpresionABB;
 
- typedef struct
+typedef struct
 {
-ExpresionABB terminos;
-int indiceLista;
+    ExpresionABB terminos;
+    int indiceLista;
 } Expresion;
-
 
 // Reserva memoria para un nodo ABB e inicializa sus enlaces.
 void ReservarNodoABB(ExpresionABB &n);
@@ -53,5 +53,10 @@ void InsertarParentesisIzquierdo(ExpresionABB &abb);
 // Ingresa un paréntesis derecho como último hder.
 void InsertarParentesisDerecho(ExpresionABB &abb);
 
+int ObtenerIndiceExpresion(Expresion);
+
+void DestruirExpresion(Expresion);
+
+void MostrarExpresion(Expresion);
 
 #endif

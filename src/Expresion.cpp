@@ -22,3 +22,9 @@ void CopiarArbol(ExpresionABB original, ExpresionABB &copia) {}
 void InsertarParentesisIzquierdo(ExpresionABB &abb) {}
 
 void InsertarParentesisDerecho(ExpresionABB &abb) {}
+
+int ObtenerIndiceExpresion(Expresion) { return 0; }
+
+void DestruirExpresion(Expresion) {}
+
+void MostrarExpresion(Expresion) {}

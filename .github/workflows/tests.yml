@@ -1,0 +1,37 @@
+name: C++ Tests
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install compiler
+        run: sudo apt-get update && sudo apt-get install -y g++
+
+      - name: Create build folder
+        run: mkdir -p build
+
+      - name: Compile tests
+        run: |
+          g++ -I src/include \
+              src/Boolean.cpp \
+              src/CodigoError.cpp \
+              src/Expresion.cpp \
+              src/ListaExpresiones.cpp \
+              src/String.cpp \
+              src/tests/tests_runner.cpp \
+              -o build/tests
+
+      - name: Run tests
+        run: ./build/tests

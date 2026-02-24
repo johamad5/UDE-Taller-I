@@ -41,3 +41,11 @@ build/
 
 # debug information files
 *.dwo
+
+# Custom executables
+programa
+tests
+
+# Build folders adicionales
+bin/
+dist/

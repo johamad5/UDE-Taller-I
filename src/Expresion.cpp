@@ -4,9 +4,12 @@ void ReservarNodoABB(ExpresionABB &n) {}
 
 void InsertarABBPorIndice(ExpresionABB &raiz, ExpresionABB nodo) {}
 
-int IndiceMaximoABB(ExpresionABB abb) {}
+int IndiceMaximoABB(ExpresionABB abb) { return 0; }
 
-Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b) {}
+Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b)
+{
+    return FALSE;
+}
 
 void CalcularABB(ExpresionABB nodo, int &valorX, Boolean &errorDivision) {}
 

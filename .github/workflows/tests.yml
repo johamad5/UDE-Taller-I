@@ -30,7 +30,7 @@ jobs:
               src/Expresion.cpp \
               src/ListaExpresiones.cpp \
               src/String.cpp \
-              src/test/tests_runner.cpp \
+              src/tests/tests_runner.cpp \
               -o build/tests
 
       - name: Run tests

@@ -8,10 +8,4 @@ typedef enum
     TRUE
 } Boolean;
 
-// Cargar valor boolean desde teclado
-void Cargar(Boolean &b);
-
-// Mostrar valor booleano en pantalla
-void Despliegue(Boolean b);
-
-#endif // BOOLEAN_H_INCLUDED
+#endif

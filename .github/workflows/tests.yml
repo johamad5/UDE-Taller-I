@@ -25,9 +25,10 @@ jobs:
       - name: Compile tests
         run: |
           g++ -I src/include \
-              src/Boolean.cpp \
               src/CodigoError.cpp \
               src/Expresion.cpp \
+              src/ExpresionABB.cpp \
+              src/Operacion.cpp \
               src/ListaExpresiones.cpp \
               src/String.cpp \
               src/tests/tests_runner.cpp \

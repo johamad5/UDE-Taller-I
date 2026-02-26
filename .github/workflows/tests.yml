@@ -30,6 +30,7 @@ jobs:
               src/ExpresionABB.cpp \
               src/Operacion.cpp \
               src/ListaExpresiones.cpp \
+              src/ListaParsing.cpp \
               src/String.cpp \
               src/tests/tests_runner.cpp \
               -o build/tests

@@ -1,30 +1,31 @@
-name: C++ Tests
+name: C++ Tests + 100% Coverage
 
 on:
   push:
-    branches:
-      - develop
+    branches: [develop]
   pull_request:
-    branches:
-      - develop
+    branches: [develop]
 
 jobs:
-  build-and-test:
+  build-test-coverage:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install compiler
-        run: sudo apt-get update && sudo apt-get install -y g++
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ lcov bc
 
       - name: Create build folder
         run: mkdir -p build
 
-      - name: Compile tests
+      - name: Compile with coverage flags
         run: |
-          g++ -I src/include \
+          g++ --coverage -g -O0 -I src/include \
+              src/Boolean.cpp \
               src/CodigoError.cpp \
               src/Expresion.cpp \
               src/ExpresionABB.cpp \
@@ -36,3 +37,18 @@ jobs:
 
       - name: Run tests
         run: ./build/tests
+
+      - name: Generate coverage report
+        run: |
+          lcov --capture --directory . --output-file coverage.info
+          lcov --remove coverage.info '/usr/*' --output-file coverage.info
+          lcov --summary coverage.info
+
+      - name: Enforce 100% coverage
+        run: |
+          COVERAGE=$(lcov --summary coverage.info | grep lines | awk '{print $2}' | sed 's/%//')
+          echo "Total Coverage: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 100.0" | bc -l) )); then
+            echo "Coverage is not 100%"
+            exit 1
+          fi

@@ -53,15 +53,15 @@ Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b)
     }
     else if (a != NULL && b != NULL)
     {
-        Boolean mismoTipo = (a->tipo == b->tipo);
+        Boolean mismoTipo = (a->tipo == b->tipo) ? TRUE : FALSE;
         Boolean mismoDato = FALSE;
 
         if (mismoTipo)
         {
             if (a->tipo == ENTERO)
-                mismoDato = (a->dato.num == b->dato.num);
+                mismoDato = (a->dato.num == b->dato.num) ? TRUE : FALSE;
             else
-                mismoDato = (a->dato.simbolo == b->dato.simbolo);
+                mismoDato = (a->dato.simbolo == b->dato.simbolo) ? TRUE : FALSE;
         }
 
         if (mismoTipo && mismoDato)
@@ -69,7 +69,7 @@ Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b)
             Boolean izq = ArbolesIdenticos(a->hizq, b->hizq);
             Boolean der = ArbolesIdenticos(a->hder, b->hder);
 
-            resultado = (izq == TRUE && der == TRUE);
+            resultado = (izq == TRUE && der == TRUE) ? TRUE : FALSE;
         }
     }
 
@@ -163,9 +163,8 @@ ExpresionABB copiarArbol(ExpresionABB original)
 
         copia->hizq = copiarArbol(original->hizq);
         copia->hder = copiarArbol(original->hder);
-
-        return copia;
     }
+    return copia;
 }
 
 void insertarParentesisIzquierdo(ExpresionABB &abb)

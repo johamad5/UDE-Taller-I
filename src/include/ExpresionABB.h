@@ -27,9 +27,6 @@ ExpresionABB CrearExpresionSimpleInt(int num);
 // Reserva memoria para un nodo ABB e inicializa sus enlaces.
 ExpresionABB CrearExpresionCompuesta(Operacion o, ExpresionABB a, ExpresionABB b);
 
-// Devuelve el índice máximo presente en el ABB.
-int indiceMaximoABB(ExpresionABB abb);
-
 // Indica si dos árboles son idénticos en estructura y contenido.
 Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b);
 
@@ -40,7 +37,7 @@ int CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision);
 void DestruirABB(ExpresionABB &abb);
 
 // Ajusta los índices del árbol
-void ajustarIndicesABB(ExpresionABB &abb, int delta);
+void reindexarInorden(ExpresionABB abb, int &contador);
 
 // Copia un árbol completo.
 ExpresionABB copiarArbol(ExpresionABB original);
@@ -50,5 +47,8 @@ void insertarParentesisIzquierdo(ExpresionABB &abb);
 
 // Ingresa un paréntesis derecho como último hder.
 void insertarParentesisDerecho(ExpresionABB &abb);
+
+// Muestra por pantalla la expresion
+void MostrarABB(ExpresionABB abb);
 
 #endif

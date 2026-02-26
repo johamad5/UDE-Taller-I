@@ -25,94 +25,104 @@ ExpresionABB CrearExpresionSimpleInt(int num)
 
 ExpresionABB CrearExpresionCompuesta(Operacion o, ExpresionABB a, ExpresionABB b)
 {
-    ExpresionABB eIzq = new nodoA;
-    ExpresionABB eDer = new nodoA;
+    int contador = 0;
+
+    ExpresionABB eIzq = copiarArbol(a);
+    ExpresionABB eDer = copiarArbol(b);
+
+    insertarParentesisIzquierdo(eIzq);
+    insertarParentesisDerecho(eDer);
+
     ExpresionABB eRaiz = new nodoA;
     eRaiz->tipo = OPERADOR;
     eRaiz->dato.simbolo = DevolverOperacion(o);
-    eIzq = copiarArbol(a);
-    eDer = copiarArbol(b);
-    insertarParentesisIzquierdo(eIzq);
-    insertarParentesisDerecho(eDer);
-    eRaiz->indiceNodo = indiceMaximoABB(eIzq) + 1;
-    ajustarIndicesABB(eDer, eRaiz->indiceNodo);
     eRaiz->hizq = eIzq;
     eRaiz->hder = eDer;
+
+    reindexarInorden(eRaiz, contador);
     return eRaiz;
-}
-
-int indiceMaximoABB(ExpresionABB abb)
-{
-    int i = 0;
-    if (abb != NULL)
-    {
-        ExpresionABB actual = abb;
-        while (actual->hder != NULL)
-        {
-            actual = actual->hder;
-        }
-        i = actual->indiceNodo;
-    }
-
-    return i;
 }
 
 Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b)
 {
-    if ((a == NULL && b == NULL) || (a == NULL && b != NULL) || (b == NULL && a != NULL) || (a->tipo != b->tipo) || (a->tipo == ENTERO && a->dato.num != b->dato.num) || (a->tipo == VARIABLE && a->dato.simbolo != b->dato.simbolo))
-        return FALSE;
-    else
+    Boolean resultado = FALSE;
+
+    if (a == NULL && b == NULL)
     {
-        Boolean izq = ArbolesIdenticos(a->hizq, b->hizq);
-        Boolean der = ArbolesIdenticos(a->hder, b->hder);
-        if (izq == TRUE && der == TRUE)
-            return TRUE;
-        else
-            return FALSE;
+        resultado = TRUE;
     }
+    else if (a != NULL && b != NULL)
+    {
+        Boolean mismoTipo = (a->tipo == b->tipo);
+        Boolean mismoDato = FALSE;
+
+        if (mismoTipo)
+        {
+            if (a->tipo == ENTERO)
+                mismoDato = (a->dato.num == b->dato.num);
+            else
+                mismoDato = (a->dato.simbolo == b->dato.simbolo);
+        }
+
+        if (mismoTipo && mismoDato)
+        {
+            Boolean izq = ArbolesIdenticos(a->hizq, b->hizq);
+            Boolean der = ArbolesIdenticos(a->hder, b->hder);
+
+            resultado = (izq == TRUE && der == TRUE);
+        }
+    }
+
+    return resultado;
 }
 
 int CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision)
 {
+    int resultado = 0;
 
-    if (nodo == NULL)
-        return 0;
-
-    if (nodo->tipo == ENTERO)
-        return nodo->dato.num;
-
-    if (nodo->tipo == VARIABLE)
-        return valorX;
-
-    if (nodo->tipo == ABREPARENTESIS || nodo->tipo == CIERRAPARENTESIS)
-        return 0;
-
-    if (nodo->tipo == OPERADOR)
+    if (nodo != NULL && errorDivision == FALSE)
     {
-        float izq = CalcularABB(nodo->hizq, valorX, errorDivision);
-        float der = CalcularABB(nodo->hder, valorX, errorDivision);
-
-        if (nodo->dato.simbolo == '+')
-            return izq + der;
-
-        if (nodo->dato.simbolo == '-')
-            return izq - der;
-
-        if (nodo->dato.simbolo == '*')
-            return izq * der;
-
-        if (nodo->dato.simbolo == '/')
+        if (nodo->tipo == ENTERO)
         {
-            if (der == 0)
+            resultado = nodo->dato.num;
+        }
+        else if (nodo->tipo == VARIABLE)
+        {
+            resultado = valorX;
+        }
+        else if (nodo->tipo == OPERADOR)
+        {
+            int izq = CalcularABB(nodo->hizq, valorX, errorDivision);
+            int der = CalcularABB(nodo->hder, valorX, errorDivision);
+
+            if (errorDivision == FALSE)
             {
-                errorDivision = TRUE;
-                return 0;
+                if (nodo->dato.simbolo == '+')
+                    resultado = izq + der;
+
+                else if (nodo->dato.simbolo == '-')
+                    resultado = izq - der;
+
+                else if (nodo->dato.simbolo == '*')
+                    resultado = izq * der;
+
+                else if (nodo->dato.simbolo == '/')
+                {
+                    if (der == 0)
+                    {
+                        errorDivision = TRUE;
+                        resultado = 0;
+                    }
+                    else
+                    {
+                        resultado = izq / der;
+                    }
+                }
             }
-            return izq / der;
         }
     }
 
-    return 0;
+    return resultado;
 }
 
 void DestruirABB(ExpresionABB &abb)
@@ -122,26 +132,27 @@ void DestruirABB(ExpresionABB &abb)
         DestruirABB(abb->hizq);
         DestruirABB(abb->hder);
         delete abb;
+        abb = NULL;
     }
 }
 
-void ajustarIndicesABB(ExpresionABB &abb, int delta)
+void reindexarInorden(ExpresionABB abb, int &contador)
 {
     if (abb != NULL)
     {
-        abb->indiceNodo += delta;
-        ajustarIndicesABB(abb->hizq, delta);
-        ajustarIndicesABB(abb->hder, delta);
+        reindexarInorden(abb->hizq, contador);
+        abb->indiceNodo = ++contador;
+        reindexarInorden(abb->hder, contador);
     }
 }
 
 ExpresionABB copiarArbol(ExpresionABB original)
 {
-    if (original == NULL)
-        return NULL;
-    else
+    ExpresionABB copia = new NodoABB;
+    if (original != NULL)
     {
-        ExpresionABB copia = new NodoABB;
+        copia = new NodoABB;
+
         copia->indiceNodo = original->indiceNodo;
         copia->tipo = original->tipo;
 
@@ -163,15 +174,14 @@ void insertarParentesisIzquierdo(ExpresionABB &abb)
     {
 
         ExpresionABB actual = abb;
-        actual->indiceNodo += 1;
+
         while (actual->hizq != NULL)
         {
             actual = actual->hizq;
-            actual->indiceNodo += 1;
         }
 
         ExpresionABB nuevo = new nodoA;
-        nuevo->indiceNodo = 1;
+        nuevo->indiceNodo = 0;
         nuevo->tipo = ABREPARENTESIS;
         nuevo->dato.simbolo = '(';
         nuevo->hizq = NULL;
@@ -187,20 +197,44 @@ void insertarParentesisDerecho(ExpresionABB &abb)
     {
 
         ExpresionABB actual = abb;
-        int i = actual->indiceNodo;
+
         while (actual->hder != NULL)
         {
             actual = actual->hder;
-            i = actual->indiceNodo;
         }
 
         ExpresionABB nuevo = new nodoA;
-        nuevo->indiceNodo = i + 1;
+        nuevo->indiceNodo = 0;
         nuevo->tipo = CIERRAPARENTESIS;
         nuevo->dato.simbolo = ')';
         nuevo->hizq = NULL;
         nuevo->hder = NULL;
 
         actual->hder = nuevo;
+    }
+}
+
+void MostrarABB(ExpresionABB abb)
+{
+    if (abb != NULL)
+    {
+        MostrarABB(abb->hizq);
+
+        if (abb->tipo == ENTERO)
+            printf("%d", abb->dato.num);
+
+        else if (abb->tipo == VARIABLE)
+            printf("%c", abb->dato.simbolo);
+
+        else if (abb->tipo == OPERADOR)
+            printf("%c", abb->dato.simbolo);
+
+        else if (abb->tipo == ABREPARENTESIS)
+            printf("(");
+
+        else if (abb->tipo == CIERRAPARENTESIS)
+            printf(")");
+
+        MostrarABB(abb->hder);
     }
 }

@@ -1,38 +1,65 @@
-name: C++ Tests
+name: C++ Tests + 100% Coverage
 
 on:
   push:
-    branches:
-      - develop
+    branches: [develop]
   pull_request:
-    branches:
-      - develop
+    branches: [develop]
 
 jobs:
-  build-and-test:
+  build-test-coverage:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Install compiler
-        run: sudo apt-get update && sudo apt-get install -y g++
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ lcov bc
 
       - name: Create build folder
         run: mkdir -p build
 
-      - name: Compile tests
+      - name: Compile with coverage flags
         run: |
-          g++ -I src/include \
+          g++ --coverage -g -O0 -I src/include \
               src/CodigoError.cpp \
               src/Expresion.cpp \
               src/ExpresionABB.cpp \
               src/Operacion.cpp \
               src/ListaExpresiones.cpp \
+              src/ListaParsing.cpp \
               src/String.cpp \
               src/tests/tests_runner.cpp \
               -o build/tests
 
       - name: Run tests
         run: ./build/tests
+
+      - name: Capture coverage
+        run: |
+          lcov --capture --directory build --output-file coverage.info
+          lcov --remove coverage.info '/usr/*' --ignore-errors unused --output-file coverage.info
+          lcov --remove coverage.info '*/tests/*' --ignore-errors unused --output-file coverage.info
+          lcov --summary coverage.info
+
+      - name: Generate HTML report
+        run: |
+          genhtml coverage.info --output-directory coverage-report
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage-report
+
+      - name: Enforce 100% coverage
+        run: |
+          COVERAGE=$(lcov --summary coverage.info | grep lines | awk '{print $2}' | sed 's/%//')
+          echo "Total Coverage: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 100.0" | bc -l) )); then
+            echo "Coverage is not 100%"
+            exit 1
+          fi

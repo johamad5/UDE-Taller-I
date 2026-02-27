@@ -2,15 +2,16 @@
 
 int ObtenerIndiceExpresion(Expresion exp)
 {
-    // TODO: implementar
-    return 0;
+    return exp.indiceLista;
 }
 
 void MostrarExpresion(Expresion exp)
 {
+    MostrarABB(exp.terminos);
 }
 
 void DestruirExpresion(Expresion &exp)
 {
     DestruirABB(exp.terminos);
+    exp.terminos = NULL;
 }

@@ -46,6 +46,14 @@ build/
 programa
 tests
 
-# Build folders adicionales
-bin/
-dist/
+# Build
+build/
+build_*/
+*.o
+*.gcda
+*.gcno
+
+# Coverage
+coverage-report/
+coverage.info
+*.info

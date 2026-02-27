@@ -3,7 +3,7 @@
 
 ExpresionABB CrearExpresionSimpleX(char c)
 {
-    ExpresionABB e = new nodoA;
+    ExpresionABB e = new NodoABB;
     e->indiceNodo = 1;
     e->tipo = VARIABLE;
     e->dato.simbolo = c;
@@ -14,7 +14,7 @@ ExpresionABB CrearExpresionSimpleX(char c)
 
 ExpresionABB CrearExpresionSimpleInt(int num)
 {
-    ExpresionABB e = new nodoA;
+    ExpresionABB e = new NodoABB;
     e->indiceNodo = 1;
     e->tipo = ENTERO;
     e->dato.num = num;
@@ -33,7 +33,7 @@ ExpresionABB CrearExpresionCompuesta(Operacion o, ExpresionABB a, ExpresionABB b
     insertarParentesisIzquierdo(eIzq);
     insertarParentesisDerecho(eDer);
 
-    ExpresionABB eRaiz = new nodoA;
+    ExpresionABB eRaiz = new NodoABB;
     eRaiz->tipo = OPERADOR;
     eRaiz->dato.simbolo = DevolverOperacion(o);
     eRaiz->hizq = eIzq;
@@ -148,18 +148,15 @@ void reindexarInorden(ExpresionABB abb, int &contador)
 
 ExpresionABB copiarArbol(ExpresionABB original)
 {
-    ExpresionABB copia = new NodoABB;
+    ExpresionABB copia = NULL;
+
     if (original != NULL)
     {
         copia = new NodoABB;
 
         copia->indiceNodo = original->indiceNodo;
         copia->tipo = original->tipo;
-
-        if (original->tipo == ENTERO)
-            copia->dato.num = original->dato.num;
-        else
-            copia->dato.simbolo = original->dato.simbolo;
+        copia->dato = original->dato;
 
         copia->hizq = copiarArbol(original->hizq);
         copia->hder = copiarArbol(original->hder);
@@ -179,7 +176,7 @@ void insertarParentesisIzquierdo(ExpresionABB &abb)
             actual = actual->hizq;
         }
 
-        ExpresionABB nuevo = new nodoA;
+        ExpresionABB nuevo = new NodoABB;
         nuevo->indiceNodo = 0;
         nuevo->tipo = ABREPARENTESIS;
         nuevo->dato.simbolo = '(';
@@ -202,7 +199,7 @@ void insertarParentesisDerecho(ExpresionABB &abb)
             actual = actual->hder;
         }
 
-        ExpresionABB nuevo = new nodoA;
+        ExpresionABB nuevo = new NodoABB;
         nuevo->indiceNodo = 0;
         nuevo->tipo = CIERRAPARENTESIS;
         nuevo->dato.simbolo = ')';

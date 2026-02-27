@@ -187,20 +187,20 @@ Boolean EsEntero(String s)
 
     if (esEntero)
     {
-        if (s[i] != '-' && !(s[i] >= '0' && s[i] <= '9'))
-        {
-            esEntero = FALSE;
-        }
-        else
+        if (s[i] == '-') // si empieza con -
         {
             i++;
+        }
+
+        if (!(s[i] >= '0' && s[i] <= '9')) // debe haber al menos un dígito
+        {
+            esEntero = FALSE;
         }
 
         while (s[i] != '\0' && esEntero)
         {
             if (!(s[i] >= '0' && s[i] <= '9'))
             {
-
                 esEntero = FALSE;
             }
             else
@@ -215,32 +215,18 @@ Boolean EsEntero(String s)
 
 Boolean EsEnteroPositivo(String s)
 {
-
-    Boolean esEntero = TRUE;
-    int i = 0;
-
-    if (s == NULL || s[0] == ' ')
+    if (!EsEntero(s))
     {
-        esEntero = FALSE;
+        return FALSE;
     }
 
-    if (esEntero)
+    // Si empieza con '-' no es positivo
+    if (s[0] == '-')
     {
-
-        while (s[i] != '\0' && esEntero)
-        {
-            if (!(s[i] >= '0' && s[i] <= '9'))
-            {
-
-                esEntero = FALSE;
-            }
-            else
-            {
-                i++;
-            }
-        }
+        return FALSE;
     }
-    return esEntero;
+
+    return TRUE;
 }
 
 int ConvertirAEntero(String s)

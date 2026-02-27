@@ -52,26 +52,26 @@ void TokenizarEntrada(ListaParsing &lp, String linea)
             i++;
         }
 
-        int inicioToken = i;
-
-        while (linea[i] != '\0' && linea[i] != ' ')
+        if (linea[i] != '\0')
         {
-            i++;
+            int inicioToken = i;
+            while (linea[i] != '\0' && linea[i] != ' ')
+                i++;
+
+            int largoToken = i - inicioToken;
+
+            String token = NULL;
+            token = new char[largoToken + 1];
+
+            for (j = 0; j < largoToken; j++)
+            {
+                token[j] = linea[inicioToken + j];
+            }
+            token[largoToken] = '\0';
+
+            InsertarAlFinalParsing(lp, ultimo, token);
+            strdestruir(token);
         }
-
-        int largoToken = i - inicioToken;
-
-        String token = NULL;
-        token = new char[largoToken + 1];
-
-        for (j = 0; j < largoToken; j++)
-        {
-            token[j] = linea[inicioToken + j];
-        }
-        token[largoToken] = '\0';
-
-        InsertarAlFinalParsing(lp, ultimo, token);
-        strdestruir(token);
     }
 }
 

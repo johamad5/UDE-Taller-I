@@ -32,6 +32,7 @@ jobs:
               src/ListaExpresiones.cpp \
               src/ListaParsing.cpp \
               src/String.cpp \
+              src/Archivo.cpp
               src/tests/tests_runner.cpp \
               -o build/tests
 

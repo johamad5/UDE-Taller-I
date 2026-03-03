@@ -234,3 +234,84 @@ void MostrarABB(ExpresionABB abb)
         MostrarABB(abb->hder);
     }
 }
+
+void BajarExpresionABB(ExpresionABB abb, FILE *f)
+{
+    if (abb != NULL)
+    {
+        BajarNodoABB(abb, f);
+        BajarExpresionABB(abb->hizq, f);
+        BajarExpresionABB(abb->hder, f);
+    }
+}
+
+void BajarNodoABB(ExpresionABB nodo, FILE *f)
+{
+    fwrite(&nodo->tipo, sizeof(TipoDato), 1, f);
+    if (nodo->tipo == ENTERO)
+    {
+        fwrite(&nodo->dato.num, sizeof(int), 1, f);
+    }
+    else
+    {
+        fwrite(&nodo->dato.simbolo, sizeof(char), 1, f);
+    }
+    fwrite(&nodo->indiceNodo, sizeof(int), 1, f);
+}
+
+void InsertarEnABB(ExpresionABB &abb, ExpresionABB nuevo)
+{
+    if (abb == NULL)
+    {
+        abb = nuevo;
+    }
+    else
+    {
+        if (nuevo->indiceNodo < abb->indiceNodo)
+        {
+            InsertarEnABB(abb->hizq, nuevo);
+        }
+        else
+        {
+            InsertarEnABB(abb->hder, nuevo);
+        }
+    }
+}
+
+void LevantarExpresionABB(ExpresionABB &abb, FILE *f)
+{
+    abb = NULL;
+
+    Boolean seguir = TRUE;
+
+    while (seguir == TRUE)
+    {
+        ExpresionABB nuevo = new NodoABB;
+
+        size_t leido = fread(&nuevo->tipo, sizeof(TipoDato), 1, f);
+
+        if (leido != 1)
+        {
+            delete nuevo;
+            seguir = FALSE;
+        }
+        else
+        {
+            if (nuevo->tipo == ENTERO)
+            {
+                fread(&nuevo->dato.num, sizeof(int), 1, f);
+            }
+            else
+            {
+                fread(&nuevo->dato.simbolo, sizeof(char), 1, f);
+            }
+
+            fread(&nuevo->indiceNodo, sizeof(int), 1, f);
+
+            nuevo->hizq = NULL;
+            nuevo->hder = NULL;
+
+            InsertarEnABB(abb, nuevo);
+        }
+    }
+}

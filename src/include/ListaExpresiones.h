@@ -12,10 +12,10 @@ typedef struct nodoL
 typedef NodoL *ListaExpresiones;
 
 // Reserva memoria para un nodo de lista e inicializa su enlace.
-void ReservarNodoL(NodoL *&n);
+void ReservarNodoL(ListaExpresiones &n);
 
 // Inserta una nueva expresión al final de la lista.
-void InsertarExpresionAlFinalL(ListaExpresiones &l, Expresion exp);
+void InsertarExpresionAlFinalL(ListaExpresiones &lp, Expresion exp);
 
 // Busca una expresión por índice dentro de la lista.
 // PRECONDICIÓN: índice es un valor válido y existente

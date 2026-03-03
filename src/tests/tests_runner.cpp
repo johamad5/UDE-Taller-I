@@ -23,6 +23,7 @@
 #include "CodigoError.h"
 #include "Expresion.h"
 #include "ListaExpresiones.h"
+#include "Archivo.h"
 
 void test_arboles_identicos()
 {
@@ -576,7 +577,7 @@ void test_destruir_lista()
 }
 
 //-----------------------//
-//--------STRING--------//
+//        STRING        //
 //---------------------//
 
 void test_strcrear()
@@ -764,6 +765,50 @@ void test_streq_identicos()
         printf("✔ test_streq_identicos pasó\n");
     else
         printf("✘ test_streq_identicos falló\n");
+
+    strdestruir(s1);
+    strdestruir(s2);
+}
+
+void test_strcon_supera_MAX()
+{
+    String s1;
+    String s2;
+
+    strcrear(s1);
+    strcrear(s2);
+
+    // Crear string de 70 caracteres
+    char buffer1[71];
+    int i = 0;
+    while (i < 70)
+    {
+        buffer1[i] = 'A';
+        i++;
+    }
+    buffer1[70] = '\0';
+
+    // Crear string de 20 caracteres
+    char buffer2[21];
+    i = 0;
+    while (i < 20)
+    {
+        buffer2[i] = 'B';
+        i++;
+    }
+    buffer2[20] = '\0';
+
+    strcop(s1, buffer1);
+    strcop(s2, buffer2);
+
+    strcon(s1, s2);
+
+    int largoFinal = strlar(s1);
+
+    if (largoFinal == MAX - 1) // debería quedar truncado
+        printf("✔ test_strcon_supera_MAX pasó (if largo > MAX cubierto)\n");
+    else
+        printf("✘ test_strcon_supera_MAX falló (largo: %d)\n", largoFinal);
 
     strdestruir(s1);
     strdestruir(s2);
@@ -1168,7 +1213,7 @@ void test_primer_caracter()
 }
 
 //---------------------//
-//------Operacion-----//
+//      OPERACION      //
 //--------------------//
 
 void test_operacion_default()
@@ -1179,6 +1224,140 @@ void test_operacion_default()
     char resultado = DevolverOperacion(op_invalida);
 
     printf("✔ test_operacion_default pasó (se ejecutó el caso por defecto)\n");
+}
+
+//--------------------------//
+//      MODULO ARCHIVO     //
+//------------------------//
+
+void test_existe_archivo_true()
+{
+    String nombre = NULL;
+    strcrear(nombre);
+    strcop(nombre, "archivo_test_existente.dat");
+
+    FILE *f = fopen(nombre, "wb");
+    if (f != NULL)
+    {
+        fprintf(f, "contenido de prueba");
+        fclose(f);
+    }
+
+    if (ExisteArchivo(nombre) == TRUE)
+        printf("✔ test_existe_archivo_true pasó\n");
+    else
+        printf("✘ test_existe_archivo_true falló\n");
+
+    remove(nombre);
+    strdestruir(nombre);
+}
+
+void test_existe_archivo_false()
+{
+    String nombre = NULL;
+    strcrear(nombre);
+    strcop(nombre, "este_archivo_no_existe_12345.dat");
+
+    if (ExisteArchivo(nombre) == FALSE)
+        printf("✔ test_existe_archivo_false pasó\n");
+    else
+        printf("✘ test_existe_archivo_false falló\n");
+
+    strdestruir(nombre);
+}
+
+void test_existe_archivo_null()
+{
+    // Caso de borde: pasar un NULL o string vacío
+    String nombre = NULL;
+    strcrear(nombre); // string vacío ""
+
+    if (ExisteArchivo(nombre) == FALSE)
+        printf("✔ test_existe_archivo_vacio pasó\n");
+    else
+        printf("✘ test_existe_archivo_vacio falló\n");
+
+    strdestruir(nombre);
+}
+
+void test_guardar_recuperar_expresion_archivo_ok()
+{
+
+    Expresion exp, expRecuperada;
+    CodigoError err;
+
+    // Crear subárbol izquierdo: (3 + x)
+    ExpresionABB n3 = CrearExpresionSimpleInt(3);
+    ExpresionABB nx = CrearExpresionSimpleX('x');
+    ExpresionABB suma = CrearExpresionCompuesta(SUMA, n3, nx);
+
+    // Crear subárbol derecho: (10 - 2)
+    ExpresionABB n10 = CrearExpresionSimpleInt(10);
+    ExpresionABB n2 = CrearExpresionSimpleInt(2);
+    ExpresionABB resta = CrearExpresionCompuesta(RESTA, n10, n2);
+
+    // Crear raíz: ( (3 + x) * (10 - 2) )
+    ExpresionABB raiz = CrearExpresionCompuesta(MULTIPLICACION, suma, resta);
+
+    exp.indiceLista = 99;
+    exp.terminos = raiz;
+
+    String nombreBase = "test_integracion";
+
+    GuardarExpresionEnArchivo(nombreBase, exp, err);
+
+    if (err != ERR_NINGUNO)
+    {
+        printf("✘ FALLO: Error al guardar (%d)\n", err);
+    }
+    else
+    {
+        RecuperarExpresionDesdeArchivo(nombreBase, expRecuperada, err);
+
+        if (err != ERR_NINGUNO)
+        {
+            printf("✘ FALLO: Error al recuperar (%d)\n", err);
+        }
+        else
+        {
+            if (ArbolesIdenticos(exp.terminos, expRecuperada.terminos) == TRUE)
+                printf("✔ PASO: Expresion compleja recuperada correctamente\n");
+            else
+                printf("✘ FALLO: La expresion compleja NO coincide\n");
+
+            DestruirExpresion(expRecuperada);
+        }
+    }
+
+    remove("test_integracion.txt");
+    DestruirExpresion(exp);
+}
+
+void test_Recuperar_Archivo_NoExiste()
+{
+    Expresion exp;
+    CodigoError err;
+
+    RecuperarExpresionDesdeArchivo("archivo_que_no_existe", exp, err);
+
+    if (err == ERR_ARCHIVO_NO_EXISTE)
+        printf("OK: detecto archivo inexistente.\n");
+    else
+        printf("ERROR: no detecto archivo inexistente.\n");
+}
+
+void test_Guardar_Archivo_NoSePuedeAbrir()
+{
+    Expresion exp;
+    CodigoError err;
+
+    // Nombre inválido con caracteres prohibidos
+    GuardarExpresionEnArchivo("///", exp, err);
+
+    if (err == ERR_ARCHIVO_NO_SE_PUEDE_ABRIR)
+        printf("OK: detecto error al abrir archivo.\n");
+    else
+        printf("ERROR: no detecto error al abrir.\n");
 }
 
 int main()
@@ -1236,6 +1415,7 @@ int main()
     test_convertir_a_entero();
     test_primer_caracter();
     test_es_operador_valido();
+    test_strcon_supera_MAX();
 
     printf("\n---- Fin de tests String ----\n");
 
@@ -1279,6 +1459,18 @@ int main()
     test_es_indice_valido_false();
     test_mostrar_expresiones();
     test_destruir_lista();
+
+    printf("\n---- Fin de tests ----\n");
+
+    printf("\n---- Ejecutando tests Archivo ----\n\n");
+
+    test_existe_archivo_true();
+    test_existe_archivo_false();
+    test_existe_archivo_null();
+
+    test_guardar_recuperar_expresion_archivo_ok();
+    test_Recuperar_Archivo_NoExiste();
+    test_Guardar_Archivo_NoSePuedeAbrir();
 
     printf("\n---- Fin de tests ----\n");
 

@@ -51,4 +51,12 @@ void insertarParentesisDerecho(ExpresionABB &abb);
 // Muestra por pantalla la expresion
 void MostrarABB(ExpresionABB abb);
 
+void BajarExpresionABB(ExpresionABB abb, FILE *f);
+
+void BajarNodoABB(ExpresionABB nodo, FILE *f);
+
+void LevantarExpresionABB(ExpresionABB &abb, FILE *f);
+
+void InsertarEnABB(ExpresionABB &abb, ExpresionABB nuevo);
+
 #endif

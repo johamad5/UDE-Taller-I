@@ -15,3 +15,14 @@ void DestruirExpresion(Expresion &exp)
     DestruirABB(exp.terminos);
     exp.terminos = NULL;
 }
+
+void BajarExpresion(Expresion exp, FILE *f)
+{
+    BajarExpresionABB(exp.terminos, f);
+}
+
+void LevantarExpresion(Expresion &exp, FILE *f)
+{
+    exp.terminos = NULL;
+    LevantarExpresionABB(exp.terminos, f);
+}

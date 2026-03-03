@@ -1,33 +1,30 @@
 #include "ListaExpresiones.h"
 
-void ReservarNodoL(NodoL *&n)
+void ReservarNodoL(ListaExpresiones &n)
 {
     n = new NodoL;
     n->sig = NULL;
 }
 
-void InsertarExpresionAlFinalL(ListaExpresiones &l, Expresion exp)
+void InsertarExpresionAlFinalL(ListaExpresiones &lp, Expresion exp)
 {
-    NodoL *nuevo = NULL;
-    ReservarNodoL(nuevo);
-
-    nuevo->exp = exp;
-    nuevo->sig = NULL;
-
-    if (l == NULL)
+    if (lp == NULL)
     {
-        l = nuevo;
+        ReservarNodoL(lp);
+        lp->exp = exp;
+        lp->sig = NULL;
     }
     else
     {
-        NodoL *aux = l;
-
+        ListaExpresiones aux = lp;
         while (aux->sig != NULL)
         {
             aux = aux->sig;
         }
 
-        aux->sig = nuevo;
+        ReservarNodoL(aux->sig);
+        aux->sig->exp = exp;
+        aux->sig->sig = NULL;
     }
 }
 

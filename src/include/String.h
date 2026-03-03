@@ -20,6 +20,9 @@ void strcop(String &s1, String s2);
 // Lee el string s desde teclado
 void scan(String &s);
 
+// Concatena el contenido de s2 al final de s1
+void strcon(String &s1, String s2);
+
 // Imprime el string s por pantalla
 void print(String s);
 

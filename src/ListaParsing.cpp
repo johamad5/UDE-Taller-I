@@ -1,29 +1,34 @@
 #include "ListaParsing.h"
 
-void ReservarNodoP(NodoP *&n)
+void ReservarNodoP(ListaParsing &n)
 {
     n = new nodoP;
     n->sig = NULL;
 }
 
-void InsertarAlFinalParsing(ListaParsing &lp, NodoP *&ultimo, String palabra)
+void InsertarAlFinalParsing(ListaParsing &lp, String palabra)
 {
-    nodoP *nuevo = NULL;
-    ReservarNodoP(nuevo);
-
-    nuevo->palabra = NULL;
-    strcop(nuevo->palabra, palabra);
-    nuevo->sig = NULL;
-
-    if (lp == NULL)
+    if (lp == NULL) 
     {
-        lp = nuevo;
-        ultimo = nuevo;
+        ReservarNodoP(lp); 
+        lp->palabra = NULL;
+        strcrear(lp->palabra);
+        strcop(lp->palabra, palabra);
+        lp->sig = NULL;
     }
-    else
+    else 
     {
-        ultimo->sig = nuevo;
-        ultimo = nuevo;
+        ListaParsing aux = lp;
+        while (aux->sig != NULL) 
+        {
+            aux = aux->sig;
+        }
+
+        ReservarNodoP(aux->sig);
+        aux->sig->palabra = NULL;
+        strcrear(aux->sig->palabra);
+        strcop(aux->sig->palabra, palabra);
+        aux->sig->sig = NULL;
     }
 }
 
@@ -40,9 +45,7 @@ void DestruirListaParsing(ListaParsing &lp)
 
 void TokenizarEntrada(ListaParsing &lp, String linea)
 {
-    lp = NULL;
-    NodoP *ultimo = NULL;
-
+    
     int j, i = 0;
 
     while (linea[i] != '\0')
@@ -68,11 +71,14 @@ void TokenizarEntrada(ListaParsing &lp, String linea)
                 token[j] = linea[inicioToken + j];
             }
             token[largoToken] = '\0';
-
-            InsertarAlFinalParsing(lp, ultimo, token);
+            printf("Tokenizar Entrada %d ", i);
+            InsertarAlFinalParsing(lp, token);
             strdestruir(token);
+
         }
+        
     }
+    
 }
 
 void TokenEnPosicion(ListaParsing lp, int pos, String &token)

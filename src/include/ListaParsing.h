@@ -11,11 +11,11 @@ typedef struct nodoP
 typedef NodoP *ListaParsing;
 
 // Reserva memoria para un nodo de parsing e inicializa su enlace.
-void ReservarNodoP(NodoP *&n);
+void ReservarNodoP(ListaParsing &n);
 
 // Inserta una palabra al final de la lista de tokens.
 // PRECONDICIÓN: palabra debe ser un String válido.
-void InsertarAlFinalParsing(ListaParsing &lp, NodoP *&ultimo, String palabra);
+void InsertarAlFinalParsing(ListaParsing &lp, String palabra);
 
 // Destruye la lista de tokens y libera memoria.
 void DestruirListaParsing(ListaParsing &lp);

@@ -17,4 +17,9 @@ void MostrarExpresion(Expresion exp);
 // Destruye la expresion y libera toda la memoria
 void DestruirExpresion(Expresion &exp);
 
+void BajarExpresion(Expresion exp, FILE * f);
+
+void LevantarExpresion(Expresion &exp, FILE * f);
+
+
 #endif

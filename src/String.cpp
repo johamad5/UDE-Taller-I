@@ -33,6 +33,33 @@ void strcop(String &s1, String s2)
     s1[i] = '\0';
 }
 
+void strcon(String &s1,String s2)
+{
+    String aux;
+    strcrear (aux);
+    strcop (aux, s1);
+    int largo = strlar (s1) + strlar (s2) + 1;
+    if (largo > MAX)
+        largo = MAX;
+    delete [] s1;
+    s1 = new char[largo];
+    int i = 0;
+    while (aux[i] != '\0')
+    {
+        s1[i] = aux[i];
+        i++;
+    }
+    int j = 0;
+    while (s2[j] != '\0' && i < MAX-1)
+    {
+        s1[i] = s2[j];
+        i++;
+        j++;
+    }
+    s1[i] = '\0';
+    strdestruir (aux);
+}
+
 void scan(String &s)
 {
     String aux = new char[MAX];

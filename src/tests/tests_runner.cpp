@@ -23,6 +23,7 @@
 #include "CodigoError.h"
 #include "Expresion.h"
 #include "ListaExpresiones.h"
+#include "Archivo.h"
 
 void test_arboles_identicos()
 {
@@ -576,7 +577,7 @@ void test_destruir_lista()
 }
 
 //-----------------------//
-//--------STRING--------//
+//        STRING        //
 //---------------------//
 
 void test_strcrear()
@@ -1168,7 +1169,7 @@ void test_primer_caracter()
 }
 
 //---------------------//
-//------Operacion-----//
+//      OPERACION      //
 //--------------------//
 
 void test_operacion_default()
@@ -1180,6 +1181,103 @@ void test_operacion_default()
 
     printf("✔ test_operacion_default pasó (se ejecutó el caso por defecto)\n");
 }
+
+
+//--------------------------//
+//      MODULO ARCHIVO     //
+//------------------------//
+
+void test_existe_archivo_true()
+{
+    String nombre = NULL;
+    strcrear(nombre);
+    strcop(nombre, "archivo_test_existente.dat");
+
+    FILE *f = fopen(nombre, "wb");
+    if (f != NULL)
+    {
+        fprintf(f, "contenido de prueba");
+        fclose(f);
+    }
+
+    if (ExisteArchivo(nombre) == TRUE)
+        printf("✔ test_existe_archivo_true pasó\n");
+    else
+        printf("✘ test_existe_archivo_true falló\n");
+
+    remove(nombre);
+    strdestruir(nombre);
+}
+
+void test_existe_archivo_false()
+{
+    String nombre = NULL;
+    strcrear(nombre);
+    strcop(nombre, "este_archivo_no_existe_12345.dat");
+
+    if (ExisteArchivo(nombre) == FALSE)
+        printf("✔ test_existe_archivo_false pasó\n");
+    else
+        printf("✘ test_existe_archivo_false falló\n");
+
+    strdestruir(nombre);
+}
+
+void test_existe_archivo_null()
+{
+    // Caso de borde: pasar un NULL o string vacío
+    String nombre = NULL;
+    strcrear(nombre); // string vacío ""
+
+    if (ExisteArchivo(nombre) == FALSE)
+        printf("✔ test_existe_archivo_vacio pasó\n");
+    else
+        printf("✘ test_existe_archivo_vacio falló\n");
+
+    strdestruir(nombre);
+}
+
+
+
+
+void test_guardar_recuperar_expresion_archivo_ok() { 
+ 
+ 
+    Expresion exp, expRecuperada;
+    exp.indiceLista = 5;
+    exp.terminos = CrearExpresionSimpleInt(100); 
+
+
+    String nombreBase = "test_integracion";
+    CodigoError err;
+
+    GuardarExpresionEnArchivo(nombreBase, exp, err);
+    MostrarExpresion(exp);
+    if (err != ERR_NINGUNO) {
+        printf("✘ FALLO: Error al guardar (%d)\n", err);
+    } else {
+        RecuperarExpresionDesdeArchivo(nombreBase, expRecuperada, err);
+        MostrarExpresion(expRecuperada);
+
+        if (err != ERR_NINGUNO) {
+             printf("✘ FALLO: Error al recuperar (%d)\n", err);
+         } else {
+     
+             if (expRecuperada.terminos != NULL && ArbolesIdenticos(exp.terminos, expRecuperada.terminos)) {
+                 printf("✔ PASO: La expresion recuperada es identica a la original.\n");
+        } else {
+              printf("✘ FALLO: Los datos recuperados no coinciden o no existen.\n");
+             }
+         }
+         DestruirExpresion(expRecuperada);
+    }
+
+     remove("test_integracion.txt");
+     DestruirExpresion(exp);
+}
+
+
+
 
 int main()
 {
@@ -1281,6 +1379,17 @@ int main()
     test_destruir_lista();
 
     printf("\n---- Fin de tests ----\n");
+
+    printf("\n---- Ejecutando tests Archivo ----\n\n");
+    
+    test_existe_archivo_true();
+    test_existe_archivo_false();
+    test_existe_archivo_null();
+
+    test_guardar_recuperar_expresion_archivo_ok();
+
+    printf("\n---- Fin de tests ----\n");
+
 
     return 0;
 }

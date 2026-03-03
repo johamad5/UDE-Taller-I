@@ -234,3 +234,51 @@ void MostrarABB(ExpresionABB abb)
         MostrarABB(abb->hder);
     }
 }
+
+
+void BajarExpresionABB(ExpresionABB abb, FILE * f)
+{
+    if (abb != NULL)
+    {
+        BajarNodoABB(abb, f);
+        BajarExpresionABB(abb->hizq, f);
+        BajarExpresionABB(abb->hder, f);
+    }
+}
+
+void BajarNodoABB(ExpresionABB nodo, FILE * f)
+{
+    fwrite(&nodo->tipo, sizeof(TipoDato), 1, f);
+    if(nodo->tipo == ENTERO ){
+        fwrite(&nodo->dato.num, sizeof(int), 1, f);
+    }else{
+        fwrite(&nodo->dato.simbolo, sizeof(char), 1, f);
+    }
+    fwrite(&nodo->indiceNodo, sizeof(int), 1, f);
+}
+
+void LevantarNodoABB(ExpresionABB &nodo, FILE * f)
+{
+    nodo = new NodoABB;
+    fread(&nodo->tipo, sizeof(TipoDato), 1, f);
+    if(nodo->tipo == ENTERO ){
+        fread(&nodo->dato.num, sizeof(int), 1, f);
+    }else{
+        fread(&nodo->dato.simbolo, sizeof(char), 1, f);
+    }
+    fread(&nodo->indiceNodo, sizeof(int), 1, f);
+}
+
+
+
+
+
+void LevantarExpresionABB(ExpresionABB &abb, FILE * f)
+{
+    if (abb != NULL) 
+    {
+        LevantarNodoABB(abb, f);
+        LevantarExpresionABB(abb->hizq, f);
+        LevantarExpresionABB(abb->hder, f);
+    }
+} 

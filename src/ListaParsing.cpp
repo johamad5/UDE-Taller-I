@@ -8,18 +8,18 @@ void ReservarNodoP(ListaParsing &n)
 
 void InsertarAlFinalParsing(ListaParsing &lp, String palabra)
 {
-    if (lp == NULL) 
+    if (lp == NULL)
     {
-        ReservarNodoP(lp); 
+        ReservarNodoP(lp);
         lp->palabra = NULL;
         strcrear(lp->palabra);
         strcop(lp->palabra, palabra);
         lp->sig = NULL;
     }
-    else 
+    else
     {
         ListaParsing aux = lp;
-        while (aux->sig != NULL) 
+        while (aux->sig != NULL)
         {
             aux = aux->sig;
         }
@@ -45,7 +45,7 @@ void DestruirListaParsing(ListaParsing &lp)
 
 void TokenizarEntrada(ListaParsing &lp, String linea)
 {
-    
+
     int j, i = 0;
 
     while (linea[i] != '\0')
@@ -74,11 +74,8 @@ void TokenizarEntrada(ListaParsing &lp, String linea)
             printf("Tokenizar Entrada %d ", i);
             InsertarAlFinalParsing(lp, token);
             strdestruir(token);
-
         }
-        
     }
-    
 }
 
 void TokenEnPosicion(ListaParsing lp, int pos, String &token)

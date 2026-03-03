@@ -235,8 +235,7 @@ void MostrarABB(ExpresionABB abb)
     }
 }
 
-
-void BajarExpresionABB(ExpresionABB abb, FILE * f)
+void BajarExpresionABB(ExpresionABB abb, FILE *f)
 {
     if (abb != NULL)
     {
@@ -246,39 +245,73 @@ void BajarExpresionABB(ExpresionABB abb, FILE * f)
     }
 }
 
-void BajarNodoABB(ExpresionABB nodo, FILE * f)
+void BajarNodoABB(ExpresionABB nodo, FILE *f)
 {
     fwrite(&nodo->tipo, sizeof(TipoDato), 1, f);
-    if(nodo->tipo == ENTERO ){
+    if (nodo->tipo == ENTERO)
+    {
         fwrite(&nodo->dato.num, sizeof(int), 1, f);
-    }else{
+    }
+    else
+    {
         fwrite(&nodo->dato.simbolo, sizeof(char), 1, f);
     }
     fwrite(&nodo->indiceNodo, sizeof(int), 1, f);
 }
 
-void LevantarNodoABB(ExpresionABB &nodo, FILE * f)
+void InsertarEnABB(ExpresionABB &abb, ExpresionABB nuevo)
 {
-    nodo = new NodoABB;
-    fread(&nodo->tipo, sizeof(TipoDato), 1, f);
-    if(nodo->tipo == ENTERO ){
-        fread(&nodo->dato.num, sizeof(int), 1, f);
-    }else{
-        fread(&nodo->dato.simbolo, sizeof(char), 1, f);
+    if (abb == NULL)
+    {
+        abb = nuevo;
     }
-    fread(&nodo->indiceNodo, sizeof(int), 1, f);
+    else
+    {
+        if (nuevo->indiceNodo < abb->indiceNodo)
+        {
+            InsertarEnABB(abb->hizq, nuevo);
+        }
+        else
+        {
+            InsertarEnABB(abb->hder, nuevo);
+        }
+    }
 }
 
-
-
-
-
-void LevantarExpresionABB(ExpresionABB &abb, FILE * f)
+void LevantarExpresionABB(ExpresionABB &abb, FILE *f)
 {
-    if (abb != NULL) 
+    abb = NULL;
+
+    Boolean seguir = TRUE;
+
+    while (seguir == TRUE)
     {
-        LevantarNodoABB(abb, f);
-        LevantarExpresionABB(abb->hizq, f);
-        LevantarExpresionABB(abb->hder, f);
+        ExpresionABB nuevo = new NodoABB;
+
+        size_t leido = fread(&nuevo->tipo, sizeof(TipoDato), 1, f);
+
+        if (leido != 1)
+        {
+            delete nuevo;
+            seguir = FALSE;
+        }
+        else
+        {
+            if (nuevo->tipo == ENTERO)
+            {
+                fread(&nuevo->dato.num, sizeof(int), 1, f);
+            }
+            else
+            {
+                fread(&nuevo->dato.simbolo, sizeof(char), 1, f);
+            }
+
+            fread(&nuevo->indiceNodo, sizeof(int), 1, f);
+
+            nuevo->hizq = NULL;
+            nuevo->hder = NULL;
+
+            InsertarEnABB(abb, nuevo);
+        }
     }
-} 
+}

@@ -16,12 +16,13 @@ void DestruirExpresion(Expresion &exp)
     exp.terminos = NULL;
 }
 
-void BajarExpresion(Expresion exp, FILE * f)
+void BajarExpresion(Expresion exp, FILE *f)
 {
     BajarExpresionABB(exp.terminos, f);
 }
 
-void LevantarExpresion(Expresion &exp, FILE * f)
+void LevantarExpresion(Expresion &exp, FILE *f)
 {
+    exp.terminos = NULL;
     LevantarExpresionABB(exp.terminos, f);
 }

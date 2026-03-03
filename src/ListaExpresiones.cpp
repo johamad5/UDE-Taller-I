@@ -6,19 +6,18 @@ void ReservarNodoL(ListaExpresiones &n)
     n->sig = NULL;
 }
 
-
 void InsertarExpresionAlFinalL(ListaExpresiones &lp, Expresion exp)
 {
-    if (lp == NULL) 
+    if (lp == NULL)
     {
-        ReservarNodoL(lp); 
+        ReservarNodoL(lp);
         lp->exp = exp;
         lp->sig = NULL;
     }
-    else 
+    else
     {
         ListaExpresiones aux = lp;
-        while (aux->sig != NULL) 
+        while (aux->sig != NULL)
         {
             aux = aux->sig;
         }

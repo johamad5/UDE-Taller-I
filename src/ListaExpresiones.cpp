@@ -66,8 +66,10 @@ void MostrarExpresiones(ListaExpresiones l)
 
     while (aux != NULL)
     {
-        printf("Indice en lista: %d \n", ObtenerIndiceExpresion(aux->exp));
-        printf("--------------------------------\n");
+        printf("EXPRESION %d \n", ObtenerIndiceExpresion(aux->exp));
+        printf("-------------\n");
+        printf("Indice: %d \n", ObtenerIndiceExpresion(aux->exp));
+        printf("Exp: ");
         MostrarExpresion(aux->exp);
         printf("\n\n");
 

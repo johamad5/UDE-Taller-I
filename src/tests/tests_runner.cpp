@@ -24,6 +24,7 @@
 #include "Expresion.h"
 #include "ListaExpresiones.h"
 #include "Archivo.h"
+#include "Compilador.h"
 
 void test_arboles_identicos()
 {
@@ -1360,11 +1361,251 @@ void test_Guardar_Archivo_NoSePuedeAbrir()
         printf("ERROR: no detecto error al abrir.\n");
 }
 
+//---------------------------//
+//     MODULO COMPILADOR     //
+//---------------------------//
+
+// ValidarComandoMostrar
+void test_validar_mostrar_ok()
+{
+    CodigoError err;
+
+    String linea = NULL;
+    strcrear(linea);
+    strcop(linea, "TEST");
+
+    ListaParsing tokens = NULL;
+    TokenizarEntrada(tokens, linea);
+
+    ListaExpresiones expresiones = NULL;
+    Expresion e1;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(10);
+    InsertarExpresionAlFinalL(expresiones, e1);
+
+    Boolean res = ValidarComandoMostrar(tokens, expresiones, err);
+
+    if (res)
+        printf("✔ test_validar_mostrar_ok pasó\n");
+    else
+        printf("✘ test_validar_mostrar_ok falló\n");
+
+    strdestruir(linea);
+    DestruirListaParsing(tokens);
+    DestruirListaExpresiones(expresiones);
+}
+
+void test_validar_mostrar_error_tokens()
+{
+    CodigoError err;
+
+    String linea = NULL;
+    strcrear(linea);
+    strcop(linea, "TEST TEST");
+
+    ListaParsing tokens = NULL;
+    TokenizarEntrada(tokens, linea);
+
+    ListaExpresiones expresiones = NULL;
+    Expresion e1;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(10);
+    InsertarExpresionAlFinalL(expresiones, e1);
+
+    Boolean res = ValidarComandoMostrar(tokens, expresiones, err);
+
+    if (res == FALSE && err == ERR_CANT_PARAMETROS)
+        printf("✔ test_validar_mostrar_error_tokens pasó\n");
+    else
+        printf("✘ test_validar_mostrar_error_tokens falló\n");
+
+    strdestruir(linea);
+    DestruirListaParsing(tokens);
+    DestruirListaExpresiones(expresiones);
+}
+
+void test_validar_mostrar_lista_null()
+{
+    CodigoError err;
+
+    String linea = NULL;
+    strcrear(linea);
+    strcop(linea, "TEST");
+
+    ListaParsing tokens = NULL;
+    TokenizarEntrada(tokens, linea);
+
+    ListaExpresiones expresiones = NULL;
+
+    Boolean res = ValidarComandoMostrar(tokens, expresiones, err);
+
+    if (res == FALSE && err == ERR_LISTA_VACIA)
+        printf("✔ test_validar_mostrar_lista_null pasó\n");
+    else
+        printf("✘ test_validar_mostrar_lista_null falló\n");
+
+    strdestruir(linea);
+    DestruirListaParsing(tokens);
+    DestruirListaExpresiones(expresiones);
+}
+
+// ValidarComandoRecuperar
+void test_validar_recuperar_ok()
+{
+    CodigoError err;
+
+    String linea = NULL, nombreArchivo = NULL;
+    strcrear(linea);
+    strcop(linea, "TEST TEST");
+
+    ListaParsing tokens = NULL;
+    TokenizarEntrada(tokens, linea);
+
+    strcrear(nombreArchivo);
+    strcop(nombreArchivo, "test");
+
+    FILE *file = fopen("test.txt", "wb");
+
+    Boolean res = ValidarComandoRecuperar(tokens, nombreArchivo, err);
+
+    if (res)
+        printf("✔ test_validar_recuperar_ok pasó\n");
+    else
+        printf("✘ test_validar_recuperar_ok falló\n");
+
+    fclose(file);
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(tokens);
+}
+
+void test_validar_recuperar_error_tokens()
+{
+    CodigoError err;
+
+    String linea = NULL, nombreArchivo = NULL;
+    strcrear(linea);
+    strcop(linea, "TEST");
+
+    ListaParsing tokens = NULL;
+    TokenizarEntrada(tokens, linea);
+
+    strcrear(nombreArchivo);
+    strcop(nombreArchivo, "testdos");
+
+    FILE *file = fopen("testdos.txt", "wb");
+
+    Boolean res = ValidarComandoRecuperar(tokens, nombreArchivo, err);
+
+    if (!res && err == ERR_CANT_PARAMETROS)
+        printf("✔ test_validar_recuperar_error_tokens pasó\n");
+    else
+        printf("✘ test_validar_recuperar_error_tokens falló\n");
+
+    fclose(file);
+
+    fclose(file);
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(tokens);
+}
+
+void test_validar_recuperar_error_archivo_invalido()
+{
+    CodigoError err;
+
+    String linea = NULL, nombreArchivo = NULL;
+    strcrear(linea);
+    strcop(linea, "TEST TEST");
+
+    ListaParsing tokens = NULL;
+    TokenizarEntrada(tokens, linea);
+
+    strcrear(nombreArchivo);
+    strcop(nombreArchivo, "test3");
+
+    FILE *file = fopen("test3.txt", "wb");
+
+    Boolean res = ValidarComandoRecuperar(tokens, nombreArchivo, err);
+
+    if (!res && err == ERR_ARCHIVO_INVALIDO)
+        printf("✔ test_validar_recuperar_error_archivo_invalido pasó\n");
+    else
+        printf("✘ test_validar_recuperar_error_archivo_invalido falló\n");
+
+    fclose(file);
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(tokens);
+}
+
+// ValidarComandoSalir
+void test_validar_salir_ok()
+{
+    CodigoError err;
+
+    String linea = NULL;
+    strcrear(linea);
+    strcop(linea, "TEST");
+
+    ListaParsing tokens = NULL;
+    TokenizarEntrada(tokens, linea);
+
+    Boolean res = ValidarComandoSalir(tokens, err);
+
+    if (res)
+        printf("✔ test_validar_salir_ok pasó\n");
+    else
+        printf("✘ test_validar_salir_ok falló\n");
+
+    strdestruir(linea);
+    DestruirListaParsing(tokens);
+}
+
+void test_validar_salir_error_tokens()
+{
+    CodigoError err;
+
+    String linea = NULL;
+    strcrear(linea);
+    strcop(linea, "TEST");
+
+    ListaParsing tokens = NULL;
+    TokenizarEntrada(tokens, linea);
+
+    Boolean res = ValidarComandoSalir(tokens, err);
+
+    if (!res && err == ERR_CANT_PARAMETROS)
+        printf("✔ test_validar_salir_error_tokens pasó\n");
+    else
+        printf("✘ test_validar_salir_error_tokens falló\n");
+}
+
+void test_validar_recuperar_error_archivo_inexistente()
+{
+    CodigoError err;
+
+    String linea = NULL, nombreArchivo = NULL;
+    strcrear(linea);
+    strcop(linea, "TEST TEST");
+
+    ListaParsing tokens = NULL;
+    TokenizarEntrada(tokens, linea);
+
+    strcrear(nombreArchivo);
+    strcop(nombreArchivo, "testcuatro");
+
+    Boolean res = ValidarComandoRecuperar(tokens, nombreArchivo, err);
+
+    if (!res && err == ERR_ARCHIVO_NO_EXISTE)
+        printf("✔ test_validar_recuperar_error_archivo_inexistente pasó\n");
+    else
+        printf("✘ test_validar_recuperar_error_archivo_inexistente falló\n");
+}
+
 int main()
 {
-
-    printf("---- Ejecutando tests CalcularABB ----\n\n");
-
+    printf("---- Ejecutando tests CalcularABB ----\n");
     test_entero_simple();
     test_variable_x();
     test_suma_resta();
@@ -1373,42 +1614,42 @@ int main()
     test_arboles_identicos();
     test_division();
     test_mostrar_abb();
+    printf("\n----------   Fin   ----------\n\n");
 
-    printf("\n---- Fin de tests CalcularABB ----\n");
-
-    printf("---- Ejecutando tests String ----");
+    printf("---- Ejecutando tests String ----\n");
+    // strcrear y strdestruir
     test_strcrear();
     test_strdestruir();
-    // casos strlar
+    // strlar
     test_strlar_vacio();
     test_strlar_con_contenido();
-    // casos strcop
+    // strcop
     test_strcop_contenido();
     test_strcop_redimension();
     test_strcop_vacio_a_vacio();
     // print y scan
     test_print();
     test_scan_mock();
-    // casos streq
+    // streq
     test_streq_identicos();
     test_streq_diferentes_caracter();
     test_streq_diferente_largo();
-    // casos bajar
+    // BajarString
     test_bajar_string_basico();
     test_bajar_string_vacio();
     test_bajar_string_fin_archivo();
-    // casos levantar
+    // LevantarString
     test_levantar_string_basico();
     test_levantar_string_vacio();
-    // casos crear desde rango
+    // CrearStringDesdeRango
     test_crear_desde_rango_normal();
     test_crear_desde_rango_error();
     test_crear_desde_rango_un_char();
-    // casos es alfabetico
+    // EsAlfabetico
     test_es_alfabetico_valido();
     test_es_alfabetico_con_numeros();
     test_es_alfabetico_casos_borde();
-    // casos es entero
+    // EsEntero
     test_es_entero_positivo();
     test_es_entero_negativo();
     test_es_entero_falla();
@@ -1416,41 +1657,31 @@ int main()
     test_primer_caracter();
     test_es_operador_valido();
     test_strcon_supera_MAX();
+    printf("\n----------   Fin   ----------\n\n");
 
-    printf("\n---- Fin de tests String ----\n");
-
-    printf("---- Ejecutando tests Operacion ----");
-
+    printf("---- Ejecutando tests Operacion ----\n");
     test_operacion_default();
+    printf("\n----------   Fin   ----------\n\n");
 
-    printf("\n---- Fin de tests Operacion ----\n");
-
-    printf("\n---- Ejecutando tests ListaParsing ----\n\n");
-
+    printf("\n---- Ejecutando tests ListaParsing ----\n");
     test_tokenizar_simple();
     test_token_en_posicion();
     test_cantidad_tokens();
     test_espacios_multiples();
+    printf("\n----------   Fin   ----------\n\n");
 
-    printf("\n---- Fin de tests ----\n");
-
-    printf("\n---- Ejecutando tests CodigoError ----\n\n");
-
+    printf("---- Ejecutando tests CodigoError ----\n");
     test_mostrar_error();
+    printf("\n----------   Fin   ----------\n\n");
 
-    printf("\n---- Fin de tests ----\n");
-
-    printf("\n---- Ejecutando tests Expresion ----\n\n");
-
+    printf("---- Ejecutando tests Expresion ----\n");
     test_obtener_indice_expresion();
     test_mostrar_expresion_simple();
     test_destruir_expresion_simple();
     test_destruir_expresion_compuesta();
+    printf("\n----------   Fin   ----------\n\n");
 
-    printf("\n---- Fin de tests ----\n");
-
-    printf("\n---- Ejecutando tests ListaExpresiones ----\n\n");
-
+    printf("---- Ejecutando tests ListaExpresiones ----\n");
     test_insertar_en_lista_vacia();
     test_insertar_dos_expresiones();
     test_insertar_en_lista_con_multiples_nodos();
@@ -1459,20 +1690,41 @@ int main()
     test_es_indice_valido_false();
     test_mostrar_expresiones();
     test_destruir_lista();
+    printf("\n----------   Fin   ----------\n\n");
 
-    printf("\n---- Fin de tests ----\n");
-
-    printf("\n---- Ejecutando tests Archivo ----\n\n");
-
+    printf("---- Ejecutando tests Archivo ----\n");
     test_existe_archivo_true();
     test_existe_archivo_false();
     test_existe_archivo_null();
-
     test_guardar_recuperar_expresion_archivo_ok();
     test_Recuperar_Archivo_NoExiste();
     test_Guardar_Archivo_NoSePuedeAbrir();
+    printf("\n----------   Fin   ----------\n\n");
 
-    printf("\n---- Fin de tests ----\n");
+    printf("---- Ejecutando tests Compilador ----\n");
+    // ValidarComandoSimple
+
+    // ValidarComandoCompuesta
+
+    // ValidarComandoMostrar
+    test_validar_mostrar_ok();
+    test_validar_mostrar_error_tokens();
+    test_validar_mostrar_lista_null();
+    // ValidarComandoCalcular
+
+    // ValidarComandoIguales
+
+    // ValidarComandoGuardar
+
+    // ValidarComandoRecuperar
+    test_validar_recuperar_ok();
+    test_validar_recuperar_error_tokens();
+    test_validar_recuperar_error_archivo_invalido();
+    test_validar_recuperar_error_archivo_inexistente();
+    // ValidarComandoSalir
+    test_validar_salir_ok();
+    test_validar_salir_error_tokens();
+    printf("\n----------   Fin   ----------\n\n");
 
     return 0;
 }

@@ -4,8 +4,7 @@ Boolean ValidarComandoMostrar(ListaParsing tokens, ListaExpresiones expresiones,
 {
     Boolean cmdValido = TRUE;
 
-    int cantTokens = CantidadTokens(tokens);
-    if (cantTokens != 1)
+    if (CantidadTokens(tokens) != 1)
     {
         err = ERR_CANT_PARAMETROS;
         cmdValido = FALSE;
@@ -22,10 +21,37 @@ Boolean ValidarComandoMostrar(ListaParsing tokens, ListaExpresiones expresiones,
 
 Boolean ValidarComandoRecuperar(ListaParsing tokens, String &nombreArchivo, CodigoError &err)
 {
-    return TRUE;
+    Boolean cmdValido = TRUE;
+
+    if (CantidadTokens(tokens) != 2)
+    {
+        err = ERR_CANT_PARAMETROS;
+        cmdValido = FALSE;
+    }
+
+    if (!EsAlfabetico(nombreArchivo))
+    {
+        err = ERR_ARCHIVO_INVALIDO;
+        cmdValido = FALSE;
+    }
+    else if (!ExisteArchivo(nombreArchivo))
+    {
+        err = ERR_ARCHIVO_NO_EXISTE;
+        cmdValido = FALSE;
+    }
+
+    return cmdValido;
 }
 
 Boolean ValidarComandoSalir(ListaParsing tokens, CodigoError &err)
 {
-    return TRUE;
+    Boolean cmdValido = TRUE;
+
+    if (CantidadTokens(tokens) != 1)
+    {
+        err = ERR_CANT_PARAMETROS;
+        cmdValido = FALSE;
+    }
+
+    return cmdValido;
 }

@@ -1,6 +1,6 @@
 #include "Operacion.h"
 
-char DevolverOperacion(Operacion o)
+char DevolverOperacionChar(Operacion o)
 {
     char c;
     switch (o)
@@ -22,4 +22,26 @@ char DevolverOperacion(Operacion o)
     }
 
     return c;
+}
+
+Operacion DevolverOperacion(char c)
+{
+    Operacion o;
+    switch (c)
+    {
+    case '+':
+        o = SUMA;
+        break;
+    case '-':
+        o = RESTA;
+        break;
+    case '*':
+        o = MULTIPLICACION;
+        break;
+    case '/':
+        o = DIVISION;
+        break;
+    }
+
+    return o;
 }

@@ -1221,7 +1221,7 @@ void test_operacion_default()
 
     Operacion op_invalida = (Operacion)99;
 
-    char resultado = DevolverOperacion(op_invalida);
+    char resultado = DevolverOperacionChar(op_invalida);
 
     printf("✔ test_operacion_default pasó (se ejecutó el caso por defecto)\n");
 }

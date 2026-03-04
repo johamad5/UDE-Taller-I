@@ -18,7 +18,7 @@ typedef enum
     ERR_ARCHIVO_NO_EXISTE,
     ERR_ARCHIVO_INVALIDO,
     ERR_ARCHIVO_NO_SE_PUEDE_ABRIR,
-    ERR_LISTA_VACIA
+    ERR_LISTA_VACIA,
 } CodigoError;
 
 // Muestra por pantalla un mensaje asociado al código de error pasado por parámetro.

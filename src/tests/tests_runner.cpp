@@ -211,7 +211,7 @@ void test_mostrar_abb()
     ExpresionABB e2 = CrearExpresionSimpleInt(10);
     ExpresionABB e3 = CrearExpresionSimpleInt(2);
     ExpresionABB arbol = CrearExpresionCompuesta(SUMA, e1, e2);
-    ExpresionABB arbol2 = CrearExpresionCompuesta(MULTIPLICACION, arbol, e2);
+    ExpresionABB arbol2 = CrearExpresionCompuesta(MULTIPLICACION, arbol, e3);
 
     printf("> test_mostrar_abb\n");
 
@@ -316,7 +316,7 @@ void test_espacios_multiples()
 
 void test_mostrar_error()
 {
-    printf("\n> Desplegando errores | test_mostrar_error ----\n\n");
+    printf("> test_mostrar_error ejecutado (verificar mensajes ):");
     MostrarError(ERR_NINGUNO);
     MostrarError(ERR_COMANDO_VACIO);
     MostrarError(ERR_COMANDO_INVALIDO);
@@ -335,8 +335,6 @@ void test_mostrar_error()
 
     // Caso default (valor inexistente)
     MostrarError(CodigoError(999));
-
-    printf("> test_mostrar_error ejecutado (verificar mensajes )\n");
 }
 
 //--------------------//
@@ -364,10 +362,11 @@ void test_mostrar_expresion_simple()
 
     printf("> test_mostrar_expresion_simple\n");
 
-    printf("   Resultado esperado: (5)\n");
+    printf("   Resultado esperado: 5\n");
     printf("   Resultado obtenido: ");
     MostrarExpresion(exp);
     DestruirExpresion(exp);
+    printf("\n");
 }
 
 void test_destruir_expresion_simple()
@@ -561,7 +560,7 @@ void test_mostrar_expresiones()
 
     printf("> test_mostrar_expresiones\n");
     printf("   Resultado esperado: \n   Expresion 1 - Indice: 1 Valor: 3 \n   Expresion 2 - Indice: 2 Valor: 7  \n");
-    printf("   Resultado obtenido: ");
+    printf("   Resultado obtenido: \n");
     MostrarExpresiones(l);
 
     DestruirListaExpresiones(l);
@@ -1484,7 +1483,7 @@ void test_validar_recuperar_ok()
         printf("ERROR  test_validar_recuperar_ok\n");
 
     fclose(file);
-    remove(file);
+    remove("test.bin");
 
     strdestruir(linea);
     strdestruir(nombreArchivo);
@@ -1550,6 +1549,32 @@ void test_validar_recuperar_error_archivo_invalido()
     DestruirListaParsing(tokens);
 }
 
+void test_validar_recuperar_error_archivo_inexistente()
+{
+    CodigoError err;
+
+    String linea = NULL, nombreArchivo = NULL;
+    strcrear(linea);
+    strcop(linea, "TEST TEST");
+
+    ListaParsing tokens = NULL;
+    TokenizarEntrada(tokens, linea);
+
+    strcrear(nombreArchivo);
+    strcop(nombreArchivo, "testCUATRO");
+
+    Boolean res = ValidarComandoRecuperar(tokens, nombreArchivo, err);
+
+    if (!res && err == ERR_ARCHIVO_NO_EXISTE)
+        printf("OK     test_validar_recuperar_error_archivo_inexistente\n");
+    else
+        printf("ERROR  test_validar_recuperar_error_archivo_inexistente\n");
+
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(tokens);
+}
+
 // ValidarComandoSalir
 void test_validar_salir_ok()
 {
@@ -1579,7 +1604,7 @@ void test_validar_salir_error_tokens()
 
     String linea = NULL;
     strcrear(linea);
-    strcop(linea, "TEST");
+    strcop(linea, "TEST TEST");
 
     ListaParsing tokens = NULL;
     TokenizarEntrada(tokens, linea);
@@ -1590,28 +1615,6 @@ void test_validar_salir_error_tokens()
         printf("OK     test_validar_salir_error_tokens\n");
     else
         printf("ERROR  test_validar_salir_error_tokens\n");
-}
-
-void test_validar_recuperar_error_archivo_inexistente()
-{
-    CodigoError err;
-
-    String linea = NULL, nombreArchivo = NULL;
-    strcrear(linea);
-    strcop(linea, "TEST TEST");
-
-    ListaParsing tokens = NULL;
-    TokenizarEntrada(tokens, linea);
-
-    strcrear(nombreArchivo);
-    strcop(nombreArchivo, "testcuatro");
-
-    Boolean res = ValidarComandoRecuperar(tokens, nombreArchivo, err);
-
-    if (!res && err == ERR_ARCHIVO_NO_EXISTE)
-        printf("OK     test_validar_recuperar_error_archivo_inexistente\n");
-    else
-        printf("ERROR  test_validar_recuperar_error_archivo_inexistente\n");
 }
 
 int main()
@@ -1625,7 +1628,7 @@ int main()
     test_arboles_identicos();
     test_division();
     test_mostrar_abb();
-    printf("\n----------   Fin   ----------\n\n");
+    printf("\n--------------------------------\n\n");
 
     printf("---- Ejecutando tests String ----\n");
     // strcrear y strdestruir
@@ -1668,29 +1671,29 @@ int main()
     test_primer_caracter();
     test_es_operador_valido();
     test_strcon_supera_MAX();
-    printf("\n----------   Fin   ----------\n\n");
+    printf("\n--------------------------------\n\n");
 
     printf("---- Ejecutando tests Operacion ----\n");
     test_operacion_default();
-    printf("\n----------   Fin   ----------\n\n");
+    printf("\n--------------------------------\n\n");
 
     printf("\n---- Ejecutando tests ListaParsing ----\n");
     test_tokenizar_simple();
     test_token_en_posicion();
     test_cantidad_tokens();
     test_espacios_multiples();
-    printf("\n----------   Fin   ----------\n\n");
+    printf("\n--------------------------------\n\n");
 
     printf("---- Ejecutando tests CodigoError ----\n");
     test_mostrar_error();
-    printf("\n----------   Fin   ----------\n\n");
+    printf("\n--------------------------------\n\n");
 
     printf("---- Ejecutando tests Expresion ----\n");
     test_obtener_indice_expresion();
     test_mostrar_expresion_simple();
     test_destruir_expresion_simple();
     test_destruir_expresion_compuesta();
-    printf("\n----------   Fin   ----------\n\n");
+    printf("\n--------------------------------\n\n");
 
     printf("---- Ejecutando tests ListaExpresiones ----\n");
     test_insertar_en_lista_vacia();
@@ -1701,7 +1704,7 @@ int main()
     test_es_indice_valido_false();
     test_mostrar_expresiones();
     test_destruir_lista();
-    printf("\n----------   Fin   ----------\n\n");
+    printf("\n--------------------------------\n\n");
 
     printf("---- Ejecutando tests Archivo ----\n");
     test_existe_archivo_true();
@@ -1710,7 +1713,7 @@ int main()
     test_guardar_recuperar_expresion_archivo_ok();
     test_Recuperar_Archivo_NoExiste();
     test_Guardar_Archivo_NoSePuedeAbrir();
-    printf("\n----------   Fin   ----------\n\n");
+    printf("\n--------------------------------\n\n");
 
     printf("---- Ejecutando tests Compilador ----\n");
     // ValidarComandoSimple
@@ -1735,7 +1738,7 @@ int main()
     // ValidarComandoSalir
     test_validar_salir_ok();
     test_validar_salir_error_tokens();
-    printf("\n----------   Fin   ----------\n\n");
+    printf("\n--------------------------------\n\n");
 
     return 0;
 }

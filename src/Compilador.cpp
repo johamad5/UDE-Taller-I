@@ -1,57 +1,53 @@
 #include "Compilador.h"
 
-Boolean ValidarComandoMostrar(ListaParsing tokens, ListaExpresiones expresiones, CodigoError &err)
+CodigoError ValidarComandoMostrar(ListaParsing tokens, ListaExpresiones expresiones)
 {
-    Boolean cmdValido = TRUE;
+    CodigoError err = ERR_NINGUNO;
 
-    if (CantidadTokens(tokens) != 1)
+    if (CantidadTokens(tokens) != MOSTRAR_CANT_TOKENS)
     {
         err = ERR_CANT_PARAMETROS;
-        cmdValido = FALSE;
     }
 
     if (expresiones == NULL)
     {
         err = ERR_LISTA_VACIA;
-        cmdValido = FALSE;
     }
 
-    return cmdValido;
+    return err;
 }
 
-Boolean ValidarComandoRecuperar(ListaParsing tokens, String &nombreArchivo, CodigoError &err)
+void ValidarComandoRecuperar(ListaParsing tokens, String &nombreArchivo, CodigoError &err)
 {
-    Boolean cmdValido = TRUE;
+    err = ERR_NINGUNO;
 
-    if (CantidadTokens(tokens) != 2)
+    if (CantidadTokens(tokens) != RECUPERAR_CANT_TOKENS)
     {
         err = ERR_CANT_PARAMETROS;
-        cmdValido = FALSE;
     }
-
-    if (!EsAlfabetico(nombreArchivo))
+    else
     {
-        err = ERR_ARCHIVO_INVALIDO;
-        cmdValido = FALSE;
+        if (!EsAlfabetico(tokens->palabra))
+        {
+            err = ERR_ARCHIVO_INVALIDO;
+        }
+        else if (!ExisteArchivo(tokens->palabra))
+        {
+            err = ERR_ARCHIVO_NO_EXISTE;
+        }
+        else
+        {
+            strcop(nombreArchivo, tokens->palabra)
+        }
     }
-    else if (!ExisteArchivo(nombreArchivo))
-    {
-        err = ERR_ARCHIVO_NO_EXISTE;
-        cmdValido = FALSE;
-    }
-
-    return cmdValido;
 }
 
-Boolean ValidarComandoSalir(ListaParsing tokens, CodigoError &err)
+CodigoError ValidarComandoSalir(ListaParsing tokens)
 {
-    Boolean cmdValido = TRUE;
+    CodigoError err = ERR_NINGUNO;
 
     if (CantidadTokens(tokens) != 1)
-    {
         err = ERR_CANT_PARAMETROS;
-        cmdValido = FALSE;
-    }
 
-    return cmdValido;
+    return err;
 }

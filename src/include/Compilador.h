@@ -3,6 +3,13 @@
 #include "ListaParsing.h"
 #include "Archivo.h"
 #include "Comando.h"
+#include "Operacion.h"
+#include "CodigoError.h"
+#include "ListaExpresiones.h"
+
+const int MOSTRAR_CANT_TOKENS = 0;
+const int RECUPERAR_CANT_TOKENS = 1;
+const int SALIR_CANT_TOKENS = 0;
 
 //  LOOP PRINCIPAL
 // Ejecuta el ciclo principal del programa. Lee la entrada del usuario, tokeniza, valida y ejecuta comandos.
@@ -45,10 +52,9 @@ Boolean ValidarComandoCompuesta(
     CodigoError &err);
 
 // Valida que todos los parámetros sean válidos para posteriormente ejecutar el comando mostrar.
-Boolean ValidarComandoMostrar(
+CodigoError ValidarComandoMostrar(
     ListaParsing tokens,
-    ListaExpresiones expresiones,
-    CodigoError &err);
+    ListaExpresiones expresiones);
 
 // Valida que todos los parámetros sean válidos para posteriormente ejecutar el comando calcular.
 Boolean ValidarComandoCalcular(
@@ -74,13 +80,13 @@ Boolean ValidarComandoGuardar(
     CodigoError &err);
 
 // Valida que todos los parámetros sean válidos para posteriormente ejecutar el comando recuperar.
-Boolean ValidarComandoRecuperar(
+void ValidarComandoRecuperar(
     ListaParsing tokens,
     String &nombreArchivo,
     CodigoError &err);
 
 // Valida que todos los parámetros sean válidos para posteriormente ejecutar el comando salir.
-Boolean ValidarComandoSalir(ListaParsing tokens, CodigoError &err);
+CodigoError ValidarComandoSalir(ListaParsing tokens);
 
 //    EJECUCION DE COMANDOS
 // Ejecuta el comando previamente validado.

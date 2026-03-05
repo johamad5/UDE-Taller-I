@@ -18,7 +18,7 @@ const int POSICION_TOKEN_PRIMER_INDICE_IGUALES = 1;
 const int POSICION_TOKEN_SEGUNDO_INDICE_IGUALES = 2;
 
 void ValidarComandoCompuesta(ListaParsing tokens, ListaExpresiones expresiones, int &indiceUno, int &indiceDos, Operacion &operacion, CodigoError &codigoError);
-void ValidarComandoCalcular(ListaParsing tokens, ListaExpresiones expresiones, int &indice, CodigoError &codigoError);
+void ValidarComandoCalcular(ListaParsing tokens, ListaExpresiones expresiones, int &valor, int &indice, CodigoError &codigoError);
 void ValidarComandoIguales(ListaParsing tokens, ListaExpresiones expresiones, int &indiceUno, int &indiceDos, CodigoError &codigoError);
 
 #endif

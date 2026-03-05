@@ -1663,11 +1663,12 @@ void test_validar_calcular_ok()
     TokenizarEntrada(lp, linea);
 
     int indice;
+    int valor;
     CodigoError err;
 
-    ValidarComandoCalcular(lp, l, indice, err);
+    ValidarComandoCalcular(lp, l, valor, indice, err);
 
-    if (err == ERR_NINGUNO && indice == 1)
+    if (err == ERR_NINGUNO && indice == 1 && valor == 7)
         printf("✔ test_validar_calcular_ok pasó\n");
     else
         printf("✘ test_validar_calcular_ok falló\n");
@@ -1694,9 +1695,10 @@ void test_validar_calcular_parametro_invalido()
     TokenizarEntrada(lp, linea);
 
     int indice;
+    int valor;
     CodigoError err;
 
-    ValidarComandoCalcular(lp, l, indice, err);
+    ValidarComandoCalcular(lp, l, valor, indice, err);
 
     if (err == ERR_PARAMETRO_INVALIDO)
         printf("✔ test_validar_calcular_parametro_invalido pasó\n");
@@ -1725,9 +1727,10 @@ void test_validar_calcular_indice_no_existe()
     TokenizarEntrada(lp, linea);
 
     int indice;
+    int valor;
     CodigoError err;
 
-    ValidarComandoCalcular(lp, l, indice, err);
+    ValidarComandoCalcular(lp, l, valor, indice, err);
 
     if (err == ERR_INDICE_INVALIDO)
         printf("✔ test_validar_calcular_indice_no_existe pasó\n");
@@ -1756,9 +1759,10 @@ void test_validar_calcular_indice_negativo()
     TokenizarEntrada(lp, linea);
 
     int indice;
+    int valor;
     CodigoError err;
 
-    ValidarComandoCalcular(lp, l, indice, err);
+    ValidarComandoCalcular(lp, l, valor, indice, err);
 
     if (err == ERR_INDICE_INVALIDO)
         printf("✔ test_validar_calcular_indice_negativo pasó\n");
@@ -1782,9 +1786,10 @@ void test_validar_calcular_cantidad_parametros_invalidos()
     TokenizarEntrada(lp, linea);
 
     int indice;
+    int valor;
     CodigoError err;
 
-    ValidarComandoCalcular(lp, l, indice, err);
+    ValidarComandoCalcular(lp, l, valor, indice, err);
 
     if (err == ERR_CANT_PARAMETROS)
         printf("✔ test_validar_calcular_cantidad_parametros_invalidos pasó\n");

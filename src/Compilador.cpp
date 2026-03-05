@@ -50,7 +50,7 @@ void ValidarComandoCompuesta(ListaParsing tokens, ListaExpresiones expresiones, 
     }
 }
 
-void ValidarComandoCalcular(ListaParsing tokens, ListaExpresiones expresiones, int &indice, CodigoError &codigoError)
+void ValidarComandoCalcular(ListaParsing tokens, ListaExpresiones expresiones, int &valor, int &indice, CodigoError &codigoError)
 {
     codigoError = ERR_NINGUNO;
     indice = 0;
@@ -76,6 +76,8 @@ void ValidarComandoCalcular(ListaParsing tokens, ListaExpresiones expresiones, i
                     indice = ConvertirAEntero(tokens->palabra);
                     if (!EsIndiceValido(expresiones, indice))
                         codigoError = ERR_INDICE_INVALIDO;
+                    else
+                        valor = ConvertirAEntero(tokens->palabra);
                 }
                 break;
             }

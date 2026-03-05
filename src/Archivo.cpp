@@ -3,12 +3,21 @@
 Boolean ExisteArchivo(String nombreArchivo)
 {
     Boolean existe = FALSE;
-    FILE *f = fopen(nombreArchivo, "rb");
+
+    String nombreCompleto;
+    strcrear(nombreCompleto);
+    strcop(nombreCompleto, nombreArchivo);
+    strcon(nombreCompleto, ".txt");
+
+    FILE *f = fopen(nombreCompleto, "rb");
+
     if (f != NULL)
     {
         existe = TRUE;
         fclose(f);
     }
+
+    strdestruir(nombreCompleto);
     return existe;
 }
 

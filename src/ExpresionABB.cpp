@@ -35,7 +35,7 @@ ExpresionABB CrearExpresionCompuesta(Operacion o, ExpresionABB a, ExpresionABB b
 
     ExpresionABB eRaiz = new NodoABB;
     eRaiz->tipo = OPERADOR;
-    eRaiz->dato.simbolo = DevolverOperacion(o);
+    eRaiz->dato.simbolo = DevolverOperacionChar(o);
     eRaiz->hizq = eIzq;
     eRaiz->hder = eDer;
 

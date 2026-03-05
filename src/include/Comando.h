@@ -8,7 +8,8 @@ typedef enum
     CALCULAR,
     MOSTRAR,
     RECUPERAR,
-    GARDAR,
+    GUARDAR,
+    IGUALES,
     SALIR
 } TipoComando;
 

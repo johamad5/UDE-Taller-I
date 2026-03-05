@@ -1992,6 +1992,100 @@ void test_validar_iguales_cantidad_tokens_invalida()
     strdestruir(linea);
 }
 
+void test_reconocer_comando_valido()
+{
+    String cmd;
+    strcrear(cmd);
+
+    TipoComando tipo;
+    CodigoError err;
+
+    // Caso 1: "simple"
+    strcop(cmd, "simple");
+    ReconocerComando(cmd, tipo, err);
+    if (tipo == SIMPLE && err == ERR_NINGUNO)
+        printf("✔ test_reconocer_comando 'simple' pasó\n");
+    else
+        printf("✘ test_reconocer_comando 'simple' falló\n");
+
+    // Caso 2: "compuesta"
+    strcop(cmd, "compuesta");
+    ReconocerComando(cmd, tipo, err);
+    if (tipo == COMPUESTA && err == ERR_NINGUNO)
+        printf("✔ test_reconocer_comando 'compuesta' pasó\n");
+    else
+        printf("✘ test_reconocer_comando 'compuesta' falló\n");
+
+    // Caso 3: "calcular"
+    strcop(cmd, "calcular");
+    ReconocerComando(cmd, tipo, err);
+    if (tipo == CALCULAR && err == ERR_NINGUNO)
+        printf("✔ test_reconocer_comando 'calcular' pasó\n");
+    else
+        printf("✘ test_reconocer_comando 'calcular' falló\n");
+
+    // Caso 4: "mostrar"
+    strcop(cmd, "mostrar");
+    ReconocerComando(cmd, tipo, err);
+    if (tipo == MOSTRAR && err == ERR_NINGUNO)
+        printf("✔ test_reconocer_comando 'mostrar' pasó\n");
+    else
+        printf("✘ test_reconocer_comando 'mostrar' falló\n");
+
+    // Caso 5: "guardar"
+    strcop(cmd, "guardar");
+    ReconocerComando(cmd, tipo, err);
+    if (tipo == GUARDAR && err == ERR_NINGUNO)
+        printf("✔ test_reconocer_comando 'guardar' pasó\n");
+    else
+        printf("✘ test_reconocer_comando 'guardar' falló\n");
+
+    // Caso 6: "recuperar"
+    strcop(cmd, "recuperar");
+    ReconocerComando(cmd, tipo, err);
+    if (tipo == RECUPERAR && err == ERR_NINGUNO)
+        printf("✔ test_reconocer_comando 'recuperar' pasó\n");
+    else
+        printf("✘ test_reconocer_comando 'recuperar' falló\n");
+
+    // Caso 7: "iguales"
+    strcop(cmd, "iguales");
+    ReconocerComando(cmd, tipo, err);
+    if (tipo == IGUALES && err == ERR_NINGUNO)
+        printf("✔ test_reconocer_comando 'iguales' pasó\n");
+    else
+        printf("✘ test_reconocer_comando 'iguales' falló\n");
+
+    // Caso 8: "salir"
+    strcop(cmd, "salir");
+    ReconocerComando(cmd, tipo, err);
+    if (tipo == SALIR && err == ERR_NINGUNO)
+        printf("✔ test_reconocer_comando 'salir' pasó\n");
+    else
+        printf("✘ test_reconocer_comando 'salir' falló\n");
+
+    strdestruir(cmd);
+}
+
+void test_reconocer_comando_invalido()
+{
+    String cmd;
+    strcrear(cmd);
+
+    TipoComando tipo;
+    CodigoError err;
+
+    strcop(cmd, "comando_inexistente");
+    ReconocerComando(cmd, tipo, err);
+
+    if (err == ERR_COMANDO_INVALIDO)
+        printf("✔ test_reconocer_comando invalido pasó (ERR_COMANDO_INVALIDO)\n");
+    else
+        printf("✘ test_reconocer_comando invalido falló\n");
+
+    strdestruir(cmd);
+}
+
 int main()
 {
 
@@ -2111,6 +2205,12 @@ int main()
     printf("\n---- Fin de tests ----\n");
 
     printf("\n========== INICIO TESTS MODULO COMPILADOR ==========\n\n");
+
+    // =====================
+    // OBTENER COMANDO
+    // =====================
+    test_reconocer_comando_valido();
+    test_reconocer_comando_invalido();
 
     // =====================
     // COMPUESTA

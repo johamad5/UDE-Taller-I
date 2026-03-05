@@ -1,5 +1,112 @@
 #include "Compilador.h"
 
+void ReconocerYValidarComando(ListaParsing tokens, ListaExpresiones expresiones, TipoComando &tipoComando, Boolean &esX, int &num, int &idx1, Operacion &operador, int &idx2, int &valorX, String &nombreArchivo, CodigoError &codigoError)
+{
+    ReconocerComando(tokens->palabra, tipoComando, codigoError);
+
+    if (codigoError != ERR_NINGUNO)
+    {
+        switch (tipoComando)
+        {
+        case SIMPLE:
+            // ValidarComandoSimple(tokens->sig, esX, num, codigoError);
+            break;
+        case COMPUESTA:
+            ValidarComandoCompuesta(tokens->sig, expresiones, idx1, idx2, operador, codigoError);
+            break;
+        case CALCULAR:
+            ValidarComandoCalcular(tokens->sig, expresiones, num, idx1, codigoError);
+            break;
+        case MOSTRAR:
+            // codigoError = ValidarComandoMostrar(tokens->sig,expresiones);
+            break;
+        case IGUALES:
+            ValidarComandoIguales(tokens->sig, expresiones, idx1, idx2, codigoError);
+            break;
+        case GUARDAR:
+            // ValidarComandoGuardar(tokens->sig, expresiones, idx1, nombreArchivo, codigoError);
+            break;
+        case RECUPERAR:
+            // ValidarComandoRecuperar(tokens->sig, nombreArchivo, codigoError);
+            break;
+        case SALIR:
+            // codigoError = ValidarComandoSalir(tokens->sig);
+            break;
+        }
+    }
+}
+
+void ReconocerComando(String cmd, TipoComando &tipoComando, CodigoError &codigoError)
+{
+    codigoError = ERR_NINGUNO;
+
+    String Simple, Compuesta, Calcular, Mostrar, Guardar, Recuperar, Iguales, Salir;
+
+    strcrear(Simple);
+    strcrear(Compuesta);
+    strcrear(Calcular);
+    strcrear(Mostrar);
+    strcrear(Guardar);
+    strcrear(Recuperar);
+    strcrear(Iguales);
+    strcrear(Salir);
+
+    strcop(Simple, "simple");
+    strcop(Compuesta, "compuesta");
+    strcop(Calcular, "calcular");
+    strcop(Mostrar, "mostrar");
+    strcop(Guardar, "guardar");
+    strcop(Recuperar, "recuperar");
+    strcop(Iguales, "iguales");
+    strcop(Salir, "salir");
+
+    if (streq(cmd, Simple))
+    {
+        tipoComando = SIMPLE;
+    }
+    else if (streq(cmd, Compuesta))
+    {
+        tipoComando = COMPUESTA;
+    }
+    else if (streq(cmd, Calcular))
+    {
+        tipoComando = CALCULAR;
+    }
+    else if (streq(cmd, Mostrar))
+    {
+        tipoComando = MOSTRAR;
+    }
+    else if (streq(cmd, Guardar))
+    {
+        tipoComando = GUARDAR;
+    }
+    else if (streq(cmd, Recuperar))
+    {
+        tipoComando = RECUPERAR;
+    }
+    else if (streq(cmd, Iguales))
+    {
+        tipoComando = IGUALES;
+    }
+    else if (streq(cmd, Salir))
+    {
+        tipoComando = SALIR;
+    }
+    else
+    {
+        codigoError = ERR_COMANDO_INVALIDO;
+    }
+
+    strdestruir(Simple);
+    strdestruir(Compuesta);
+    strdestruir(Calcular);
+    strdestruir(Mostrar);
+    strdestruir(Guardar);
+    strdestruir(Recuperar);
+    strdestruir(Iguales);
+    strdestruir(Salir);
+}
+
 void ValidarComandoCompuesta(ListaParsing tokens, ListaExpresiones expresiones, int &indiceUno, int &indiceDos, Operacion &operacion, CodigoError &codigoError)
 {
     codigoError = ERR_NINGUNO;

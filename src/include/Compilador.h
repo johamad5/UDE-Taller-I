@@ -5,13 +5,12 @@
 #include "CodigoError.h"
 #include "ListaExpresiones.h"
 
-const int TOKENS_COMPUESTA = 4;
-const int TOKENS_CALCULAR = 3;
-const int TOKENS_IGUALES = 3;
+const int TOKENS_COMPUESTA = 3;
+const int TOKENS_CALCULAR = 2;
+const int TOKENS_IGUALES = 2;
 
-const int POSICION_TOKEN_COMANDO = 0;
 const int POSICION_TOKEN_PRIMER_INDICE_COMPUESTA = 1;
-const int POSICION_TOKEN_OPERADOR = 2;
+const int POSICION_TOKEN_OPERADOR_COMPUESTA = 2;
 const int POSICION_TOKEN_SEGUNDO_INDICE_COMPUESTA = 3;
 const int POSICION_TOKEN_INDICE_CALCULO = 2;
 const int POSICION_TOKEN_INDICE_VARIABLE = 1;

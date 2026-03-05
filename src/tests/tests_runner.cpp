@@ -24,6 +24,7 @@
 #include "Expresion.h"
 #include "ListaExpresiones.h"
 #include "Archivo.h"
+#include "Compilador.h"
 
 void test_arboles_identicos()
 {
@@ -1226,6 +1227,46 @@ void test_operacion_default()
     printf("✔ test_operacion_default pasó (se ejecutó el caso por defecto)\n");
 }
 
+void test_devolver_operacion_suma()
+{
+    Operacion op = DevolverOperacion('+');
+
+    if (op == SUMA)
+        printf("✔ test_devolver_operacion_suma pasó\n");
+    else
+        printf("✘ test_devolver_operacion_suma falló\n");
+}
+
+void test_devolver_operacion_resta()
+{
+    Operacion op = DevolverOperacion('-');
+
+    if (op == RESTA)
+        printf("✔ test_devolver_operacion_resta pasó\n");
+    else
+        printf("✘ test_devolver_operacion_resta falló\n");
+}
+
+void test_devolver_operacion_multiplicacion()
+{
+    Operacion op = DevolverOperacion('*');
+
+    if (op == MULTIPLICACION)
+        printf("✔ test_devolver_operacion_multiplicacion pasó\n");
+    else
+        printf("✘ test_devolver_operacion_multiplicacion falló\n");
+}
+
+void test_devolver_operacion_division()
+{
+    Operacion op = DevolverOperacion('/');
+
+    if (op == DIVISION)
+        printf("✔ test_devolver_operacion_division pasó\n");
+    else
+        printf("✘ test_devolver_operacion_division falló\n");
+}
+
 //--------------------------//
 //      MODULO ARCHIVO     //
 //------------------------//
@@ -1360,6 +1401,592 @@ void test_Guardar_Archivo_NoSePuedeAbrir()
         printf("ERROR: no detecto error al abrir.\n");
 }
 
+//--------------------------//
+//     MODULO COMPILADOR    //
+//--------------------------//
+
+// ==========================
+//        COMPUESTA
+// ==========================
+
+void test_validar_compuesta_ok()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e1, e2;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(5);
+
+    e2.indiceLista = 2;
+    e2.terminos = CrearExpresionSimpleInt(10);
+
+    InsertarExpresionAlFinalL(l, e1);
+    InsertarExpresionAlFinalL(l, e2);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "1 + 2");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    Operacion op;
+    CodigoError err;
+
+    ValidarComandoCompuesta(lp, l, i1, i2, op, err);
+
+    if (err == ERR_NINGUNO && i1 == 1 && i2 == 2)
+        printf("✔ test_validar_compuesta_ok pasó\n");
+    else
+        printf("✘ test_validar_compuesta_ok falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_compuesta_operador_invalido()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e1, e2;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(5);
+
+    e2.indiceLista = 2;
+    e2.terminos = CrearExpresionSimpleInt(10);
+
+    InsertarExpresionAlFinalL(l, e1);
+    InsertarExpresionAlFinalL(l, e2);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "1 ! 2");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    Operacion op;
+    CodigoError err;
+
+    ValidarComandoCompuesta(lp, l, i1, i2, op, err);
+
+    if (err == ERR_OPERADOR_INVALIDO)
+        printf("✔ test_validar_compuesta_operador_invalido pasó\n");
+    else
+        printf("✘ test_validar_compuesta_operador_invalido falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_compuesta_primer_indice_no_existe()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e1;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e1);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "99 + 1");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    Operacion op;
+    CodigoError err;
+
+    ValidarComandoCompuesta(lp, l, i1, i2, op, err);
+
+    if (err == ERR_INDICE_INVALIDO)
+        printf("✔ test_validar_compuesta_primer_indice_no_existe pasó\n");
+    else
+        printf("✘ test_validar_compuesta_primer_indice_no_existe falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_compuesta_segundo_indice_no_existe()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e1;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e1);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "1 + 99");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    Operacion op;
+    CodigoError err;
+
+    ValidarComandoCompuesta(lp, l, i1, i2, op, err);
+
+    if (err == ERR_INDICE_INVALIDO)
+        printf("✔ test_validar_compuesta_segundo_indice_no_existe pasó\n");
+    else
+        printf("✘ test_validar_compuesta_segundo_indice_no_existe falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_compuesta_primer_indice_negativo()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e1;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e1);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "-1 + 1");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    Operacion op;
+    CodigoError err;
+
+    ValidarComandoCompuesta(lp, l, i1, i2, op, err);
+
+    if (err == ERR_INDICE_INVALIDO)
+        printf("✔ test_validar_compuesta_primer_indice_negativo pasó\n");
+    else
+        printf("✘ test_validar_compuesta_primer_indice_negativo falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_compuesta_segundo_indice_negativo()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e1, e2;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(5);
+
+    e2.indiceLista = 2;
+    e2.terminos = CrearExpresionSimpleInt(10);
+
+    InsertarExpresionAlFinalL(l, e1);
+    InsertarExpresionAlFinalL(l, e2);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "1 + -123");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    Operacion op;
+    CodigoError err;
+
+    ValidarComandoCompuesta(lp, l, i1, i2, op, err);
+
+    if (err == ERR_INDICE_INVALIDO)
+        printf("✔ test_validar_compuesta_segundo_indice_negativo pasó\n");
+    else
+        printf("✘ test_validar_compuesta_segundo_indice_negativo falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_compuesta_cantidad_tokens_invalida()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "1 +");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    Operacion op;
+    CodigoError err;
+
+    ValidarComandoCompuesta(lp, l, i1, i2, op, err);
+
+    if (err == ERR_CANT_PARAMETROS)
+        printf("✔ test_validar_compuesta_cantidad_tokens_invalida pasó\n");
+    else
+        printf("✘ test_validar_compuesta_cantidad_tokens_invalida falló\n");
+
+    DestruirListaParsing(lp);
+    strdestruir(linea);
+}
+
+// ==========================
+//         CALCULAR
+// ==========================
+
+void test_validar_calcular_ok()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e;
+    e.indiceLista = 1;
+    e.terminos = CrearExpresionSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "7 1");
+
+    TokenizarEntrada(lp, linea);
+
+    int indice;
+    CodigoError err;
+
+    ValidarComandoCalcular(lp, l, indice, err);
+
+    if (err == ERR_NINGUNO && indice == 1)
+        printf("✔ test_validar_calcular_ok pasó\n");
+    else
+        printf("✘ test_validar_calcular_ok falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_calcular_parametro_invalido()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e;
+    e.indiceLista = 1;
+    e.terminos = CrearExpresionSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "abc 1");
+
+    TokenizarEntrada(lp, linea);
+
+    int indice;
+    CodigoError err;
+
+    ValidarComandoCalcular(lp, l, indice, err);
+
+    if (err == ERR_PARAMETRO_INVALIDO)
+        printf("✔ test_validar_calcular_parametro_invalido pasó\n");
+    else
+        printf("✘ test_validar_calcular_parametro_invalido falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_calcular_indice_no_existe()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e;
+    e.indiceLista = 1;
+    e.terminos = CrearExpresionSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "7 99");
+
+    TokenizarEntrada(lp, linea);
+
+    int indice;
+    CodigoError err;
+
+    ValidarComandoCalcular(lp, l, indice, err);
+
+    if (err == ERR_INDICE_INVALIDO)
+        printf("✔ test_validar_calcular_indice_no_existe pasó\n");
+    else
+        printf("✘ test_validar_calcular_indice_no_existe falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_calcular_indice_negativo()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e;
+    e.indiceLista = 1;
+    e.terminos = CrearExpresionSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "7 -99");
+
+    TokenizarEntrada(lp, linea);
+
+    int indice;
+    CodigoError err;
+
+    ValidarComandoCalcular(lp, l, indice, err);
+
+    if (err == ERR_INDICE_INVALIDO)
+        printf("✔ test_validar_calcular_indice_negativo pasó\n");
+    else
+        printf("✘ test_validar_calcular_indice_negativo falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_calcular_cantidad_parametros_invalidos()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "7 99 123");
+
+    TokenizarEntrada(lp, linea);
+
+    int indice;
+    CodigoError err;
+
+    ValidarComandoCalcular(lp, l, indice, err);
+
+    if (err == ERR_CANT_PARAMETROS)
+        printf("✔ test_validar_calcular_cantidad_parametros_invalidos pasó\n");
+    else
+        printf("✘ test_validar_calcular_cantidad_parametros_invalidos falló\n");
+
+    DestruirListaParsing(lp);
+    strdestruir(linea);
+}
+
+// ==========================
+//          IGUALES
+// ==========================
+
+void test_validar_iguales_ok()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e1, e2;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(5);
+    e2.indiceLista = 2;
+    e2.terminos = CrearExpresionSimpleInt(10);
+
+    InsertarExpresionAlFinalL(l, e1);
+    InsertarExpresionAlFinalL(l, e2);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "1 2");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    CodigoError err;
+
+    ValidarComandoIguales(lp, l, i1, i2, err);
+
+    if (err == ERR_NINGUNO && i1 == 1 && i2 == 2)
+        printf("✔ test_validar_iguales_ok pasó\n");
+    else
+        printf("✘ test_validar_iguales_ok falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_iguales_primer_indice_no_existe()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e1;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e1);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "99 1");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    CodigoError err;
+
+    ValidarComandoIguales(lp, l, i1, i2, err);
+
+    if (err == ERR_INDICE_INVALIDO)
+        printf("✔ test_validar_iguales_primer_indice_no_existe pasó\n");
+    else
+        printf("✘ test_validar_iguales_primer_indice_no_existe falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_iguales_segundo_indice_no_existe()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e1;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e1);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "1 99");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    CodigoError err;
+
+    ValidarComandoIguales(lp, l, i1, i2, err);
+
+    if (err == ERR_INDICE_INVALIDO)
+        printf("✔ test_validar_iguales_segundo_indice_no_existe pasó\n");
+    else
+        printf("✘ test_validar_iguales_segundo_indice_no_existe falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_iguales_primer_indice_negativo()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e1;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e1);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "-123 1");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    CodigoError err;
+
+    ValidarComandoIguales(lp, l, i1, i2, err);
+
+    if (err == ERR_INDICE_INVALIDO)
+        printf("✔ test_validar_iguales_primer_indice_negativo pasó\n");
+    else
+        printf("✘ test_validar_iguales_primer_indice_negativo falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_iguales_segundo_indice_negativo()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    Expresion e1, e2;
+    e1.indiceLista = 1;
+    e1.terminos = CrearExpresionSimpleInt(5);
+    e2.indiceLista = 2;
+    e2.terminos = CrearExpresionSimpleInt(10);
+
+    InsertarExpresionAlFinalL(l, e1);
+    InsertarExpresionAlFinalL(l, e2);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "1 -12");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    CodigoError err;
+
+    ValidarComandoIguales(lp, l, i1, i2, err);
+
+    if (err == ERR_INDICE_INVALIDO)
+        printf("✔ test_validar_iguales_segundo_indice_negativo pasó\n");
+    else
+        printf("✘ test_validar_iguales_segundo_indice_negativo falló\n");
+
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+    strdestruir(linea);
+}
+
+void test_validar_iguales_cantidad_tokens_invalida()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "1");
+
+    TokenizarEntrada(lp, linea);
+
+    int i1, i2;
+    CodigoError err;
+
+    ValidarComandoIguales(lp, l, i1, i2, err);
+
+    if (err == ERR_CANT_PARAMETROS)
+        printf("✔ test_validar_iguales_cantidad_tokens_invalida pasó\n");
+    else
+        printf("✘ test_validar_iguales_cantidad_tokens_invalida falló\n");
+
+    DestruirListaParsing(lp);
+    strdestruir(linea);
+}
+
 int main()
 {
 
@@ -1422,6 +2049,10 @@ int main()
     printf("---- Ejecutando tests Operacion ----");
 
     test_operacion_default();
+    test_devolver_operacion_suma();
+    test_devolver_operacion_resta();
+    test_devolver_operacion_division();
+    test_devolver_operacion_multiplicacion();
 
     printf("\n---- Fin de tests Operacion ----\n");
 
@@ -1473,6 +2104,40 @@ int main()
     test_Guardar_Archivo_NoSePuedeAbrir();
 
     printf("\n---- Fin de tests ----\n");
+
+    printf("\n========== INICIO TESTS MODULO COMPILADOR ==========\n\n");
+
+    // =====================
+    // COMPUESTA
+    // =====================
+    test_validar_compuesta_ok();
+    test_validar_compuesta_operador_invalido();
+    test_validar_compuesta_primer_indice_no_existe();
+    test_validar_compuesta_segundo_indice_no_existe();
+    test_validar_compuesta_primer_indice_negativo();
+    test_validar_compuesta_segundo_indice_negativo();
+    test_validar_compuesta_cantidad_tokens_invalida();
+
+    // =====================
+    // CALCULAR
+    // =====================
+    test_validar_calcular_ok();
+    test_validar_calcular_parametro_invalido();
+    test_validar_calcular_indice_no_existe();
+    test_validar_calcular_indice_negativo();
+    test_validar_calcular_cantidad_parametros_invalidos();
+
+    // =====================
+    // IGUALES
+    // =====================
+    test_validar_iguales_ok();
+    test_validar_iguales_primer_indice_no_existe();
+    test_validar_iguales_segundo_indice_no_existe();
+    test_validar_iguales_primer_indice_negativo();
+    test_validar_iguales_segundo_indice_negativo();
+    test_validar_iguales_cantidad_tokens_invalida();
+
+    printf("\n========== FIN TESTS MODULO COMPILADOR ==========\n");
 
     return 0;
 }

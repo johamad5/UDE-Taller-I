@@ -10,7 +10,7 @@ void ValidarComandoCompuesta(ListaParsing tokens, ListaExpresiones expresiones, 
         codigoError = ERR_CANT_PARAMETROS;
     else
     {
-        int i = 0;
+        int i = 1;
         while (tokens != NULL && codigoError == ERR_NINGUNO)
         {
             switch (i)
@@ -21,11 +21,11 @@ void ValidarComandoCompuesta(ListaParsing tokens, ListaExpresiones expresiones, 
                 else
                 {
                     indiceUno = ConvertirAEntero(tokens->palabra);
-                    if (EsIndiceValido(expresiones, indiceUno))
+                    if (!EsIndiceValido(expresiones, indiceUno))
                         codigoError = ERR_INDICE_INVALIDO;
                 }
                 break;
-            case POSICION_TOKEN_OPERADOR:
+            case POSICION_TOKEN_OPERADOR_COMPUESTA:
                 if (!EsOperadorValido(tokens->palabra))
                     codigoError = ERR_OPERADOR_INVALIDO;
                 else
@@ -38,7 +38,7 @@ void ValidarComandoCompuesta(ListaParsing tokens, ListaExpresiones expresiones, 
                 else
                 {
                     indiceDos = ConvertirAEntero(tokens->palabra);
-                    if (EsIndiceValido(expresiones, indiceDos))
+                    if (!EsIndiceValido(expresiones, indiceDos))
                         codigoError = ERR_INDICE_INVALIDO;
                 }
                 break;
@@ -59,7 +59,7 @@ void ValidarComandoCalcular(ListaParsing tokens, ListaExpresiones expresiones, i
         codigoError = ERR_CANT_PARAMETROS;
     else
     {
-        int i = 0;
+        int i = 1;
         while (tokens != NULL && codigoError == ERR_NINGUNO)
         {
             switch (i)
@@ -74,7 +74,7 @@ void ValidarComandoCalcular(ListaParsing tokens, ListaExpresiones expresiones, i
                 else
                 {
                     indice = ConvertirAEntero(tokens->palabra);
-                    if (EsIndiceValido(expresiones, indice))
+                    if (!EsIndiceValido(expresiones, indice))
                         codigoError = ERR_INDICE_INVALIDO;
                 }
                 break;
@@ -96,7 +96,7 @@ void ValidarComandoIguales(ListaParsing tokens, ListaExpresiones expresiones, in
         codigoError = ERR_CANT_PARAMETROS;
     else
     {
-        int i = 0;
+        int i = 1;
         while (tokens != NULL && codigoError == ERR_NINGUNO)
         {
             switch (i)
@@ -107,7 +107,7 @@ void ValidarComandoIguales(ListaParsing tokens, ListaExpresiones expresiones, in
                 else
                 {
                     indiceUno = ConvertirAEntero(tokens->palabra);
-                    if (EsIndiceValido(expresiones, indiceUno))
+                    if (!EsIndiceValido(expresiones, indiceUno))
                         codigoError = ERR_INDICE_INVALIDO;
                 }
                 break;
@@ -117,7 +117,7 @@ void ValidarComandoIguales(ListaParsing tokens, ListaExpresiones expresiones, in
                 else
                 {
                     indiceDos = ConvertirAEntero(tokens->palabra);
-                    if (EsIndiceValido(expresiones, indiceDos))
+                    if (!EsIndiceValido(expresiones, indiceDos))
                         codigoError = ERR_INDICE_INVALIDO;
                 }
                 break;

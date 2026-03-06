@@ -65,14 +65,11 @@ Boolean EsIndiceValido(ListaExpresiones l, int indiceLista)
 void MostrarExpresiones(ListaExpresiones l)
 {
 
+    printf("EXPRESIONES EN MEMORIA\n");
+    printf("-----------------------\n");
     while (l != NULL)
     {
-        printf("EXPRESION %d \n", getIndiceExpresion(l->exp));
-        printf("-------------\n");
-        printf("Indice: %d \n", getIndiceExpresion(l->exp));
-        printf("Exp: ");
         MostrarExpresion(l->exp);
-        printf("\n\n");
 
         l = l->sig;
     }

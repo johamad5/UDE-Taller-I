@@ -246,7 +246,6 @@ Boolean EsEnteroPositivo(String s)
         return FALSE;
     }
 
-    // Si empieza con '-' no es positivo
     if (s[0] == '-')
     {
         return FALSE;

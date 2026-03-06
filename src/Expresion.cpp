@@ -22,6 +22,7 @@ int getIndiceExpresion(Expresion exp)
 
 void MostrarExpresion(Expresion exp)
 {
+    printf("%d) ", exp.indiceLista);
     MostrarABB(exp.terminos);
 }
 

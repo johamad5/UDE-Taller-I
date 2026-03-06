@@ -426,7 +426,9 @@ void EjecutarComando(TipoComando tipo, Boolean esX, int num, int idx1, Operacion
             setTermino(exp, CrearExpresionSimpleInt(num));
         }
         InsertarExpresionAlFinalL(lp, exp);
+
         MostrarExpresion(exp);
+        printf("\n\n");
 
         break;
     case COMPUESTA:
@@ -434,6 +436,7 @@ void EjecutarComando(TipoComando tipo, Boolean esX, int num, int idx1, Operacion
         setTermino(exp, CrearExpresionCompuesta(op, getTermino(BuscarExpresionPorIndice(lp, idx1)), getTermino(BuscarExpresionPorIndice(lp, idx2))));
         InsertarExpresionAlFinalL(lp, exp);
         MostrarExpresion(exp);
+        printf("\n\n");
 
         break;
     case CALCULAR:
@@ -443,22 +446,25 @@ void EjecutarComando(TipoComando tipo, Boolean esX, int num, int idx1, Operacion
             err = ERR_DIVISION_POR_CERO;
         else
             printf("RESULTADO: %d", resultado);
-
+        printf("\n\n");
         break;
     case MOSTRAR:
         MostrarExpresiones(lp);
+        printf("\n\n");
         break;
     case RECUPERAR:
 
         exp = RecuperarExpresionDesdeArchivo(nombreArchivo);
         InsertarExpresionAlFinalL(lp, exp);
         MostrarExpresion(exp);
+        printf("\n\n");
 
         break;
     case GUARDAR:
 
         GuardarExpresionEnArchivo(nombreArchivo, BuscarExpresionPorIndice(lp, idx1));
         printf("Se guardó la expresion correctamente!");
+        printf("\n\n");
 
         break;
     case IGUALES:
@@ -466,7 +472,7 @@ void EjecutarComando(TipoComando tipo, Boolean esX, int num, int idx1, Operacion
             printf("Las expresiones con los indices %d y %d son identicas.\n", idx1, idx2);
         else
             printf("Las expresiones con los indices %d y %d NO son identicas.\n", idx1, idx2);
-
+        printf("\n\n");
         break;
     }
 }

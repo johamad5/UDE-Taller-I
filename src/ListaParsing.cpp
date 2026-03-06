@@ -46,6 +46,8 @@ void DestruirListaParsing(ListaParsing &lp)
 void TokenizarEntrada(ListaParsing &lp, String linea)
 {
 
+    DestruirListaParsing(lp);
+    lp = NULL;
     int j, i = 0;
 
     while (linea[i] != '\0')

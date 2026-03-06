@@ -1,6 +1,21 @@
 #include "Expresion.h"
 
-int ObtenerIndiceExpresion(Expresion exp)
+void setTermino(Expresion &exp, ExpresionABB expABB)
+{
+    exp.terminos = expABB;
+}
+
+ExpresionABB getTermino(Expresion exp)
+{
+    return exp.terminos;
+}
+
+void setIndiceExpresion(Expresion &exp, int id)
+{
+    exp.indiceLista = id;
+}
+
+int getIndiceExpresion(Expresion exp)
 {
     return exp.indiceLista;
 }
@@ -24,5 +39,6 @@ void BajarExpresion(Expresion exp, FILE *f)
 void LevantarExpresion(Expresion &exp, FILE *f)
 {
     exp.terminos = NULL;
+    exp.indiceLista = 0;
     LevantarExpresionABB(exp.terminos, f);
 }

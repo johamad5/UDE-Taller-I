@@ -11,10 +11,10 @@ Boolean ExisteArchivo(String nombreArchivo);
 
 // Guarda una expresión (ABB) en orden en un archivo.
 // PRECONDICIÓN: nombreArchivo es un String válido: alfabético.
-void GuardarExpresionEnArchivo(String nombreArchivo, Expresion exp, CodigoError &err);
+void GuardarExpresionEnArchivo(String nombreArchivo, Expresion exp);
 
 // Recupera expresiones desde un archivo y las agrega a la lista.
 // PRECONDICIÓN: nombreArchivo es un String válido: alfabético.
-void RecuperarExpresionDesdeArchivo(String nombreArchivo, Expresion &lista, CodigoError &err);
+Expresion RecuperarExpresionDesdeArchivo(String nombreArchivo);
 
 #endif

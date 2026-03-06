@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "ExpresionABB.h"
 
-ExpresionABB CrearExpresionSimpleX(char c)
+ExpresionABB CrearExpresionSimpleChar(char c)
 {
     ExpresionABB e = new NodoABB;
     e->indiceNodo = 1;
@@ -259,6 +259,69 @@ void BajarNodoABB(ExpresionABB nodo, FILE *f)
     fwrite(&nodo->indiceNodo, sizeof(int), 1, f);
 }
 
+void LevantarExpresionABB(ExpresionABB &abb, FILE *f)
+{
+    abb = NULL;
+
+    TipoDato tipo;
+    int indice;
+    int num;
+    char simbolo;
+
+    Boolean leyoDato = FALSE;
+    Boolean leyoIndice = FALSE;
+
+    fread(&tipo, sizeof(TipoDato), 1, f);
+
+    while (!feof(f))
+    {
+
+        if (tipo == ENTERO)
+        {
+            if ((fread(&num, sizeof(int), 1, f) == 1))
+                leyoDato = TRUE;
+            else
+                leyoDato = FALSE;
+        }
+        else
+        {
+            if ((fread(&simbolo, sizeof(char), 1, f) == 1))
+                leyoDato = TRUE;
+            else
+                leyoDato = FALSE;
+        }
+
+        if ((fread(&indice, sizeof(int), 1, f) == 1))
+            leyoIndice = TRUE;
+        else
+            leyoIndice = FALSE;
+
+        if (leyoDato == TRUE && leyoIndice == TRUE)
+        {
+            ExpresionABB nuevo = new NodoABB;
+
+            nuevo->tipo = tipo;
+
+            if (tipo == ENTERO)
+            {
+                nuevo->dato.num = num;
+            }
+            else
+            {
+                nuevo->dato.simbolo = simbolo;
+            }
+
+            nuevo->indiceNodo = indice;
+            nuevo->hizq = NULL;
+            nuevo->hder = NULL;
+
+            InsertarEnABB(abb, nuevo);
+        }
+
+        fread(&tipo, sizeof(TipoDato), 1, f);
+    }
+}
+
 void InsertarEnABB(ExpresionABB &abb, ExpresionABB nuevo)
 {
     if (abb == NULL)
@@ -274,44 +337,6 @@ void InsertarEnABB(ExpresionABB &abb, ExpresionABB nuevo)
         else
         {
             InsertarEnABB(abb->hder, nuevo);
-        }
-    }
-}
-
-void LevantarExpresionABB(ExpresionABB &abb, FILE *f)
-{
-    abb = NULL;
-
-    Boolean seguir = TRUE;
-
-    while (seguir == TRUE)
-    {
-        ExpresionABB nuevo = new NodoABB;
-
-        size_t leido = fread(&nuevo->tipo, sizeof(TipoDato), 1, f);
-
-        if (leido != 1)
-        {
-            delete nuevo;
-            seguir = FALSE;
-        }
-        else
-        {
-            if (nuevo->tipo == ENTERO)
-            {
-                fread(&nuevo->dato.num, sizeof(int), 1, f);
-            }
-            else
-            {
-                fread(&nuevo->dato.simbolo, sizeof(char), 1, f);
-            }
-
-            fread(&nuevo->indiceNodo, sizeof(int), 1, f);
-
-            nuevo->hizq = NULL;
-            nuevo->hder = NULL;
-
-            InsertarEnABB(abb, nuevo);
         }
     }
 }

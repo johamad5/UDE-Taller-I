@@ -19,7 +19,7 @@ typedef struct nodoA
 typedef NodoABB *ExpresionABB;
 
 // Reserva memoria para un nodo ABB e inicializa sus enlaces.
-ExpresionABB CrearExpresionSimpleX(char c);
+ExpresionABB CrearExpresionSimpleChar(char c);
 
 // Reserva memoria para un nodo ABB e inicializa sus enlaces.
 ExpresionABB CrearExpresionSimpleInt(int num);
@@ -51,12 +51,19 @@ void insertarParentesisDerecho(ExpresionABB &abb);
 // Muestra por pantalla la expresion
 void MostrarABB(ExpresionABB abb);
 
+//
+// PRECONDICION:
 void BajarExpresionABB(ExpresionABB abb, FILE *f);
 
+//
+// PRECONIDCION:
 void BajarNodoABB(ExpresionABB nodo, FILE *f);
 
+//
+// PRECONIDICON:
 void LevantarExpresionABB(ExpresionABB &abb, FILE *f);
 
+//
 void InsertarEnABB(ExpresionABB &abb, ExpresionABB nuevo);
 
 #endif

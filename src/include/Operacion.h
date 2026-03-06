@@ -9,10 +9,10 @@ typedef enum
     DIVISION
 } Operacion;
 
-// Devuelve el simbolo de la operacion
+// Devuelve el ENUM de la operacion
 Operacion DevolverOperacion(char c);
 
-// Devuelve el primer caracter
+// Devuelve el simbolo de la operacion
 char DevolverOperacionChar(Operacion o);
 
 #endif

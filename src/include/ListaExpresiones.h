@@ -15,7 +15,7 @@ typedef NodoL *ListaExpresiones;
 void ReservarNodoL(ListaExpresiones &n);
 
 // Inserta una nueva expresión al final de la lista.
-void InsertarExpresionAlFinalL(ListaExpresiones &lp, Expresion exp);
+void InsertarExpresionAlFinalL(ListaExpresiones &lp, Expresion &exp);
 
 // Busca una expresión por índice dentro de la lista.
 // PRECONDICIÓN: índice es un valor válido y existente
@@ -30,5 +30,8 @@ void MostrarExpresiones(ListaExpresiones l);
 
 // Destruye la lista y libera la memoria de sus nodos
 void DestruirListaExpresiones(ListaExpresiones &l);
+
+// Devuelve el ultimo indice disponible para ser usado
+int UltimoIndiceDisponible(ListaExpresiones l);
 
 #endif

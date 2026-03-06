@@ -54,10 +54,6 @@ void MostrarError(CodigoError e)
     case ERR_ARCHIVO_INVALIDO:
         printf("ERROR: Archivo invalido.\n");
         break;
-
-    case ERR_ARCHIVO_NO_SE_PUEDE_ABRIR:
-        printf("ERROR: No se puede abrir el archivo.\n");
-        break;
     case ERR_LISTA_VACIA:
         printf("ERROR: No hay expresiones guardadas en memoria.\n");
         break;

@@ -11,7 +11,7 @@ const int MOSTRAR_CANT_TOKENS = 0;
 const int RECUPERAR_CANT_TOKENS = 1;
 const int SALIR_CANT_TOKENS = 0;
 const int TOKENS_SIMPLE = 1;
-const int TOKENS_GUARDAR = 3;
+const int TOKENS_GUARDAR = 2;
 const int TOKENS_COMPUESTA = 3;
 const int TOKENS_CALCULAR = 2;
 const int TOKENS_IGUALES = 2;
@@ -19,18 +19,18 @@ const int TOKENS_IGUALES = 2;
 const int POSICION_TOKEN_PRIMER_INDICE_COMPUESTA = 1;
 const int POSICION_TOKEN_OPERADOR_COMPUESTA = 2;
 const int POSICION_TOKEN_SEGUNDO_INDICE_COMPUESTA = 3;
-const int POSICION_TOKEN_INDICE_CALCULO = 2;
-const int POSICION_TOKEN_INDICE_VARIABLE = 1;
+const int POSICION_TOKEN_INDICE_CALCULO = 1;
+const int POSICION_TOKEN_INDICE_VARIABLE = 2;
 const int POSICION_TOKEN_PRIMER_INDICE_IGUALES = 1;
 const int POSICION_TOKEN_SEGUNDO_INDICE_IGUALES = 2;
-const int POSICION_TOKEN_PARAM_SIMPLE = 2;
-const int POSICION_TOKEN_NOMBRE_ARCHIVO_GUARDAR = 3;
-const int POSICION_TOKEN_INDICE_GUARDAR = 2;
+const int POSICION_TOKEN_PARAM_SIMPLE = 1;
+const int POSICION_TOKEN_NOMBRE_ARCHIVO_GUARDAR = 2;
+const int POSICION_TOKEN_INDICE_GUARDAR = 1;
 
 //  LOOP PRINCIPAL
 // Ejecuta el ciclo principal del programa. Lee la entrada del usuario, tokeniza, valida y ejecuta comandos.
 // PRECONDICIÓN: La lista de expresiones debe estar correctamente inicializada.
-void LoopPrincipal(ListaExpresiones &expresiones);
+void LoopPrincipal();
 
 //  RECONOCIMIENTO Y VALIDACIÓN GENERAL
 // Reconoce el comando ingresado y valida sus parámetros. Deja cargados todos los valores necesarios para ejecutar el comando.
@@ -84,7 +84,7 @@ void EjecutarComando(
     Operacion op,
     int idx2,
     String nombreArchivo,
-    ListaExpresiones &expresiones,
+    ListaExpresiones &lp,
     CodigoError &err);
 
 // Crea una expresión simple y la guarda en la lista.

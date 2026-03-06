@@ -6,8 +6,10 @@ void ReservarNodoL(ListaExpresiones &n)
     n->sig = NULL;
 }
 
-void InsertarExpresionAlFinalL(ListaExpresiones &lp, Expresion exp)
+void InsertarExpresionAlFinalL(ListaExpresiones &lp, Expresion &exp)
 {
+    setIndiceExpresion(exp, UltimoIndiceDisponible(lp));
+
     if (lp == NULL)
     {
         ReservarNodoL(lp);
@@ -32,7 +34,7 @@ Expresion BuscarExpresionPorIndice(ListaExpresiones l, int indiceLista)
 {
     NodoL *aux = l;
 
-    while (ObtenerIndiceExpresion(aux->exp) != indiceLista)
+    while (getIndiceExpresion(aux->exp) != indiceLista)
     {
         aux = aux->sig;
     }
@@ -47,7 +49,7 @@ Boolean EsIndiceValido(ListaExpresiones l, int indiceLista)
 
     while (aux != NULL && !existe)
     {
-        if (ObtenerIndiceExpresion(aux->exp) == indiceLista)
+        if (getIndiceExpresion(aux->exp) == indiceLista)
         {
             existe = TRUE;
         }
@@ -62,18 +64,17 @@ Boolean EsIndiceValido(ListaExpresiones l, int indiceLista)
 
 void MostrarExpresiones(ListaExpresiones l)
 {
-    NodoL *aux = l;
 
-    while (aux != NULL)
+    while (l != NULL)
     {
-        printf("EXPRESION %d \n", ObtenerIndiceExpresion(aux->exp));
+        printf("EXPRESION %d \n", getIndiceExpresion(l->exp));
         printf("-------------\n");
-        printf("Indice: %d \n", ObtenerIndiceExpresion(aux->exp));
+        printf("Indice: %d \n", getIndiceExpresion(l->exp));
         printf("Exp: ");
-        MostrarExpresion(aux->exp);
+        MostrarExpresion(l->exp);
         printf("\n\n");
 
-        aux = aux->sig;
+        l = l->sig;
     }
 }
 
@@ -90,4 +91,17 @@ void DestruirListaExpresiones(ListaExpresiones &l)
 
         delete aux;
     }
+}
+
+int UltimoIndiceDisponible(ListaExpresiones l)
+{
+    int i = 1;
+
+    while (l != NULL)
+    {
+        l = l->sig;
+        i++;
+    }
+
+    return i;
 }

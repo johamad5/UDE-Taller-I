@@ -1,13 +1,14 @@
 #include "Compilador.h"
 
-void LoopPrincipal(ListaExpresiones &expresiones)
+void LoopPrincipal()
 {
 
     String linea;
     strcrear(linea);
+    ListaExpresiones expresiones = NULL;
     ListaParsing tokens = NULL;
     TipoComando tipo;
-    CodigoError error;
+    CodigoError error = ERR_NINGUNO;
 
     Boolean esX;
     int num;
@@ -42,8 +43,7 @@ void LoopPrincipal(ListaExpresiones &expresiones)
                             error);
 
             if (error != ERR_NINGUNO)
-                ;
-            MostrarError(error);
+                MostrarError(error);
         }
     }
 
@@ -53,33 +53,12 @@ void LoopPrincipal(ListaExpresiones &expresiones)
     strdestruir(nombreArchivo);
 }
 
-void ValidarComandoSimple(ListaParsing tokens, Boolean &esX, int &num, CodigoError &error)
-{
-    esX = FALSE;
-    num = 0;
-    error = ERR_NINGUNO;
-
-    if (CantidadTokens(tokens) != TOKENS_SIMPLE)
-        error = ERR_CANT_PARAMETROS;
-    else if (tokens != NULL && error == ERR_NINGUNO)
-    {
-        if (streq(tokens->palabra, "x"))
-            esX = TRUE;
-        else
-        {
-            if (EsEntero(tokens->palabra))
-                num = ConvertirAEntero(tokens->palabra);
-            else
-                error = ERR_PARAMETRO_INVALIDO;
-        }
-    }
-}
-
-void ReconocerYValidarComando(ListaParsing tokens, ListaExpresiones expresiones, TipoComando &tipoComando, Boolean &esX, int &num, int &idx1, Operacion &operador, int &idx2, int &valorX, String &nombreArchivo, CodigoError &codigoError)
+void ReconocerYValidarComando(ListaParsing tokens, ListaExpresiones expresiones, TipoComando &tipoComando, Boolean &esX, int &num,
+                              int &idx1, Operacion &operador, int &idx2, int &valorX, String &nombreArchivo, CodigoError &codigoError)
 {
     ReconocerComando(tokens->palabra, tipoComando, codigoError);
 
-    if (codigoError != ERR_NINGUNO)
+    if (codigoError == ERR_NINGUNO)
     {
         switch (tipoComando)
         {
@@ -182,6 +161,28 @@ void ReconocerComando(String cmd, TipoComando &tipoComando, CodigoError &codigoE
     strdestruir(Salir);
 }
 
+void ValidarComandoSimple(ListaParsing tokens, Boolean &esX, int &num, CodigoError &error)
+{
+    esX = FALSE;
+    num = 0;
+    error = ERR_NINGUNO;
+
+    if (CantidadTokens(tokens) != TOKENS_SIMPLE)
+        error = ERR_CANT_PARAMETROS;
+    else if (tokens != NULL && error == ERR_NINGUNO)
+    {
+        if (streq(tokens->palabra, "x"))
+            esX = TRUE;
+        else
+        {
+            if (EsEntero(tokens->palabra))
+                num = ConvertirAEntero(tokens->palabra);
+            else
+                error = ERR_PARAMETRO_INVALIDO;
+        }
+    }
+}
+
 void ValidarComandoCompuesta(ListaParsing tokens, ListaExpresiones expresiones, int &indiceUno, int &indiceDos, Operacion &operacion, CodigoError &codigoError)
 {
     codigoError = ERR_NINGUNO;
@@ -246,10 +247,6 @@ void ValidarComandoCalcular(ListaParsing tokens, ListaExpresiones expresiones, i
         {
             switch (i)
             {
-            case POSICION_TOKEN_INDICE_VARIABLE:
-                if (!EsEntero(tokens->palabra))
-                    codigoError = ERR_PARAMETRO_INVALIDO;
-                break;
             case POSICION_TOKEN_INDICE_CALCULO:
                 if (!EsEnteroPositivo(tokens->palabra))
                     codigoError = ERR_INDICE_INVALIDO;
@@ -258,9 +255,13 @@ void ValidarComandoCalcular(ListaParsing tokens, ListaExpresiones expresiones, i
                     indice = ConvertirAEntero(tokens->palabra);
                     if (!EsIndiceValido(expresiones, indice))
                         codigoError = ERR_INDICE_INVALIDO;
-                    else
-                        valor = ConvertirAEntero(tokens->palabra);
                 }
+                break;
+            case POSICION_TOKEN_INDICE_VARIABLE:
+                if (!EsEntero(tokens->palabra))
+                    codigoError = ERR_PARAMETRO_INVALIDO;
+                else
+                    valor = ConvertirAEntero(tokens->palabra);
                 break;
             }
 
@@ -405,13 +406,67 @@ CodigoError ValidarComandoSalir(ListaParsing tokens)
     return err;
 }
 
-void EjecutarComando(
-    TipoComando tipo,
-    Boolean esX,
-    int num,
-    int idx1,
-    Operacion op,
-    int idx2,
-    String nombreArchivo,
-    ListaExpresiones &expresiones,
-    CodigoError &err) {}
+void EjecutarComando(TipoComando tipo, Boolean esX, int num, int idx1, Operacion op, int idx2, String nombreArchivo,
+                     ListaExpresiones &lp, CodigoError &err)
+{
+    Expresion exp;
+    Boolean errDiv = FALSE;
+    int resultado;
+
+    switch (tipo)
+    {
+    case SIMPLE:
+
+        if (esX)
+        {
+            setTermino(exp, CrearExpresionSimpleChar('x'));
+        }
+        else
+        {
+            setTermino(exp, CrearExpresionSimpleInt(num));
+        }
+        InsertarExpresionAlFinalL(lp, exp);
+        MostrarExpresion(exp);
+
+        break;
+    case COMPUESTA:
+
+        setTermino(exp, CrearExpresionCompuesta(op, getTermino(BuscarExpresionPorIndice(lp, idx1)), getTermino(BuscarExpresionPorIndice(lp, idx2))));
+        InsertarExpresionAlFinalL(lp, exp);
+        MostrarExpresion(exp);
+
+        break;
+    case CALCULAR:
+        exp = BuscarExpresionPorIndice(lp, idx1);
+        resultado = CalcularABB(getTermino(exp), num, errDiv);
+        if (errDiv)
+            err = ERR_DIVISION_POR_CERO;
+        else
+            printf("RESULTADO: %d", resultado);
+
+        break;
+    case MOSTRAR:
+        MostrarExpresiones(lp);
+        break;
+    case RECUPERAR:
+
+        exp = RecuperarExpresionDesdeArchivo(nombreArchivo);
+        InsertarExpresionAlFinalL(lp, exp);
+        MostrarExpresion(exp);
+
+        break;
+    case GUARDAR:
+
+        GuardarExpresionEnArchivo(nombreArchivo, BuscarExpresionPorIndice(lp, idx1));
+        printf("Se guardó la expresion correctamente!");
+
+        break;
+    case IGUALES:
+        if (ArbolesIdenticos(getTermino(BuscarExpresionPorIndice(lp, idx1)), getTermino(BuscarExpresionPorIndice(lp, idx2))))
+            printf("Las expresiones con los indices %d y %d son identicas.\n", idx1, idx2);
+        else
+            printf("Las expresiones con los indices %d y %d NO son identicas.\n", idx1, idx2);
+
+        break;
+    }
+}

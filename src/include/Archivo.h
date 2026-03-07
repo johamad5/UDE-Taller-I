@@ -13,6 +13,6 @@ void GuardarExpresionEnArchivo(ListaExpresiones lp, String nombreArchivo, int id
 
 // Recupera expresiones desde un archivo y las agrega a la lista.
 // PRECONDICIÓN: nombreArchivo es un String válido: alfabético.
-void RecuperarInsertarExpresionDesdeArchivo(String nombreArchivo, ListaExpresiones lp);
+void RecuperarInsertarExpresionDesdeArchivo(String nombreArchivo, ListaExpresiones &lp);
 
 #endif

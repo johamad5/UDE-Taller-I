@@ -3234,6 +3234,43 @@ void test_loop_division_por_cero()
     remove("entrada_div0.txt");
 }
 
+void test_guardar_recuperar_verificar_indice()
+{
+    ListaExpresiones lista = NULL;
+    CodigoError err = ERR_NINGUNO;
+
+    String nombreArchivo;
+    strcrear(nombreArchivo);
+    strcop(nombreArchivo, "testexp");
+
+    EjecutarComando(SIMPLE, TRUE, 0, 0, SUMA, 0, nombreArchivo, lista, err);
+    EjecutarComando(GUARDAR, FALSE, 0, 1, SUMA, 0, nombreArchivo, lista, err);
+
+    DestruirListaExpresiones(lista);
+    lista = NULL;
+
+    EjecutarComando(RECUPERAR, FALSE, 0, 0, SUMA, 0, nombreArchivo, lista, err);
+
+    Boolean indiceEncontrado = FALSE;
+    ListaExpresiones temp = lista;
+    while (temp != NULL && !indiceEncontrado)
+    {
+        if (temp->exp.indiceLista == 1)
+            indiceEncontrado = TRUE;
+        temp = temp->sig;
+    }
+
+    if (err == ERR_NINGUNO && indiceEncontrado)
+        printf("OK     test_guardar_recuperar_verificar_indice\n");
+    else
+        printf("ERROR  test_guardar_recuperar_verificar_indice\n");
+
+    DestruirListaExpresiones(lista);
+    strdestruir(nombreArchivo);
+
+    remove("testexp.txt");
+}
+
 int main()
 {
     printf("---- Ejecutando tests String ----\n");
@@ -3426,6 +3463,7 @@ int main()
     test_loop_principal();
     test_loop_principal_error();
     test_loop_division_por_cero();
+    test_guardar_recuperar_verificar_indice();
     printf("---------------------------------------------------------\n\n");
 
     return 0;

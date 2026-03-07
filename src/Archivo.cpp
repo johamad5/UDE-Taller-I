@@ -61,7 +61,7 @@ void GuardarExpresionEnArchivo(ListaExpresiones lp, String nombreArchivo, int id
     strdestruir(nombreCompleto);
 }
 
-void RecuperarInsertarExpresionDesdeArchivo(String nombreArchivo, ListaExpresiones lp)
+void RecuperarInsertarExpresionDesdeArchivo(String nombreArchivo, ListaExpresiones &lp)
 {
     FILE *arch = NULL;
 

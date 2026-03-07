@@ -19,19 +19,19 @@ typedef struct nodoA
 typedef NodoABB *ExpresionABB;
 
 // Reserva memoria para un nodo ABB e inicializa sus enlaces.
-ExpresionABB CrearExpresionSimpleChar(char c);
+ExpresionABB CrearAbbSimpleChar();
 
 // Reserva memoria para un nodo ABB e inicializa sus enlaces.
-ExpresionABB CrearExpresionSimpleInt(int num);
+ExpresionABB CrearAbbSimpleInt(int num);
 
 // Reserva memoria para un nodo ABB e inicializa sus enlaces.
-ExpresionABB CrearExpresionCompuesta(Operacion o, ExpresionABB a, ExpresionABB b);
+ExpresionABB CrearAbbCompuesta(Operacion o, ExpresionABB a, ExpresionABB b);
 
 // Indica si dos árboles son idénticos en estructura y contenido.
 Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b);
 
 // Calcula el resultado del ABB evaluando la variable x.
-int CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision);
+void CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision, int &resultado);
 
 // Llibera toda la memoria del ABB.
 void DestruirABB(ExpresionABB &abb);

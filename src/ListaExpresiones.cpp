@@ -70,6 +70,7 @@ void MostrarExpresiones(ListaExpresiones l)
     while (l != NULL)
     {
         MostrarExpresion(l->exp);
+        printf("\n");
 
         l = l->sig;
     }
@@ -101,4 +102,40 @@ int UltimoIndiceDisponible(ListaExpresiones l)
     }
 
     return i;
+}
+
+void CrearInsertarExpresionSimple(ListaExpresiones &lp, Boolean esX, int num)
+{
+    Expresion exp = CrearExpresionSimple(esX, num);
+    InsertarExpresionAlFinalL(lp, exp);
+    MostrarExpresion(exp);
+}
+
+void CrearInsertarExpresionCompuesta(ListaExpresiones &lp, Operacion op, int idx1, int idx2)
+{
+    Expresion exp = CrearExpresionCompuesta(op, BuscarExpresionPorIndice(lp, idx1), BuscarExpresionPorIndice(lp, idx2));
+    InsertarExpresionAlFinalL(lp, exp);
+    MostrarExpresion(exp);
+}
+
+void CalcularExpresionPorIndice(ListaExpresiones lp, int idx1, int num, Boolean &errDiv, int &resultado)
+{
+    CalcularExpresion(BuscarExpresionPorIndice(lp, idx1), num, errDiv, resultado);
+}
+
+void BajarExpresionEnLista(ListaExpresiones lp, int idx1, FILE *arch)
+{
+    BajarExpresion(BuscarExpresionPorIndice(lp, idx1), arch);
+}
+
+void LevantarInsertarExpresion(ListaExpresiones lp, FILE *arch)
+{
+    Expresion exp;
+    LevantarExpresion(exp, arch);
+    InsertarExpresionAlFinalL(lp, exp);
+}
+
+void CompararExpresionesPorIndice(ListaExpresiones lp, int idx1, int idx2)
+{
+    CompararExpresiones(BuscarExpresionPorIndice(lp, idx1), BuscarExpresionPorIndice(lp, idx2));
 }

@@ -417,31 +417,18 @@ void EjecutarComando(TipoComando tipo, Boolean esX, int num, int idx1, Operacion
     {
     case SIMPLE:
 
-        if (esX)
-        {
-            setTermino(exp, CrearExpresionSimpleChar('x'));
-        }
-        else
-        {
-            setTermino(exp, CrearExpresionSimpleInt(num));
-        }
-        InsertarExpresionAlFinalL(lp, exp);
-
-        MostrarExpresion(exp);
+        CrearInsertarExpresionSimple(lp, esX, num);
         printf("\n\n");
 
         break;
     case COMPUESTA:
 
-        setTermino(exp, CrearExpresionCompuesta(op, getTermino(BuscarExpresionPorIndice(lp, idx1)), getTermino(BuscarExpresionPorIndice(lp, idx2))));
-        InsertarExpresionAlFinalL(lp, exp);
-        MostrarExpresion(exp);
+        CrearInsertarExpresionCompuesta(lp, op, idx1, idx2);
         printf("\n\n");
 
         break;
     case CALCULAR:
-        exp = BuscarExpresionPorIndice(lp, idx1);
-        resultado = CalcularABB(getTermino(exp), num, errDiv);
+        CalcularExpresionPorIndice(lp, idx1, num, errDiv, resultado);
         if (errDiv)
             err = ERR_DIVISION_POR_CERO;
         else
@@ -454,24 +441,18 @@ void EjecutarComando(TipoComando tipo, Boolean esX, int num, int idx1, Operacion
         break;
     case RECUPERAR:
 
-        exp = RecuperarExpresionDesdeArchivo(nombreArchivo);
-        InsertarExpresionAlFinalL(lp, exp);
-        MostrarExpresion(exp);
+        RecuperarInsertarExpresionDesdeArchivo(nombreArchivo, lp);
         printf("\n\n");
 
         break;
     case GUARDAR:
 
-        GuardarExpresionEnArchivo(nombreArchivo, BuscarExpresionPorIndice(lp, idx1));
-        printf("Se guardó la expresion correctamente!");
+        GuardarExpresionEnArchivo(lp, nombreArchivo, idx1);
         printf("\n\n");
 
         break;
     case IGUALES:
-        if (ArbolesIdenticos(getTermino(BuscarExpresionPorIndice(lp, idx1)), getTermino(BuscarExpresionPorIndice(lp, idx2))))
-            printf("Las expresiones con los indices %d y %d son identicas.\n", idx1, idx2);
-        else
-            printf("Las expresiones con los indices %d y %d NO son identicas.\n", idx1, idx2);
+        CompararExpresionesPorIndice(lp, idx1, idx2);
         printf("\n\n");
         break;
     }

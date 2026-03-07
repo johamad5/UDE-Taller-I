@@ -749,7 +749,7 @@ void test_crear_expresion_simple_variable_x()
 
 void test_crear_expresion_simple_int()
 {
-    ExpresionABB e = CrearExpresionSimpleInt(5);
+    ExpresionABB e = CrearAbbSimpleInt(5);
     Boolean error = FALSE;
 
     int resultado = CalcularABB(e, 0, error);
@@ -765,13 +765,13 @@ void test_crear_expresion_simple_int()
 void test_crear_expresion_compuesta()
 {
 
-    ExpresionABB a = CrearExpresionSimpleInt(3);
-    ExpresionABB b = CrearExpresionSimpleInt(2);
-    ExpresionABB suma = CrearExpresionCompuesta(SUMA, a, b);
+    ExpresionABB a = CrearAbbSimpleInt(3);
+    ExpresionABB b = CrearAbbSimpleInt(2);
+    ExpresionABB suma = CrearAbbCompuesta(SUMA, a, b);
 
     ExpresionABB x = CrearExpresionSimpleChar('x');
-    ExpresionABB final1 = CrearExpresionCompuesta(MULTIPLICACION, suma, x);
-    ExpresionABB final2 = CrearExpresionCompuesta(MULTIPLICACION, suma, suma);
+    ExpresionABB final1 = CrearAbbCompuesta(MULTIPLICACION, suma, x);
+    ExpresionABB final2 = CrearAbbCompuesta(MULTIPLICACION, suma, suma);
 
     Boolean error1 = FALSE;
     Boolean error2 = FALSE;
@@ -789,18 +789,18 @@ void test_crear_expresion_compuesta()
 
 void test_arboles_identicos()
 {
-    ExpresionABB a1 = CrearExpresionSimpleInt(25);
-    ExpresionABB a2 = CrearExpresionSimpleInt(25);
+    ExpresionABB a1 = CrearAbbSimpleInt(25);
+    ExpresionABB a2 = CrearAbbSimpleInt(25);
 
-    ExpresionABB a3 = CrearExpresionSimpleInt(99);
+    ExpresionABB a3 = CrearAbbSimpleInt(99);
 
     ExpresionABB x1 = CrearExpresionSimpleChar('x');
-    ExpresionABB n1 = CrearExpresionSimpleInt(10);
-    ExpresionABB compuesto1 = CrearExpresionCompuesta(SUMA, x1, n1);
+    ExpresionABB n1 = CrearAbbSimpleInt(10);
+    ExpresionABB compuesto1 = CrearAbbCompuesta(SUMA, x1, n1);
 
     ExpresionABB x2 = CrearExpresionSimpleChar('x');
-    ExpresionABB n2 = CrearExpresionSimpleInt(10);
-    ExpresionABB compuesto2 = CrearExpresionCompuesta(SUMA, x2, n2);
+    ExpresionABB n2 = CrearAbbSimpleInt(10);
+    ExpresionABB compuesto2 = CrearAbbCompuesta(SUMA, x2, n2);
 
     if (ArbolesIdenticos(a1, a2) == TRUE)
         printf("OK     test_arboles_identicos_simples_iguales\n");
@@ -836,11 +836,11 @@ void test_arboles_identicos()
 // CalcularABB
 void test_calcular_abb_suma_resta()
 {
-    ExpresionABB a = CrearExpresionSimpleInt(10);
-    ExpresionABB b = CrearExpresionSimpleInt(4);
+    ExpresionABB a = CrearAbbSimpleInt(10);
+    ExpresionABB b = CrearAbbSimpleInt(4);
 
-    ExpresionABB s = CrearExpresionCompuesta(SUMA, a, b);
-    ExpresionABB r = CrearExpresionCompuesta(RESTA, a, b);
+    ExpresionABB s = CrearAbbCompuesta(SUMA, a, b);
+    ExpresionABB r = CrearAbbCompuesta(RESTA, a, b);
 
     Boolean errorSuma = FALSE;
     Boolean errorResta = FALSE;
@@ -862,9 +862,9 @@ void test_calcular_abb_suma_resta()
 void test_calcular_abb_multiplicacion_variable()
 {
     ExpresionABB a = CrearExpresionSimpleChar('x');
-    ExpresionABB b = CrearExpresionSimpleInt(2);
+    ExpresionABB b = CrearAbbSimpleInt(2);
 
-    ExpresionABB e = CrearExpresionCompuesta(MULTIPLICACION, a, b);
+    ExpresionABB e = CrearAbbCompuesta(MULTIPLICACION, a, b);
 
     Boolean error = FALSE;
     int resultado = CalcularABB(e, 5, error);
@@ -879,12 +879,12 @@ void test_calcular_abb_multiplicacion_variable()
 
 void test_calcular_abb_division()
 {
-    ExpresionABB a = CrearExpresionSimpleInt(10);
-    ExpresionABB b_cero = CrearExpresionSimpleInt(0);
-    ExpresionABB b_ok = CrearExpresionSimpleInt(2);
+    ExpresionABB a = CrearAbbSimpleInt(10);
+    ExpresionABB b_cero = CrearAbbSimpleInt(0);
+    ExpresionABB b_ok = CrearAbbSimpleInt(2);
 
-    ExpresionABB e_error = CrearExpresionCompuesta(DIVISION, a, b_cero);
-    ExpresionABB e_ok = CrearExpresionCompuesta(DIVISION, a, b_ok);
+    ExpresionABB e_error = CrearAbbCompuesta(DIVISION, a, b_cero);
+    ExpresionABB e_ok = CrearAbbCompuesta(DIVISION, a, b_ok);
 
     Boolean error1 = FALSE;
     Boolean error2 = FALSE;
@@ -907,10 +907,10 @@ void test_calcular_abb_division()
 void test_mostrar_abb()
 {
     ExpresionABB e1 = CrearExpresionSimpleChar('x');
-    ExpresionABB e2 = CrearExpresionSimpleInt(10);
-    ExpresionABB e3 = CrearExpresionSimpleInt(2);
-    ExpresionABB arbol = CrearExpresionCompuesta(SUMA, e1, e2);
-    ExpresionABB arbol2 = CrearExpresionCompuesta(MULTIPLICACION, arbol, e3);
+    ExpresionABB e2 = CrearAbbSimpleInt(10);
+    ExpresionABB e3 = CrearAbbSimpleInt(2);
+    ExpresionABB arbol = CrearAbbCompuesta(SUMA, e1, e2);
+    ExpresionABB arbol2 = CrearAbbCompuesta(MULTIPLICACION, arbol, e3);
 
     printf("> test_mostrar_abb\n");
 
@@ -951,7 +951,7 @@ void test_mostrar_expresion_simple()
 {
     Expresion exp;
     exp.indiceLista = 1;
-    exp.terminos = CrearExpresionSimpleInt(5);
+    exp.terminos = CrearAbbSimpleInt(5);
 
     printf("> test_mostrar_expresion_simple\n");
 
@@ -966,7 +966,7 @@ void test_destruir_expresion_simple()
 {
     Expresion exp;
     exp.indiceLista = 1;
-    exp.terminos = CrearExpresionSimpleInt(10);
+    exp.terminos = CrearAbbSimpleInt(10);
 
     DestruirExpresion(exp);
 
@@ -978,9 +978,9 @@ void test_destruir_expresion_simple()
 
 void test_destruir_expresion_compuesta()
 {
-    ExpresionABB a = CrearExpresionSimpleInt(3);
-    ExpresionABB b = CrearExpresionSimpleInt(4);
-    ExpresionABB suma = CrearExpresionCompuesta(SUMA, a, b);
+    ExpresionABB a = CrearAbbSimpleInt(3);
+    ExpresionABB b = CrearAbbSimpleInt(4);
+    ExpresionABB suma = CrearAbbCompuesta(SUMA, a, b);
 
     Expresion exp;
     exp.indiceLista = 2;
@@ -1004,7 +1004,7 @@ void test_insertar_en_lista_vacia()
 
     Expresion exp;
     exp.indiceLista = 1;
-    exp.terminos = CrearExpresionSimpleInt(5);
+    exp.terminos = CrearAbbSimpleInt(5);
 
     InsertarExpresionAlFinalL(l, exp);
 
@@ -1022,11 +1022,11 @@ void test_insertar_dos_expresiones()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(3);
+    e1.terminos = CrearAbbSimpleInt(3);
 
     Expresion e2;
     e2.indiceLista = 2;
-    e2.terminos = CrearExpresionSimpleInt(7);
+    e2.terminos = CrearAbbSimpleInt(7);
 
     InsertarExpresionAlFinalL(l, e1);
     InsertarExpresionAlFinalL(l, e2);
@@ -1047,15 +1047,15 @@ void test_insertar_en_lista_con_multiples_nodos()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(10);
+    e1.terminos = CrearAbbSimpleInt(10);
 
     Expresion e2;
     e2.indiceLista = 2;
-    e2.terminos = CrearExpresionSimpleInt(20);
+    e2.terminos = CrearAbbSimpleInt(20);
 
     Expresion e3;
     e3.indiceLista = 3;
-    e3.terminos = CrearExpresionSimpleInt(30);
+    e3.terminos = CrearAbbSimpleInt(30);
 
     InsertarExpresionAlFinalL(l, e1);
     InsertarExpresionAlFinalL(l, e2);
@@ -1081,11 +1081,11 @@ void test_buscar_expresion_por_indice()
 
     Expresion e1;
     e1.indiceLista = 10;
-    e1.terminos = CrearExpresionSimpleInt(1);
+    e1.terminos = CrearAbbSimpleInt(1);
 
     Expresion e2;
     e2.indiceLista = 20;
-    e2.terminos = CrearExpresionSimpleInt(2);
+    e2.terminos = CrearAbbSimpleInt(2);
 
     InsertarExpresionAlFinalL(l, e1);
     InsertarExpresionAlFinalL(l, e2);
@@ -1106,7 +1106,7 @@ void test_es_indice_valido_true()
 
     Expresion e;
     e.indiceLista = 5;
-    e.terminos = CrearExpresionSimpleInt(8);
+    e.terminos = CrearAbbSimpleInt(8);
 
     InsertarExpresionAlFinalL(l, e);
 
@@ -1124,7 +1124,7 @@ void test_es_indice_valido_false()
 
     Expresion e;
     e.indiceLista = 3;
-    e.terminos = CrearExpresionSimpleInt(4);
+    e.terminos = CrearAbbSimpleInt(4);
 
     InsertarExpresionAlFinalL(l, e);
 
@@ -1142,11 +1142,11 @@ void test_mostrar_expresiones()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(3);
+    e1.terminos = CrearAbbSimpleInt(3);
 
     Expresion e2;
     e2.indiceLista = 2;
-    e2.terminos = CrearExpresionSimpleInt(7);
+    e2.terminos = CrearAbbSimpleInt(7);
 
     InsertarExpresionAlFinalL(l, e1);
     InsertarExpresionAlFinalL(l, e2);
@@ -1165,7 +1165,7 @@ void test_destruir_lista()
 
     Expresion e;
     e.indiceLista = 1;
-    e.terminos = CrearExpresionSimpleInt(5);
+    e.terminos = CrearAbbSimpleInt(5);
 
     InsertarExpresionAlFinalL(l, e);
 
@@ -1363,15 +1363,15 @@ void test_guardar_recuperar_expresion_archivo_ok()
 
     Expresion exp, expRecuperada;
 
-    ExpresionABB n3 = CrearExpresionSimpleInt(3);
+    ExpresionABB n3 = CrearAbbSimpleInt(3);
     ExpresionABB nx = CrearExpresionSimpleChar('x');
-    ExpresionABB suma = CrearExpresionCompuesta(SUMA, n3, nx);
+    ExpresionABB suma = CrearAbbCompuesta(SUMA, n3, nx);
 
-    ExpresionABB n10 = CrearExpresionSimpleInt(10);
-    ExpresionABB n2 = CrearExpresionSimpleInt(2);
-    ExpresionABB resta = CrearExpresionCompuesta(RESTA, n10, n2);
+    ExpresionABB n10 = CrearAbbSimpleInt(10);
+    ExpresionABB n2 = CrearAbbSimpleInt(2);
+    ExpresionABB resta = CrearAbbCompuesta(RESTA, n10, n2);
 
-    ExpresionABB raiz = CrearExpresionCompuesta(MULTIPLICACION, suma, resta);
+    ExpresionABB raiz = CrearAbbCompuesta(MULTIPLICACION, suma, resta);
 
     exp.indiceLista = 99;
     exp.terminos = raiz;
@@ -1405,10 +1405,10 @@ void test_validar_compuesta_ok()
 
     Expresion e1, e2;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
 
     e2.indiceLista = 2;
-    e2.terminos = CrearExpresionSimpleInt(10);
+    e2.terminos = CrearAbbSimpleInt(10);
 
     InsertarExpresionAlFinalL(l, e1);
     InsertarExpresionAlFinalL(l, e2);
@@ -1442,10 +1442,10 @@ void test_validar_compuesta_operador_invalido()
 
     Expresion e1, e2;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
 
     e2.indiceLista = 2;
-    e2.terminos = CrearExpresionSimpleInt(10);
+    e2.terminos = CrearAbbSimpleInt(10);
 
     InsertarExpresionAlFinalL(l, e1);
     InsertarExpresionAlFinalL(l, e2);
@@ -1479,7 +1479,7 @@ void test_validar_compuesta_primer_indice_no_existe()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e1);
 
     String linea;
@@ -1511,7 +1511,7 @@ void test_validar_compuesta_segundo_indice_no_existe()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e1);
 
     String linea;
@@ -1543,7 +1543,7 @@ void test_validar_compuesta_primer_indice_negativo()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e1);
 
     String linea;
@@ -1575,10 +1575,10 @@ void test_validar_compuesta_segundo_indice_negativo()
 
     Expresion e1, e2;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
 
     e2.indiceLista = 2;
-    e2.terminos = CrearExpresionSimpleInt(10);
+    e2.terminos = CrearAbbSimpleInt(10);
 
     InsertarExpresionAlFinalL(l, e1);
     InsertarExpresionAlFinalL(l, e2);
@@ -1639,7 +1639,7 @@ void test_validar_calcular_ok()
 
     Expresion e;
     e.indiceLista = 1;
-    e.terminos = CrearExpresionSimpleInt(5);
+    e.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e);
 
     String linea;
@@ -1671,7 +1671,7 @@ void test_validar_calcular_parametro_invalido()
 
     Expresion e;
     e.indiceLista = 1;
-    e.terminos = CrearExpresionSimpleInt(5);
+    e.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e);
 
     String linea;
@@ -1703,7 +1703,7 @@ void test_validar_calcular_indice_no_existe()
 
     Expresion e;
     e.indiceLista = 1;
-    e.terminos = CrearExpresionSimpleInt(5);
+    e.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e);
 
     String linea;
@@ -1735,7 +1735,7 @@ void test_validar_calcular_indice_negativo()
 
     Expresion e;
     e.indiceLista = 1;
-    e.terminos = CrearExpresionSimpleInt(5);
+    e.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e);
 
     String linea;
@@ -1794,9 +1794,9 @@ void test_validar_iguales_ok()
 
     Expresion e1, e2;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
     e2.indiceLista = 2;
-    e2.terminos = CrearExpresionSimpleInt(10);
+    e2.terminos = CrearAbbSimpleInt(10);
 
     InsertarExpresionAlFinalL(l, e1);
     InsertarExpresionAlFinalL(l, e2);
@@ -1829,7 +1829,7 @@ void test_validar_iguales_primer_indice_no_existe()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e1);
 
     String linea;
@@ -1860,7 +1860,7 @@ void test_validar_iguales_segundo_indice_no_existe()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e1);
 
     String linea;
@@ -1891,7 +1891,7 @@ void test_validar_iguales_primer_indice_negativo()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e1);
 
     String linea;
@@ -1922,9 +1922,9 @@ void test_validar_iguales_segundo_indice_negativo()
 
     Expresion e1, e2;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
     e2.indiceLista = 2;
-    e2.terminos = CrearExpresionSimpleInt(10);
+    e2.terminos = CrearAbbSimpleInt(10);
 
     InsertarExpresionAlFinalL(l, e1);
     InsertarExpresionAlFinalL(l, e2);
@@ -2207,7 +2207,7 @@ void test_validar_guardar_indice_invalido()
     TokenizarEntrada(lp, linea);
     Expresion e;
     e.indiceLista = 1;
-    e.terminos = CrearExpresionSimpleInt(1);
+    e.terminos = CrearAbbSimpleInt(1);
     InsertarExpresionAlFinalL(l, e);
 
     int ind;
@@ -2240,7 +2240,7 @@ void test_validar_guardar_indice_negativo()
     TokenizarEntrada(lp, linea);
     Expresion e;
     e.indiceLista = 1;
-    e.terminos = CrearExpresionSimpleInt(1);
+    e.terminos = CrearAbbSimpleInt(1);
     InsertarExpresionAlFinalL(l, e);
 
     int ind;
@@ -2269,7 +2269,7 @@ void test_validar_guardar_nombre_invalido()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e1);
 
     String linea;
@@ -2302,7 +2302,7 @@ void test_validar_guardar_ok()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e1);
 
     String linea;
@@ -2337,7 +2337,7 @@ void test_validar_guardar_archivo_existe()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(5);
+    e1.terminos = CrearAbbSimpleInt(5);
     InsertarExpresionAlFinalL(l, e1);
 
     FILE *f = fopen("archivotest.txt", "wb");
@@ -2379,7 +2379,7 @@ void test_validar_mostrar_ok()
     ListaExpresiones expresiones = NULL;
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(10);
+    e1.terminos = CrearAbbSimpleInt(10);
     InsertarExpresionAlFinalL(expresiones, e1);
 
     CodigoError err = ValidarComandoMostrar(tokens, expresiones);
@@ -2406,7 +2406,7 @@ void test_validar_mostrar_error_tokens()
     ListaExpresiones expresiones = NULL;
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearExpresionSimpleInt(10);
+    e1.terminos = CrearAbbSimpleInt(10);
     InsertarExpresionAlFinalL(expresiones, e1);
 
     CodigoError err = ValidarComandoMostrar(tokens, expresiones);

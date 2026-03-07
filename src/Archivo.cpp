@@ -21,7 +21,7 @@ Boolean ExisteArchivo(String nombreArchivo)
     return existe;
 }
 
-void GuardarExpresionEnArchivo(String nombreArchivo, Expresion exp)
+void GuardarExpresionEnArchivo(ListaExpresiones lp, String nombreArchivo, int idx)
 {
     FILE *arch = NULL;
     String nombreCompleto;
@@ -34,17 +34,15 @@ void GuardarExpresionEnArchivo(String nombreArchivo, Expresion exp)
 
     if (arch != NULL)
     {
-        BajarExpresion(exp, arch);
+        BajarExpresionEnLista(lp, idx, arch);
         fclose(arch);
     }
 
     strdestruir(nombreCompleto);
 }
 
-Expresion RecuperarExpresionDesdeArchivo(String nombreArchivo)
+void RecuperarInsertarExpresionDesdeArchivo(String nombreArchivo, ListaExpresiones lp)
 {
-    Expresion exp;
-
     FILE *arch = NULL;
     String nombreCompleto;
     strcrear(nombreCompleto);
@@ -54,10 +52,9 @@ Expresion RecuperarExpresionDesdeArchivo(String nombreArchivo)
 
     arch = fopen(nombreCompleto, "rb");
 
-    LevantarExpresion(exp, arch);
+    LevantarInsertarExpresion(lp, arch);
     fclose(arch);
     remove(nombreCompleto);
 
     strdestruir(nombreCompleto);
-    return exp;
 }

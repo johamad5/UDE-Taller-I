@@ -1,18 +1,18 @@
 #include <stdio.h>
 #include "ExpresionABB.h"
 
-ExpresionABB CrearExpresionSimpleChar(char c)
+ExpresionABB CrearAbbSimpleChar()
 {
     ExpresionABB e = new NodoABB;
     e->indiceNodo = 1;
     e->tipo = VARIABLE;
-    e->dato.simbolo = c;
+    e->dato.simbolo = 'x';
     e->hizq = NULL;
     e->hder = NULL;
     return e;
 }
 
-ExpresionABB CrearExpresionSimpleInt(int num)
+ExpresionABB CrearAbbSimpleInt(int num)
 {
     ExpresionABB e = new NodoABB;
     e->indiceNodo = 1;
@@ -23,7 +23,7 @@ ExpresionABB CrearExpresionSimpleInt(int num)
     return e;
 }
 
-ExpresionABB CrearExpresionCompuesta(Operacion o, ExpresionABB a, ExpresionABB b)
+ExpresionABB CrearAbbCompuesta(Operacion o, ExpresionABB a, ExpresionABB b)
 {
     int contador = 0;
 
@@ -76,9 +76,9 @@ Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b)
     return resultado;
 }
 
-int CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision)
+void CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision, int &resultado)
 {
-    int resultado = 0;
+    resultado = 0;
 
     if (nodo != NULL && errorDivision == FALSE)
     {
@@ -92,8 +92,11 @@ int CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision)
         }
         else if (nodo->tipo == OPERADOR)
         {
-            int izq = CalcularABB(nodo->hizq, valorX, errorDivision);
-            int der = CalcularABB(nodo->hder, valorX, errorDivision);
+            int izq;
+            int der;
+
+            CalcularABB(nodo->hizq, valorX, errorDivision, izq);
+            CalcularABB(nodo->hder, valorX, errorDivision, der);
 
             if (errorDivision == FALSE)
             {
@@ -121,8 +124,6 @@ int CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision)
             }
         }
     }
-
-    return resultado;
 }
 
 void DestruirABB(ExpresionABB &abb)

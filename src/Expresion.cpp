@@ -43,3 +43,38 @@ void LevantarExpresion(Expresion &exp, FILE *f)
     exp.indiceLista = 0;
     LevantarExpresionABB(exp.terminos, f);
 }
+
+Expresion CrearExpresionSimple(Boolean esX, int num)
+{
+    Expresion exp;
+    exp.indiceLista = 0;
+
+    if (esX)
+        exp.terminos = CrearAbbSimpleChar();
+    else
+        exp.terminos = CrearAbbSimpleInt(num);
+
+    return exp;
+}
+
+Expresion CrearExpresionCompuesta(Operacion op, Expresion exp1, Expresion exp2)
+{
+    Expresion exp;
+    exp.indiceLista = 0;
+    exp.terminos = CrearAbbCompuesta(op, exp1.terminos, exp2.terminos);
+
+    return exp;
+}
+
+void CalcularExpresion(Expresion exp, int num, Boolean &errDiv, int &resultado)
+{
+    CalcularABB(exp.terminos, num, errDiv, resultado);
+}
+
+void CompararExpresiones(Expresion exp1, Expresion exp2)
+{
+    if (ArbolesIdenticos(exp1.terminos, exp2.terminos))
+        printf("Las expresiones son identicas.\n");
+    else
+        printf("Las expresiones NO son identicas.\n");
+}

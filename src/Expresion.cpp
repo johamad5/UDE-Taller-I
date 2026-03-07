@@ -1,15 +1,5 @@
 #include "Expresion.h"
 
-void setTermino(Expresion &exp, ExpresionABB expABB)
-{
-    exp.terminos = expABB;
-}
-
-ExpresionABB getTermino(Expresion exp)
-{
-    return exp.terminos;
-}
-
 void setIndiceExpresion(Expresion &exp, int id)
 {
     exp.indiceLista = id;

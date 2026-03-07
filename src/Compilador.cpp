@@ -96,23 +96,87 @@ void ReconocerComando(String cmd, TipoComando &tipoComando, CodigoError &codigoE
 
     String Simple, Compuesta, Calcular, Mostrar, Guardar, Recuperar, Iguales, Salir;
 
-    strcrear(Simple);
-    strcrear(Compuesta);
-    strcrear(Calcular);
-    strcrear(Mostrar);
-    strcrear(Guardar);
-    strcrear(Recuperar);
-    strcrear(Iguales);
-    strcrear(Salir);
+    Simple = new char[7];
+    Simple[0] = 's';
+    Simple[1] = 'i';
+    Simple[2] = 'm';
+    Simple[3] = 'p';
+    Simple[4] = 'l';
+    Simple[5] = 'e';
+    Simple[6] = '\0';
 
-    strcop(Simple, "simple");
-    strcop(Compuesta, "compuesta");
-    strcop(Calcular, "calcular");
-    strcop(Mostrar, "mostrar");
-    strcop(Guardar, "guardar");
-    strcop(Recuperar, "recuperar");
-    strcop(Iguales, "iguales");
-    strcop(Salir, "salir");
+    Compuesta = new char[10];
+    Compuesta[0] = 'c';
+    Compuesta[1] = 'o';
+    Compuesta[2] = 'm';
+    Compuesta[3] = 'p';
+    Compuesta[4] = 'u';
+    Compuesta[5] = 'e';
+    Compuesta[6] = 's';
+    Compuesta[7] = 't';
+    Compuesta[8] = 'a';
+    Compuesta[9] = '\0';
+
+    Calcular = new char[8];
+    Calcular[0] = 'c';
+    Calcular[1] = 'a';
+    Calcular[2] = 'l';
+    Calcular[3] = 'c';
+    Calcular[4] = 'u';
+    Calcular[5] = 'l';
+    Calcular[6] = 'a';
+    Calcular[7] = 'r';
+    Calcular[8] = '\0';
+
+    Mostrar = new char[7];
+    Mostrar[0] = 'm';
+    Mostrar[1] = 'o';
+    Mostrar[2] = 's';
+    Mostrar[3] = 't';
+    Mostrar[4] = 'r';
+    Mostrar[5] = 'a';
+    Mostrar[6] = 'r';
+    Mostrar[7] = '\0';
+
+    Guardar = new char[7];
+    Guardar[0] = 'g';
+    Guardar[1] = 'u';
+    Guardar[2] = 'a';
+    Guardar[3] = 'r';
+    Guardar[4] = 'd';
+    Guardar[5] = 'a';
+    Guardar[6] = 'r';
+    Guardar[7] = '\0';
+
+    Recuperar = new char[9];
+    Recuperar[0] = 'r';
+    Recuperar[1] = 'e';
+    Recuperar[2] = 'c';
+    Recuperar[3] = 'u';
+    Recuperar[4] = 'p';
+    Recuperar[5] = 'e';
+    Recuperar[6] = 'r';
+    Recuperar[7] = 'a';
+    Recuperar[8] = 'r';
+    Recuperar[9] = '\0';
+
+    Iguales = new char[7];
+    Iguales[0] = 'i';
+    Iguales[1] = 'g';
+    Iguales[2] = 'u';
+    Iguales[3] = 'a';
+    Iguales[4] = 'l';
+    Iguales[5] = 'e';
+    Iguales[6] = 's';
+    Iguales[7] = '\0';
+
+    Salir = new char[6];
+    Salir[0] = 's';
+    Salir[1] = 'a';
+    Salir[2] = 'l';
+    Salir[3] = 'i';
+    Salir[4] = 'r';
+    Salir[5] = '\0';
 
     if (streq(cmd, Simple))
     {
@@ -171,7 +235,11 @@ void ValidarComandoSimple(ListaParsing tokens, Boolean &esX, int &num, CodigoErr
         error = ERR_CANT_PARAMETROS;
     else if (tokens != NULL && error == ERR_NINGUNO)
     {
-        if (streq(tokens->palabra, "x"))
+        String X = new char[2];
+        X[0] = 'x';
+        X[1] = '\0';
+
+        if (streq(tokens->palabra, X))
             esX = TRUE;
         else
         {
@@ -180,6 +248,7 @@ void ValidarComandoSimple(ListaParsing tokens, Boolean &esX, int &num, CodigoErr
             else
                 error = ERR_PARAMETRO_INVALIDO;
         }
+        strdestruir(X);
     }
 }
 
@@ -454,6 +523,9 @@ void EjecutarComando(TipoComando tipo, Boolean esX, int num, int idx1, Operacion
     case IGUALES:
         CompararExpresionesPorIndice(lp, idx1, idx2);
         printf("\n\n");
+        break;
+    case SALIR:
+        printf("Hasta la vista, baby! \n");
         break;
     }
 }

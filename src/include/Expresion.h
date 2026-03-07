@@ -8,12 +8,6 @@ typedef struct
     int indiceLista;
 } Expresion;
 
-// Setea la expresionABB de una expresion
-void setTermino(Expresion &exp, ExpresionABB expABB);
-
-// Devuelve la expresionABB de una expresion
-ExpresionABB getTermino(Expresion exp);
-
 // Setea el indice de una expresion
 void setIndiceExpresion(Expresion &exp, int id);
 

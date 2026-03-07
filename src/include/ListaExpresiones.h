@@ -47,7 +47,7 @@ void CalcularExpresionPorIndice(ListaExpresiones lp, int idx1, int num, Boolean 
 void BajarExpresionEnLista(ListaExpresiones lp, int idx1, FILE *arch);
 
 // Recupera una expresion de un archivo y la agrega al final de la lista
-void LevantarInsertarExpresion(ListaExpresiones lp, FILE *arch);
+void LevantarInsertarExpresion(ListaExpresiones &lp, FILE *arch);
 
 // Busca dos expresiones de la lista y compara si son iguales
 void CompararExpresionesPorIndice(ListaExpresiones lp, int idx1, int idx2);

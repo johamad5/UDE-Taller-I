@@ -26,7 +26,6 @@ void InsertarExpresionAlFinalL(ListaExpresiones &lp, Expresion &exp)
 
         ReservarNodoL(aux->sig);
         aux->sig->exp = exp;
-        aux->sig->sig = NULL;
     }
 }
 
@@ -34,7 +33,7 @@ Expresion BuscarExpresionPorIndice(ListaExpresiones l, int indiceLista)
 {
     NodoL *aux = l;
 
-    while (getIndiceExpresion(aux->exp) != indiceLista)
+    while (aux != NULL && getIndiceExpresion(aux->exp) != indiceLista)
     {
         aux = aux->sig;
     }
@@ -128,7 +127,7 @@ void BajarExpresionEnLista(ListaExpresiones lp, int idx1, FILE *arch)
     BajarExpresion(BuscarExpresionPorIndice(lp, idx1), arch);
 }
 
-void LevantarInsertarExpresion(ListaExpresiones lp, FILE *arch)
+void LevantarInsertarExpresion(ListaExpresiones &lp, FILE *arch)
 {
     Expresion exp;
     LevantarExpresion(exp, arch);

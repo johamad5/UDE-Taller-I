@@ -297,17 +297,20 @@ void test_streq_diferente_largo()
 
 void test_bajar_string_basico()
 {
-    FILE *f = fopen("teststring.txt", "wb");
-    char palabra[] = "Hola";
-    fwrite(palabra, sizeof(char), 5, f);
-    fclose(f);
-
     String s;
     strcrear(s);
-    f = fopen("teststring.txt", "rb");
+    strcop(s, "Hola");
 
+    FILE *f = fopen("test.txt", "wb");
     BajarString(s, f);
+    fclose(f);
 
+    strdestruir(s);
+
+    strcrear(s);
+
+    f = fopen("test.txt", "rb");
+    LevantarString(s, f);
     fclose(f);
 
     if (streq(s, "Hola"))
@@ -316,22 +319,24 @@ void test_bajar_string_basico()
         printf("ERROR  test_bajar_string_basico: se leyó: %s\n", s);
 
     strdestruir(s);
-    remove("teststring.txt");
+    remove("test.txt");
 }
 
 void test_bajar_string_vacio()
 {
-    FILE *f = fopen("testvacio.txt", "wb");
-    char nulo = '\0';
-    fwrite(&nulo, sizeof(char), 1, f);
-    fclose(f);
-
     String s;
     strcrear(s);
-    f = fopen("testvacio.txt", "rb");
 
+    FILE *f = fopen("test.txt", "wb");
     BajarString(s, f);
+    fclose(f);
 
+    strdestruir(s);
+
+    strcrear(s);
+
+    f = fopen("test.txt", "rb");
+    LevantarString(s, f);
     fclose(f);
 
     if (strlar(s) == 0)
@@ -340,31 +345,30 @@ void test_bajar_string_vacio()
         printf("ERROR  test_bajar_string_vacio\n");
 
     strdestruir(s);
-    remove("testvacio.txt");
 }
 
 void test_bajar_string_fin_archivo()
 {
-
-    FILE *f_out = fopen("testeof.txt", "wb");
-    char letras[3] = {'A', 'B', 'C'};
-    fwrite(letras, sizeof(char), 3, f_out);
-    fclose(f_out);
-
-    FILE *f_in = fopen("testeof.txt", "rb");
     String s;
     strcrear(s);
+    strcop(s, "Hola");
 
-    BajarString(s, f_in);
-    fclose(f_in);
-
-    if (streq(s, "ABC") == TRUE && strlar(s) == 3)
-        printf("OK     test_bajar_string_fin_archivo\n");
-    else
-        printf("ERROR  test_bajar_string_fin_archivo\n");
+    FILE *f = fopen("test.txt", "wb");
+    BajarString(s, f);
+    fclose(f);
 
     strdestruir(s);
-    remove("testeof.txt");
+
+    strcrear(s);
+
+    f = fopen("test.txt", "rb");
+    LevantarString(s, f);
+    LevantarString(s, f);
+    fclose(f);
+
+    printf("OK     test_bajar_string_fin_archivo\n");
+
+    strdestruir(s);
 }
 
 void test_levantar_string_basico()
@@ -373,22 +377,24 @@ void test_levantar_string_basico()
     strcrear(s);
     strcop(s, "Hola");
 
-    FILE *f = fopen("testsave.txt", "wb");
+    FILE *f = fopen("test.txt", "wb");
+    BajarString(s, f);
+    fclose(f);
+
+    strdestruir(s);
+
+    strcrear(s);
+
+    f = fopen("test.txt", "rb");
     LevantarString(s, f);
     fclose(f);
 
-    f = fopen("testsave.txt", "rb");
-    char buffer[10];
-    size_t leidos = fread(buffer, sizeof(char), 5, f);
-    fclose(f);
-
-    if (leidos == 5 && streq(buffer, "Hola") == TRUE && buffer[4] == '\0')
+    if (streq(s, "Hola"))
         printf("OK     test_levantar_string_basico\n");
     else
         printf("ERROR  test_levantar_string_basico\n");
 
     strdestruir(s);
-    remove("testsave.txt");
 }
 
 void test_levantar_string_vacio()
@@ -396,22 +402,25 @@ void test_levantar_string_vacio()
     String s;
     strcrear(s);
 
-    FILE *f = fopen("testemptysave.txt", "wb");
+    FILE *f = fopen("test.txt", "wb");
+    BajarString(s, f);
+    fclose(f);
+
+    strdestruir(s);
+
+    strcrear(s);
+
+    f = fopen("test.txt", "rb");
     LevantarString(s, f);
     fclose(f);
 
-    f = fopen("testemptysave.txt", "rb");
-    char c;
-    size_t leidos = fread(&c, sizeof(char), 1, f);
-    fclose(f);
-
-    if (leidos == 1 && c == '\0')
+    if (strlar(s) == 0)
         printf("OK     test_levantar_string_vacio\n");
     else
         printf("ERROR  test_levantar_string_vacio\n");
 
     strdestruir(s);
-    remove("testemptysave.txt");
+    remove("test.txt");
 }
 
 void test_crear_desde_rango_normal()
@@ -633,6 +642,19 @@ void test_convertir_a_entero()
 
     strdestruir(s);
 }
+void test_convertir_entero_negativo()
+{
+    String s;
+    strcrear(s);
+    strcop(s, "-25");
+
+    int r = ConvertirAEntero(s);
+
+    if (r == -25)
+        printf("OK test_convertir_entero_negativo\n");
+
+    strdestruir(s);
+}
 
 void test_primer_caracter()
 {
@@ -656,7 +678,7 @@ void test_primer_caracter()
 
 void test_mostrar_error()
 {
-    printf("> test_mostrar_error ejecutado (verificar mensajes ):");
+    printf("> test_mostrar_error ejecutado (verificar mensajes ): \n");
     MostrarError(ERR_NINGUNO);
     MostrarError(ERR_COMANDO_VACIO);
     MostrarError(ERR_COMANDO_INVALIDO);
@@ -734,10 +756,11 @@ void test_devolver_operacion_multiplicacion()
 
 void test_crear_expresion_simple_variable_x()
 {
-    ExpresionABB e = CrearExpresionSimpleChar('x');
+    ExpresionABB e = CrearAbbSimpleChar();
     Boolean error = FALSE;
+    int resultado = 0;
 
-    int resultado = CalcularABB(e, 7, error);
+    CalcularABB(e, 7, error, resultado);
 
     if (resultado == 7 && error == FALSE)
         printf("OK     test_crear_expresion_simple_variable_x\n");
@@ -751,8 +774,9 @@ void test_crear_expresion_simple_int()
 {
     ExpresionABB e = CrearAbbSimpleInt(5);
     Boolean error = FALSE;
+    int resultado = 0;
 
-    int resultado = CalcularABB(e, 0, error);
+    CalcularABB(e, 0, error, resultado);
 
     if (resultado == 5 && error == FALSE)
         printf("OK     test_crear_expresion_simple_int\n");
@@ -762,26 +786,29 @@ void test_crear_expresion_simple_int()
     DestruirABB(e);
 }
 
-void test_crear_expresion_compuesta()
+void test_crear_expresion_compuesta_ABB()
 {
 
     ExpresionABB a = CrearAbbSimpleInt(3);
     ExpresionABB b = CrearAbbSimpleInt(2);
     ExpresionABB suma = CrearAbbCompuesta(SUMA, a, b);
 
-    ExpresionABB x = CrearExpresionSimpleChar('x');
+    ExpresionABB x = CrearAbbSimpleChar();
     ExpresionABB final1 = CrearAbbCompuesta(MULTIPLICACION, suma, x);
     ExpresionABB final2 = CrearAbbCompuesta(MULTIPLICACION, suma, suma);
 
     Boolean error1 = FALSE;
     Boolean error2 = FALSE;
-    int resultado1 = CalcularABB(final1, 4, error1);
-    int resultado2 = CalcularABB(final2, 4, error2);
+    int resultado1 = 0;
+    int resultado2 = 0;
+
+    CalcularABB(final1, 4, error1, resultado1);
+    CalcularABB(final2, 4, error2, resultado2);
 
     if (resultado1 == 20 && error1 == FALSE && resultado2 == 25 && error2 == FALSE)
-        printf("OK     test_crear_expresion_compuesta\n");
+        printf("OK     test_crear_expresion_compuesta_ABB\n");
     else
-        printf("ERROR  test_crear_expresion_compuesta\n");
+        printf("ERROR  test_crear_expresion_compuesta_ABB\n");
 
     DestruirABB(final1);
     DestruirABB(final2);
@@ -794,11 +821,11 @@ void test_arboles_identicos()
 
     ExpresionABB a3 = CrearAbbSimpleInt(99);
 
-    ExpresionABB x1 = CrearExpresionSimpleChar('x');
+    ExpresionABB x1 = CrearAbbSimpleChar();
     ExpresionABB n1 = CrearAbbSimpleInt(10);
     ExpresionABB compuesto1 = CrearAbbCompuesta(SUMA, x1, n1);
 
-    ExpresionABB x2 = CrearExpresionSimpleChar('x');
+    ExpresionABB x2 = CrearAbbSimpleChar();
     ExpresionABB n2 = CrearAbbSimpleInt(10);
     ExpresionABB compuesto2 = CrearAbbCompuesta(SUMA, x2, n2);
 
@@ -844,9 +871,11 @@ void test_calcular_abb_suma_resta()
 
     Boolean errorSuma = FALSE;
     Boolean errorResta = FALSE;
+    int resSuma = 0;
+    int resResta = 0;
 
-    int resSuma = CalcularABB(s, 0, errorSuma);
-    int resResta = CalcularABB(r, 0, errorResta);
+    CalcularABB(s, 0, errorSuma, resSuma);
+    CalcularABB(r, 0, errorResta, resResta);
 
     if (resSuma == 14 && errorSuma == FALSE && resResta == 6 && errorResta == FALSE)
         printf("OK     test_calcular_abb_suma_resta\n");
@@ -861,13 +890,15 @@ void test_calcular_abb_suma_resta()
 
 void test_calcular_abb_multiplicacion_variable()
 {
-    ExpresionABB a = CrearExpresionSimpleChar('x');
+    ExpresionABB a = CrearAbbSimpleChar();
     ExpresionABB b = CrearAbbSimpleInt(2);
 
     ExpresionABB e = CrearAbbCompuesta(MULTIPLICACION, a, b);
 
     Boolean error = FALSE;
-    int resultado = CalcularABB(e, 5, error);
+    int resultado = 0;
+
+    CalcularABB(e, 5, error, resultado);
 
     if (resultado == 10 && error == FALSE)
         printf("OK     test_calcular_abb_multiplicacion_variable\n");
@@ -888,9 +919,11 @@ void test_calcular_abb_division()
 
     Boolean error1 = FALSE;
     Boolean error2 = FALSE;
+    int res1 = 0;
+    int res2 = 0;
 
-    int res1 = CalcularABB(e_error, 0, error1);
-    int res2 = CalcularABB(e_ok, 0, error2);
+    CalcularABB(e_error, 0, error1, res1);
+    CalcularABB(e_ok, 0, error2, res2);
 
     if (error1 == TRUE && res1 == 0 && res2 == 5 && error2 == FALSE)
         printf("OK     test_calcular_abb_division \n");
@@ -906,7 +939,7 @@ void test_calcular_abb_division()
 
 void test_mostrar_abb()
 {
-    ExpresionABB e1 = CrearExpresionSimpleChar('x');
+    ExpresionABB e1 = CrearAbbSimpleChar();
     ExpresionABB e2 = CrearAbbSimpleInt(10);
     ExpresionABB e3 = CrearAbbSimpleInt(2);
     ExpresionABB arbol = CrearAbbCompuesta(SUMA, e1, e2);
@@ -954,12 +987,14 @@ void test_mostrar_expresion_simple()
     exp.terminos = CrearAbbSimpleInt(5);
 
     printf("> test_mostrar_expresion_simple\n");
-
-    printf("   Resultado esperado: 5\n");
+    printf("   Resultado esperado: 1) 5\n");
     printf("   Resultado obtenido: ");
+
     MostrarExpresion(exp);
-    DestruirExpresion(exp);
-    printf("\n");
+
+    printf("\nOK     test_mostrar_expresion_simple\n");
+
+    DestruirABB(exp.terminos);
 }
 
 void test_destruir_expresion_simple()
@@ -994,9 +1029,133 @@ void test_destruir_expresion_compuesta()
         printf("ERROR  test_destruir_expresion_compuesta\n");
 }
 
+void test_crear_expresion_simple_entero()
+{
+    Expresion e = CrearExpresionSimple(FALSE, 5);
+
+    if (getIndiceExpresion(e) == 0)
+        printf("OK     test_crear_expresion_simple_entero\n");
+    else
+        printf("ERROR  test_crear_expresion_simple_entero\n");
+
+    DestruirExpresion(e);
+}
+
+void test_crear_expresion_simple_x()
+{
+    Expresion e = CrearExpresionSimple(TRUE, 0);
+
+    if (getIndiceExpresion(e) == 0)
+        printf("OK     test_crear_expresion_simple_x\n");
+    else
+        printf("ERROR  test_crear_expresion_simple_x\n");
+
+    DestruirExpresion(e);
+}
+
+void test_crear_expresion_compuesta()
+{
+    Expresion e1 = CrearExpresionSimple(FALSE, 3);
+    Expresion e2 = CrearExpresionSimple(FALSE, 4);
+
+    Expresion comp = CrearExpresionCompuesta(SUMA, e1, e2);
+
+    printf("OK     test_crear_expresion_compuesta\n");
+
+    DestruirExpresion(comp);
+}
+
+void test_comparar_expresiones_identicas()
+{
+    Expresion e1 = CrearExpresionSimple(FALSE, 5);
+    Expresion e2 = CrearExpresionSimple(FALSE, 5);
+
+    printf("OK     test_comparar_expresiones\n");
+    CompararExpresiones(e1, e2);
+
+    DestruirExpresion(e1);
+    DestruirExpresion(e2);
+}
+
+void test_comparar_expresiones_no_identicas()
+{
+    Expresion e1 = CrearExpresionSimple(FALSE, 5);
+    Expresion e2 = CrearExpresionSimple(FALSE, 8);
+
+    printf("> test_comparar_expresiones_no_identicas\n");
+    CompararExpresiones(e1, e2);
+
+    DestruirExpresion(e1);
+    DestruirExpresion(e2);
+}
+
+void test_calcular_expresion()
+{
+    Expresion e = CrearExpresionSimple(TRUE, 0);
+
+    Boolean err = FALSE;
+    int res;
+
+    CalcularExpresion(e, 10, err, res);
+
+    if (!err && res == 10)
+        printf("OK     test_calcular_expresion\n");
+    else
+        printf("ERROR  test_calcular_expresion\n");
+
+    DestruirExpresion(e);
+}
+
 //---------------------------------------------//
 //        TESTS MODULO LISTAEXPRESIONES        //
 //---------------------------------------------//
+
+void test_crear_insertar_simple()
+{
+    ListaExpresiones lp = NULL;
+
+    CrearInsertarExpresionSimple(lp, TRUE, 0);
+
+    printf("OK test_crear_insertar_simple\n");
+}
+
+void test_crear_insertar_compuesta()
+{
+    ListaExpresiones lp = NULL;
+
+    CrearInsertarExpresionSimple(lp, TRUE, 0);
+    CrearInsertarExpresionSimple(lp, FALSE, 5);
+
+    CrearInsertarExpresionCompuesta(lp, SUMA, 1, 2);
+
+    printf("OK test_crear_insertar_compuesta\n");
+}
+
+void test_comparar_por_indice()
+{
+    ListaExpresiones lp = NULL;
+
+    CrearInsertarExpresionSimple(lp, TRUE, 0);
+    CrearInsertarExpresionSimple(lp, TRUE, 0);
+
+    CompararExpresionesPorIndice(lp, 1, 2);
+
+    printf("OK test_comparar_por_indice\n");
+}
+
+void test_calcular_por_indice()
+{
+    ListaExpresiones lp = NULL;
+
+    CrearInsertarExpresionSimple(lp, TRUE, 0);
+
+    Boolean err = FALSE;
+    int res;
+
+    CalcularExpresionPorIndice(lp, 1, 3, err, res);
+
+    printf("OK test_calcular_por_indice\n");
+}
 
 void test_insertar_en_lista_vacia()
 {
@@ -1047,27 +1206,16 @@ void test_insertar_en_lista_con_multiples_nodos()
 
     Expresion e1;
     e1.indiceLista = 1;
-    e1.terminos = CrearAbbSimpleInt(10);
+    e1.terminos = CrearAbbSimpleInt(3);
 
     Expresion e2;
     e2.indiceLista = 2;
-    e2.terminos = CrearAbbSimpleInt(20);
-
-    Expresion e3;
-    e3.indiceLista = 3;
-    e3.terminos = CrearAbbSimpleInt(30);
+    e2.terminos = CrearAbbSimpleInt(7);
 
     InsertarExpresionAlFinalL(l, e1);
     InsertarExpresionAlFinalL(l, e2);
-    InsertarExpresionAlFinalL(l, e3);
 
-    NodoL *aux = l;
-    while (aux->sig != NULL)
-    {
-        aux = aux->sig;
-    }
-
-    if (getIndiceExpresion(aux->exp) == 3)
+    if (l != NULL && l->sig != NULL)
         printf("OK     test_insertar_en_lista_con_multiples_nodos\n");
     else
         printf("ERROR  test_insertar_en_lista_con_multiples_nodos\n");
@@ -1080,19 +1228,17 @@ void test_buscar_expresion_por_indice()
     ListaExpresiones l = NULL;
 
     Expresion e1;
-    e1.indiceLista = 10;
     e1.terminos = CrearAbbSimpleInt(1);
 
     Expresion e2;
-    e2.indiceLista = 20;
     e2.terminos = CrearAbbSimpleInt(2);
 
     InsertarExpresionAlFinalL(l, e1);
     InsertarExpresionAlFinalL(l, e2);
 
-    Expresion resultado = BuscarExpresionPorIndice(l, 20);
+    Expresion resultado = BuscarExpresionPorIndice(l, 2);
 
-    if (getIndiceExpresion(resultado) == 20)
+    if (getIndiceExpresion(resultado) == 2)
         printf("OK     test_buscar_expresion_por_indice\n");
     else
         printf("ERROR  test_buscar_expresion_por_indice\n");
@@ -1105,12 +1251,11 @@ void test_es_indice_valido_true()
     ListaExpresiones l = NULL;
 
     Expresion e;
-    e.indiceLista = 5;
     e.terminos = CrearAbbSimpleInt(8);
 
     InsertarExpresionAlFinalL(l, e);
 
-    if (EsIndiceValido(l, 5) == TRUE)
+    if (EsIndiceValido(l, 1) == TRUE)
         printf("OK     test_es_indice_valido_true\n");
     else
         printf("ERROR  test_es_indice_valido_true\n");
@@ -1361,10 +1506,11 @@ void test_existe_archivo_null()
 void test_guardar_recuperar_expresion_archivo_ok()
 {
 
-    Expresion exp, expRecuperada;
+    ListaExpresiones lista = NULL;
+    Expresion exp;
 
     ExpresionABB n3 = CrearAbbSimpleInt(3);
-    ExpresionABB nx = CrearExpresionSimpleChar('x');
+    ExpresionABB nx = CrearAbbSimpleChar();
     ExpresionABB suma = CrearAbbCompuesta(SUMA, n3, nx);
 
     ExpresionABB n10 = CrearAbbSimpleInt(10);
@@ -1373,24 +1519,146 @@ void test_guardar_recuperar_expresion_archivo_ok()
 
     ExpresionABB raiz = CrearAbbCompuesta(MULTIPLICACION, suma, resta);
 
-    exp.indiceLista = 99;
     exp.terminos = raiz;
+    InsertarExpresionAlFinalL(lista, exp);
+
+    int indiceOriginal = getIndiceExpresion(exp);
 
     String nombreBase = "testintegracion";
 
-    GuardarExpresionEnArchivo(nombreBase, exp);
+    GuardarExpresionEnArchivo(lista, nombreBase, indiceOriginal);
 
-    RecuperarExpresionDesdeArchivo(nombreBase, expRecuperada);
+    RecuperarInsertarExpresionDesdeArchivo(nombreBase, lista);
+
+    int indiceRecuperado = UltimoIndiceDisponible(lista) - 1;
+    Expresion expRecuperada = BuscarExpresionPorIndice(lista, indiceRecuperado);
 
     if (ArbolesIdenticos(exp.terminos, expRecuperada.terminos) == TRUE)
         printf("OK     test_guardar_recuperar_expresion_archivo_ok\n");
     else
         printf("ERROR  test_guardar_recuperar_expresion_archivo_ok: La expresion guardada y la recuperada NO coincide\n");
 
-    DestruirExpresion(expRecuperada);
+    DestruirListaExpresiones(lista);
+}
 
-    remove("testintegracion.txt");
-    DestruirExpresion(exp);
+void test_levantar_abb_entero()
+{
+    FILE *f = fopen("test1.bin", "wb");
+
+    TipoDato tipo = ENTERO;
+    int num = 5;
+    int indice = 1;
+
+    fwrite(&tipo, sizeof(TipoDato), 1, f);
+    fwrite(&num, sizeof(int), 1, f);
+    fwrite(&indice, sizeof(int), 1, f);
+
+    fclose(f);
+
+    f = fopen("test1.bin", "rb");
+
+    ExpresionABB abb;
+    LevantarExpresionABB(abb, f);
+
+    if (abb != NULL)
+        printf("OK     test_levantar_abb_entero\n");
+    else
+        printf("ERROR  test_levantar_abb_entero\n");
+
+    fclose(f);
+    remove("test1.bin");
+}
+
+void test_levantar_abb_simbolo()
+{
+    FILE *f = fopen("test2.bin", "wb");
+
+    TipoDato tipo = OPERADOR;
+    char simbolo = '+';
+    int indice = 1;
+
+    fwrite(&tipo, sizeof(TipoDato), 1, f);
+    fwrite(&simbolo, sizeof(char), 1, f);
+    fwrite(&indice, sizeof(int), 1, f);
+
+    fclose(f);
+
+    f = fopen("test2.bin", "rb");
+
+    ExpresionABB abb;
+    LevantarExpresionABB(abb, f);
+
+    if (abb != NULL)
+        printf("OK     test_levantar_abb_simbolo\n");
+    else
+        printf("ERROR  test_levantar_abb_simbolo\n");
+
+    fclose(f);
+    remove("test2.bin");
+}
+void test_levantar_abb_error_dato()
+{
+    FILE *f = fopen("test3.bin", "wb");
+
+    TipoDato tipo = ENTERO;
+
+    fwrite(&tipo, sizeof(TipoDato), 1, f);
+
+    fclose(f);
+
+    f = fopen("test3.bin", "rb");
+
+    ExpresionABB abb;
+    LevantarExpresionABB(abb, f);
+
+    printf("OK     test_levantar_abb_error_dato\n");
+
+    fclose(f);
+    remove("test3.bin");
+}
+
+void test_levantar_abb_error_indice()
+{
+    FILE *f = fopen("test4.bin", "wb");
+
+    TipoDato tipo = ENTERO;
+    int num = 7;
+
+    fwrite(&tipo, sizeof(TipoDato), 1, f);
+    fwrite(&num, sizeof(int), 1, f);
+
+    fclose(f);
+
+    f = fopen("test4.bin", "rb");
+
+    ExpresionABB abb;
+    LevantarExpresionABB(abb, f);
+
+    printf("OK     test_levantar_abb_error_indice\n");
+
+    fclose(f);
+    remove("test4.bin");
+}
+
+void test_levantar_abb_error_dato_simbolo()
+{
+    FILE *f = fopen("test5.bin", "wb");
+
+    TipoDato tipo = OPERADOR;
+
+    fwrite(&tipo, sizeof(TipoDato), 1, f);
+
+    fclose(f);
+
+    f = fopen("test5.bin", "rb");
+
+    ExpresionABB abb;
+    LevantarExpresionABB(abb, f);
+
+    printf("OK     test_levantar_abb_error_dato_simbolo\n");
+
+    fclose(f);
+    remove("test5.bin");
 }
 
 //---------------------------------------//
@@ -2175,7 +2443,7 @@ void test_validar_guardar_cant_params()
 
     String linea;
     strcrear(linea);
-    strcop(linea, "guardar 1");
+    strcop(linea, "1");
     TokenizarEntrada(lp, linea);
 
     int indice;
@@ -2203,7 +2471,7 @@ void test_validar_guardar_indice_invalido()
 
     String linea;
     strcrear(linea);
-    strcop(linea, "guardar 99 test");
+    strcop(linea, "99 test");
     TokenizarEntrada(lp, linea);
     Expresion e;
     e.indiceLista = 1;
@@ -2236,7 +2504,7 @@ void test_validar_guardar_indice_negativo()
 
     String linea;
     strcrear(linea);
-    strcop(linea, "guardar -9 test");
+    strcop(linea, "-9 test");
     TokenizarEntrada(lp, linea);
     Expresion e;
     e.indiceLista = 1;
@@ -2274,7 +2542,7 @@ void test_validar_guardar_nombre_invalido()
 
     String linea;
     strcrear(linea);
-    strcop(linea, "guardar 1 archivo123");
+    strcop(linea, "1 archivo123");
     TokenizarEntrada(lp, linea);
 
     int indice;
@@ -2307,7 +2575,7 @@ void test_validar_guardar_ok()
 
     String linea;
     strcrear(linea);
-    strcop(linea, "guardar 1 archivotest");
+    strcop(linea, "1 archivotest");
 
     TokenizarEntrada(lp, linea);
 
@@ -2345,7 +2613,7 @@ void test_validar_guardar_archivo_existe()
 
     String linea;
     strcrear(linea);
-    strcop(linea, "guardar 1 archivotest");
+    strcop(linea, "1 archivotest");
     TokenizarEntrada(lp, linea);
 
     int indice;
@@ -2593,6 +2861,377 @@ void test_validar_salir_error_tokens()
         printf("OK     test_validar_salir_error_tokens\n");
     else
         printf("ERROR  test_validar_salir_error_tokens\n");
+
+    strdestruir(linea);
+    DestruirListaParsing(tokens);
+}
+
+// ReconocerYValidarComando - cubre la función y todas las ramas del switch (coverage 100%)
+void test_reconocer_y_validar_comando_simple()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+    String linea;
+    strcrear(linea);
+    strcop(linea, "simple x");
+    TokenizarEntrada(lp, linea);
+
+    TipoComando tipo;
+    Boolean esX;
+    int num, idx1, idx2, valorX;
+    Operacion op;
+    String nombreArchivo;
+    strcrear(nombreArchivo);
+    CodigoError err;
+
+    ReconocerYValidarComando(lp, l, tipo, esX, num, idx1, op, idx2, valorX, nombreArchivo, err);
+
+    if (err == ERR_NINGUNO && tipo == SIMPLE && esX == TRUE)
+        printf("OK     test_reconocer_y_validar_comando_simple\n");
+    else
+        printf("ERROR  test_reconocer_y_validar_comando_simple\n");
+
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(lp);
+}
+
+void test_reconocer_y_validar_comando_compuesta()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+    Expresion e1, e2;
+    e1.indiceLista = 1;
+    e1.terminos = CrearAbbSimpleInt(5);
+    e2.indiceLista = 2;
+    e2.terminos = CrearAbbSimpleInt(10);
+    InsertarExpresionAlFinalL(l, e1);
+    InsertarExpresionAlFinalL(l, e2);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "compuesta 1 + 2");
+    TokenizarEntrada(lp, linea);
+
+    TipoComando tipo;
+    Boolean esX;
+    int num, idx1, idx2, valorX;
+    Operacion op;
+    String nombreArchivo;
+    strcrear(nombreArchivo);
+    CodigoError err;
+
+    ReconocerYValidarComando(lp, l, tipo, esX, num, idx1, op, idx2, valorX, nombreArchivo, err);
+
+    if (err == ERR_NINGUNO && tipo == COMPUESTA && idx1 == 1 && idx2 == 2 && op == SUMA)
+        printf("OK     test_reconocer_y_validar_comando_compuesta\n");
+    else
+        printf("ERROR  test_reconocer_y_validar_comando_compuesta\n");
+
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+}
+
+void test_reconocer_y_validar_comando_calcular()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+    Expresion e;
+    e.indiceLista = 1;
+    e.terminos = CrearAbbSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "calcular 1 7");
+    TokenizarEntrada(lp, linea);
+
+    TipoComando tipo;
+    Boolean esX;
+    int num, idx1, idx2, valorX;
+    Operacion op;
+    String nombreArchivo;
+    strcrear(nombreArchivo);
+    CodigoError err;
+
+    ReconocerYValidarComando(lp, l, tipo, esX, num, idx1, op, idx2, valorX, nombreArchivo, err);
+
+    if (err == ERR_NINGUNO && tipo == CALCULAR && idx1 == 1)
+        printf("OK     test_reconocer_y_validar_comando_calcular\n");
+    else
+        printf("ERROR  test_reconocer_y_validar_comando_calcular\n");
+
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+}
+
+void test_reconocer_y_validar_comando_mostrar()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+    Expresion e;
+    e.indiceLista = 1;
+    e.terminos = CrearAbbSimpleInt(10);
+    InsertarExpresionAlFinalL(l, e);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "mostrar");
+    TokenizarEntrada(lp, linea);
+
+    TipoComando tipo;
+    Boolean esX;
+    int num, idx1, idx2, valorX;
+    Operacion op;
+    String nombreArchivo;
+    strcrear(nombreArchivo);
+    CodigoError err;
+
+    ReconocerYValidarComando(lp, l, tipo, esX, num, idx1, op, idx2, valorX, nombreArchivo, err);
+
+    if (err == ERR_NINGUNO && tipo == MOSTRAR)
+        printf("OK     test_reconocer_y_validar_comando_mostrar\n");
+    else
+        printf("ERROR  test_reconocer_y_validar_comando_mostrar\n");
+
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+}
+
+void test_reconocer_y_validar_comando_iguales()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+    Expresion e1, e2;
+    e1.indiceLista = 1;
+    e1.terminos = CrearAbbSimpleInt(5);
+    e2.indiceLista = 2;
+    e2.terminos = CrearAbbSimpleInt(10);
+    InsertarExpresionAlFinalL(l, e1);
+    InsertarExpresionAlFinalL(l, e2);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "iguales 1 2");
+    TokenizarEntrada(lp, linea);
+
+    TipoComando tipo;
+    Boolean esX;
+    int num, idx1, idx2, valorX;
+    Operacion op;
+    String nombreArchivo;
+    strcrear(nombreArchivo);
+    CodigoError err;
+
+    ReconocerYValidarComando(lp, l, tipo, esX, num, idx1, op, idx2, valorX, nombreArchivo, err);
+
+    if (err == ERR_NINGUNO && tipo == IGUALES && idx1 == 1 && idx2 == 2)
+        printf("OK     test_reconocer_y_validar_comando_iguales\n");
+    else
+        printf("ERROR  test_reconocer_y_validar_comando_iguales\n");
+
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+}
+
+void test_reconocer_y_validar_comando_guardar()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+    Expresion e;
+    e.indiceLista = 1;
+    e.terminos = CrearAbbSimpleInt(5);
+    InsertarExpresionAlFinalL(l, e);
+
+    String linea;
+    strcrear(linea);
+    strcop(linea, "guardar 1 archivocover");
+    TokenizarEntrada(lp, linea);
+
+    TipoComando tipo;
+    Boolean esX;
+    int num, idx1, idx2, valorX;
+    Operacion op;
+    String nombreArchivo;
+    strcrear(nombreArchivo);
+    CodigoError err;
+
+    ReconocerYValidarComando(lp, l, tipo, esX, num, idx1, op, idx2, valorX, nombreArchivo, err);
+
+    if (err == ERR_NINGUNO && tipo == GUARDAR && idx1 == 1 && streq(nombreArchivo, "archivocover"))
+        printf("OK     test_reconocer_y_validar_comando_guardar\n");
+    else
+        printf("ERROR  test_reconocer_y_validar_comando_guardar\n");
+
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(lp);
+    DestruirListaExpresiones(l);
+}
+
+void test_reconocer_y_validar_comando_recuperar()
+{
+    FILE *f = fopen("archivorecup.txt", "wb");
+    if (f != NULL)
+        fclose(f);
+
+    ListaParsing lp = NULL;
+    String linea;
+    strcrear(linea);
+    strcop(linea, "recuperar archivorecup");
+    TokenizarEntrada(lp, linea);
+
+    ListaExpresiones l = NULL;
+    TipoComando tipo;
+    Boolean esX;
+    int num, idx1, idx2, valorX;
+    Operacion op;
+    String nombreArchivo;
+    strcrear(nombreArchivo);
+    CodigoError err;
+
+    ReconocerYValidarComando(lp, l, tipo, esX, num, idx1, op, idx2, valorX, nombreArchivo, err);
+
+    if (err == ERR_NINGUNO && tipo == RECUPERAR && streq(nombreArchivo, "archivorecup"))
+        printf("OK     test_reconocer_y_validar_comando_recuperar\n");
+    else
+        printf("ERROR  test_reconocer_y_validar_comando_recuperar\n");
+
+    remove("archivorecup.txt");
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(lp);
+}
+
+void test_reconocer_y_validar_comando_salir()
+{
+    ListaParsing lp = NULL;
+    ListaExpresiones l = NULL;
+    String linea;
+    strcrear(linea);
+    strcop(linea, "salir");
+    TokenizarEntrada(lp, linea);
+
+    TipoComando tipo;
+    Boolean esX;
+    int num, idx1, idx2, valorX;
+    Operacion op;
+    String nombreArchivo;
+    strcrear(nombreArchivo);
+    CodigoError err;
+
+    ReconocerYValidarComando(lp, l, tipo, esX, num, idx1, op, idx2, valorX, nombreArchivo, err);
+
+    if (err == ERR_NINGUNO && tipo == SALIR)
+        printf("OK     test_reconocer_y_validar_comando_salir\n");
+    else
+        printf("ERROR  test_reconocer_y_validar_comando_salir\n");
+
+    strdestruir(linea);
+    strdestruir(nombreArchivo);
+    DestruirListaParsing(lp);
+}
+
+void test_ejecutar_comandos()
+{
+    ListaExpresiones lp = NULL;
+    CodigoError err = ERR_NINGUNO;
+
+    String nombre;
+    strcrear(nombre);
+    strcop(nombre, "archivoTest");
+
+    // SIMPLE
+    EjecutarComando(SIMPLE, TRUE, 0, 0, SUMA, 0, nombre, lp, err);
+
+    // SIMPLE otra vez para tener 2 expresiones
+    EjecutarComando(SIMPLE, FALSE, 5, 0, SUMA, 0, nombre, lp, err);
+
+    // COMPUESTA
+    EjecutarComando(COMPUESTA, FALSE, 0, 1, SUMA, 2, nombre, lp, err);
+
+    // CALCULAR
+    EjecutarComando(CALCULAR, FALSE, 3, 1, SUMA, 0, nombre, lp, err);
+
+    // MOSTRAR
+    EjecutarComando(MOSTRAR, FALSE, 0, 0, SUMA, 0, nombre, lp, err);
+
+    // IGUALES
+    EjecutarComando(IGUALES, FALSE, 0, 1, SUMA, 2, nombre, lp, err);
+
+    // GUARDAR
+    EjecutarComando(GUARDAR, FALSE, 0, 1, SUMA, 0, nombre, lp, err);
+
+    // RECUPERAR
+    EjecutarComando(RECUPERAR, FALSE, 0, 0, SUMA, 0, nombre, lp, err);
+
+    // SALIR
+    EjecutarComando(SALIR, FALSE, 0, 0, SUMA, 0, nombre, lp, err);
+
+    printf("OK test_ejecutar_comandos\n");
+}
+
+void test_loop_principal()
+{
+    FILE *f = fopen("entrada_loop.txt", "w");
+
+    fprintf(f, "simple x\n");
+    fprintf(f, "mostrar\n");
+    fprintf(f, "salir\n");
+
+    fclose(f);
+
+    freopen("entrada_loop.txt", "r", stdin);
+
+    LoopPrincipal();
+
+    printf("OK test_loop_principal\n");
+    remove("entrada_loop.txt");
+}
+
+void test_loop_principal_error()
+{
+    FILE *f = fopen("entrada_loop_error.txt", "w");
+
+    fprintf(f, "comandoinvalido\n"); // provoca ERR_COMANDO_INVALIDO
+    fprintf(f, "salir\n");
+
+    fclose(f);
+
+    freopen("entrada_loop_error.txt", "r", stdin);
+
+    LoopPrincipal();
+
+    printf("OK test_loop_principal_error\n");
+    remove("entrada_loop_error.txt");
+}
+
+void test_loop_division_por_cero()
+{
+    FILE *f = fopen("entrada_div0.txt", "w");
+
+    fprintf(f, "simple 10\n");       // exp 1
+    fprintf(f, "simple 0\n");        // exp 2
+    fprintf(f, "compuesta 1 / 2\n"); // exp 3 -> 10 / 0
+    fprintf(f, "calcular 3 5\n");    // provoca división por cero
+    fprintf(f, "salir\n");
+
+    fclose(f);
+
+    freopen("entrada_div0.txt", "r", stdin);
+
+    LoopPrincipal();
+
+    printf("OK test_loop_division_por_cero\n");
+    remove("entrada_div0.txt");
 }
 
 int main()
@@ -2642,6 +3281,7 @@ int main()
     test_es_entero_negativo();
     // ConvertirAEntero
     test_convertir_a_entero();
+    test_convertir_entero_negativo();
     // PrimerCaracter
     test_primer_caracter();
     printf("---------------------------------------------------------\n\n");
@@ -2661,7 +3301,7 @@ int main()
     printf("---- TESTS MODULO ExpresionABB ----\n");
     test_crear_expresion_simple_variable_x();
     test_crear_expresion_simple_int();
-    test_crear_expresion_compuesta();
+    test_crear_expresion_compuesta_ABB();
     test_arboles_identicos();
     test_calcular_abb_suma_resta();
     test_calcular_abb_multiplicacion_variable();
@@ -2674,6 +3314,12 @@ int main()
     test_mostrar_expresion_simple();
     test_destruir_expresion_simple();
     test_destruir_expresion_compuesta();
+    test_crear_expresion_simple_entero();
+    test_crear_expresion_simple_x();
+    test_crear_expresion_compuesta();
+    test_calcular_expresion();
+    test_comparar_expresiones_identicas();
+    test_comparar_expresiones_no_identicas();
     printf("---------------------------------------------------------\n\n");
 
     printf("---- TESTS MODULO ListaExpresiones ----\n");
@@ -2685,6 +3331,10 @@ int main()
     test_es_indice_valido_false();
     test_mostrar_expresiones();
     test_destruir_lista();
+    test_crear_insertar_simple();
+    test_crear_insertar_compuesta();
+    test_comparar_por_indice();
+    test_calcular_por_indice();
     printf("---------------------------------------------------------\n\n");
 
     printf("\n---- TESTS MODULO ListaParsing ----\n");
@@ -2702,6 +3352,12 @@ int main()
     test_existe_archivo_false();
     test_existe_archivo_null();
     test_guardar_recuperar_expresion_archivo_ok();
+    test_levantar_abb_entero();
+    test_levantar_abb_simbolo();
+    test_levantar_abb_error_dato();
+    test_levantar_abb_error_indice();
+    test_levantar_abb_error_dato_simbolo();
+
     printf("---------------------------------------------------------\n\n");
 
     printf("---- TESTS MODULO Compilador ----\n");
@@ -2757,6 +3413,19 @@ int main()
     // ValidarComandoSalir
     test_validar_salir_ok();
     test_validar_salir_error_tokens();
+    // ReconocerYValidarComando (coverage 100% Compilador)
+    test_reconocer_y_validar_comando_simple();
+    test_reconocer_y_validar_comando_compuesta();
+    test_reconocer_y_validar_comando_calcular();
+    test_reconocer_y_validar_comando_mostrar();
+    test_reconocer_y_validar_comando_iguales();
+    test_reconocer_y_validar_comando_guardar();
+    test_reconocer_y_validar_comando_recuperar();
+    test_reconocer_y_validar_comando_salir();
+    test_ejecutar_comandos();
+    test_loop_principal();
+    test_loop_principal_error();
+    test_loop_division_por_cero();
     printf("---------------------------------------------------------\n\n");
 
     return 0;

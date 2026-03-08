@@ -1,6 +1,5 @@
 #ifndef LISTAEXPRESIONES_H_INCLUDED
 #define LISTAEXPRESIONES_H_INCLUDED
-#include "String.h"
 #include "Expresion.h"
 
 typedef struct nodoL

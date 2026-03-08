@@ -3,7 +3,6 @@
 #include "ListaParsing.h"
 #include "Archivo.h"
 #include "Comando.h"
-#include "Operacion.h"
 #include "CodigoError.h"
 
 const int MOSTRAR_CANT_TOKENS = 0;

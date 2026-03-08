@@ -33,6 +33,7 @@ jobs:
               src/ListaParsing.cpp \
               src/String.cpp \
               src/Archivo.cpp \
+              src/Compilador.cpp \
               src/tests/tests_runner.cpp \
               -o build/tests
 

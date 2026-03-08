@@ -101,7 +101,7 @@ Boolean streq(String s1, String s2)
     return iguales;
 }
 
-void BajarString(String &s, FILE *f)
+void LevantarString(String &s, FILE *f)
 {
     int i = 0;
     String aux;
@@ -118,7 +118,7 @@ void BajarString(String &s, FILE *f)
     delete[] aux;
 }
 
-void LevantarString(String s, FILE *f)
+void BajarString(String s, FILE *f)
 {
     int i = 0;
     while (s[i] != '\0')
@@ -150,7 +150,6 @@ void CrearStringDesdeRango(String linea, int inicio, int fin, String &resultado)
     }
     else
     {
-        delete[] resultado;
         resultado = new char[1];
         resultado[0] = '\0';
     }
@@ -247,7 +246,6 @@ Boolean EsEnteroPositivo(String s)
         return FALSE;
     }
 
-    // Si empieza con '-' no es positivo
     if (s[0] == '-')
     {
         return FALSE;
@@ -258,20 +256,30 @@ Boolean EsEnteroPositivo(String s)
 
 int ConvertirAEntero(String s)
 {
-    int i = 0, resultado = 0, potencia = 1;
+    int i = 0;
+    int signo = 1;
+    int resultado = 0;
 
-    i = strlar(s) - 1;
-
-    for (i; i >= 0; i--)
+    if (s[0] == '-')
     {
-        resultado += (s[i] - '0') * potencia;
-        potencia = potencia * 10;
+        signo = -1;
+        i = 1;
     }
 
-    return resultado;
+    while (s[i] != '\0')
+    {
+        resultado = resultado * 10 + (s[i] - '0');
+        i++;
+    }
+
+    return resultado * signo;
 }
 
 char PrimerCaracter(String s)
 {
-    return s[0];
+    char x = ' ';
+    if (s != NULL)
+        x = s[0];
+
+    return x;
 }

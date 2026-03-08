@@ -46,6 +46,8 @@ void DestruirListaParsing(ListaParsing &lp)
 void TokenizarEntrada(ListaParsing &lp, String linea)
 {
 
+    DestruirListaParsing(lp);
+    lp = NULL;
     int j, i = 0;
 
     while (linea[i] != '\0')
@@ -71,7 +73,6 @@ void TokenizarEntrada(ListaParsing &lp, String linea)
                 token[j] = linea[inicioToken + j];
             }
             token[largoToken] = '\0';
-            printf("Tokenizar Entrada %d ", i);
             InsertarAlFinalParsing(lp, token);
             strdestruir(token);
         }

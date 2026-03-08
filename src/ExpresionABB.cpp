@@ -1,18 +1,18 @@
 #include <stdio.h>
 #include "ExpresionABB.h"
 
-ExpresionABB CrearExpresionSimpleX(char c)
+ExpresionABB CrearAbbSimpleChar()
 {
     ExpresionABB e = new NodoABB;
     e->indiceNodo = 1;
     e->tipo = VARIABLE;
-    e->dato.simbolo = c;
+    e->dato.simbolo = 'x';
     e->hizq = NULL;
     e->hder = NULL;
     return e;
 }
 
-ExpresionABB CrearExpresionSimpleInt(int num)
+ExpresionABB CrearAbbSimpleInt(int num)
 {
     ExpresionABB e = new NodoABB;
     e->indiceNodo = 1;
@@ -23,7 +23,7 @@ ExpresionABB CrearExpresionSimpleInt(int num)
     return e;
 }
 
-ExpresionABB CrearExpresionCompuesta(Operacion o, ExpresionABB a, ExpresionABB b)
+ExpresionABB CrearAbbCompuesta(Operacion o, ExpresionABB a, ExpresionABB b)
 {
     int contador = 0;
 
@@ -35,7 +35,7 @@ ExpresionABB CrearExpresionCompuesta(Operacion o, ExpresionABB a, ExpresionABB b
 
     ExpresionABB eRaiz = new NodoABB;
     eRaiz->tipo = OPERADOR;
-    eRaiz->dato.simbolo = DevolverOperacion(o);
+    eRaiz->dato.simbolo = DevolverOperacionChar(o);
     eRaiz->hizq = eIzq;
     eRaiz->hder = eDer;
 
@@ -76,9 +76,9 @@ Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b)
     return resultado;
 }
 
-int CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision)
+void CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision, int &resultado)
 {
-    int resultado = 0;
+    resultado = 0;
 
     if (nodo != NULL && errorDivision == FALSE)
     {
@@ -92,8 +92,11 @@ int CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision)
         }
         else if (nodo->tipo == OPERADOR)
         {
-            int izq = CalcularABB(nodo->hizq, valorX, errorDivision);
-            int der = CalcularABB(nodo->hder, valorX, errorDivision);
+            int izq;
+            int der;
+
+            CalcularABB(nodo->hizq, valorX, errorDivision, izq);
+            CalcularABB(nodo->hder, valorX, errorDivision, der);
 
             if (errorDivision == FALSE)
             {
@@ -121,8 +124,6 @@ int CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision)
             }
         }
     }
-
-    return resultado;
 }
 
 void DestruirABB(ExpresionABB &abb)
@@ -259,6 +260,69 @@ void BajarNodoABB(ExpresionABB nodo, FILE *f)
     fwrite(&nodo->indiceNodo, sizeof(int), 1, f);
 }
 
+void LevantarExpresionABB(ExpresionABB &abb, FILE *f)
+{
+    abb = NULL;
+
+    TipoDato tipo;
+    int indice;
+    int num;
+    char simbolo;
+
+    Boolean leyoDato = FALSE;
+    Boolean leyoIndice = FALSE;
+
+    fread(&tipo, sizeof(TipoDato), 1, f);
+
+    while (!feof(f))
+    {
+
+        if (tipo == ENTERO)
+        {
+            if ((fread(&num, sizeof(int), 1, f) == 1))
+                leyoDato = TRUE;
+            else
+                leyoDato = FALSE;
+        }
+        else
+        {
+            if ((fread(&simbolo, sizeof(char), 1, f) == 1))
+                leyoDato = TRUE;
+            else
+                leyoDato = FALSE;
+        }
+
+        if ((fread(&indice, sizeof(int), 1, f) == 1))
+            leyoIndice = TRUE;
+        else
+            leyoIndice = FALSE;
+
+        if (leyoDato == TRUE && leyoIndice == TRUE)
+        {
+            ExpresionABB nuevo = new NodoABB;
+
+            nuevo->tipo = tipo;
+
+            if (tipo == ENTERO)
+            {
+                nuevo->dato.num = num;
+            }
+            else
+            {
+                nuevo->dato.simbolo = simbolo;
+            }
+
+            nuevo->indiceNodo = indice;
+            nuevo->hizq = NULL;
+            nuevo->hder = NULL;
+
+            InsertarEnABB(abb, nuevo);
+        }
+
+        fread(&tipo, sizeof(TipoDato), 1, f);
+    }
+}
+
 void InsertarEnABB(ExpresionABB &abb, ExpresionABB nuevo)
 {
     if (abb == NULL)
@@ -274,44 +338,6 @@ void InsertarEnABB(ExpresionABB &abb, ExpresionABB nuevo)
         else
         {
             InsertarEnABB(abb->hder, nuevo);
-        }
-    }
-}
-
-void LevantarExpresionABB(ExpresionABB &abb, FILE *f)
-{
-    abb = NULL;
-
-    Boolean seguir = TRUE;
-
-    while (seguir == TRUE)
-    {
-        ExpresionABB nuevo = new NodoABB;
-
-        size_t leido = fread(&nuevo->tipo, sizeof(TipoDato), 1, f);
-
-        if (leido != 1)
-        {
-            delete nuevo;
-            seguir = FALSE;
-        }
-        else
-        {
-            if (nuevo->tipo == ENTERO)
-            {
-                fread(&nuevo->dato.num, sizeof(int), 1, f);
-            }
-            else
-            {
-                fread(&nuevo->dato.simbolo, sizeof(char), 1, f);
-            }
-
-            fread(&nuevo->indiceNodo, sizeof(int), 1, f);
-
-            nuevo->hizq = NULL;
-            nuevo->hder = NULL;
-
-            InsertarEnABB(abb, nuevo);
         }
     }
 }

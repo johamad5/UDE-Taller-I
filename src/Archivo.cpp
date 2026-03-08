@@ -3,66 +3,89 @@
 Boolean ExisteArchivo(String nombreArchivo)
 {
     Boolean existe = FALSE;
-    FILE *f = fopen(nombreArchivo, "rb");
+
+    String nombreCompleto;
+    strcrear(nombreCompleto);
+    strcop(nombreCompleto, nombreArchivo);
+
+    String extension;
+    extension = new char[5];
+    extension[0] = '.';
+    extension[1] = 't';
+    extension[2] = 'x';
+    extension[3] = 't';
+    extension[4] = '\0';
+    strcon(nombreCompleto, extension);
+
+    FILE *f = fopen(nombreCompleto, "rb");
+
     if (f != NULL)
     {
         existe = TRUE;
         fclose(f);
     }
+
+    strdestruir(extension);
+    strdestruir(nombreCompleto);
+
     return existe;
 }
 
-void GuardarExpresionEnArchivo(String nombreArchivo, Expresion exp, CodigoError &err)
+void GuardarExpresionEnArchivo(ListaExpresiones lp, String nombreArchivo, int idx)
 {
     FILE *arch = NULL;
+
     String nombreCompleto;
     strcrear(nombreCompleto);
-    err = ERR_NINGUNO;
+    strcop(nombreCompleto, nombreArchivo);
 
-    if (err == ERR_NINGUNO)
-    {
-        strcop(nombreCompleto, nombreArchivo);
-        strcon(nombreCompleto, ".txt");
-    }
+    String extension;
+    extension = new char[5];
+    extension[0] = '.';
+    extension[1] = 't';
+    extension[2] = 'x';
+    extension[3] = 't';
+    extension[4] = '\0';
 
-    if (err == ERR_NINGUNO)
-    {
-        arch = fopen(nombreCompleto, "wb");
-        if (arch == NULL)
-        {
-            err = ERR_ARCHIVO_NO_SE_PUEDE_ABRIR;
-        }
-    }
+    strcon(nombreCompleto, extension);
 
-    if (err == ERR_NINGUNO)
+    arch = fopen(nombreCompleto, "wb");
+
+    if (arch != NULL)
     {
-        BajarExpresion(exp, arch);
+        BajarExpresionEnLista(lp, idx, arch);
         fclose(arch);
     }
 
+    strdestruir(extension);
     strdestruir(nombreCompleto);
 }
 
-void RecuperarExpresionDesdeArchivo(String nombreArchivo, Expresion &exp, CodigoError &err)
+void RecuperarInsertarExpresionDesdeArchivo(String nombreArchivo, ListaExpresiones &lp)
 {
     FILE *arch = NULL;
+
     String nombreCompleto;
     strcrear(nombreCompleto);
-    err = ERR_NINGUNO;
-
     strcop(nombreCompleto, nombreArchivo);
-    strcon(nombreCompleto, ".txt");
+
+    String extension;
+    extension = new char[5];
+    extension[0] = '.';
+    extension[1] = 't';
+    extension[2] = 'x';
+    extension[3] = 't';
+    extension[4] = '\0';
+
+    strcon(nombreCompleto, extension);
 
     arch = fopen(nombreCompleto, "rb");
 
-    if (arch == NULL)
-    {
-        err = ERR_ARCHIVO_NO_EXISTE;
-    }
-    else
-    {
-        LevantarExpresion(exp, arch);
-        fclose(arch);
-    }
+    LevantarInsertarExpresion(lp, arch);
+    fclose(arch);
+
+    remove(nombreCompleto);
+
+    strdestruir(extension);
     strdestruir(nombreCompleto);
 }

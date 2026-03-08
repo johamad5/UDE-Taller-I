@@ -5,7 +5,6 @@
 #include "Comando.h"
 #include "Operacion.h"
 #include "CodigoError.h"
-#include "ListaExpresiones.h"
 
 const int MOSTRAR_CANT_TOKENS = 0;
 const int RECUPERAR_CANT_TOKENS = 1;

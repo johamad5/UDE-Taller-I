@@ -7,8 +7,8 @@ void LoopPrincipal()
     strcrear(linea);
     ListaExpresiones expresiones = NULL;
     ListaParsing tokens = NULL;
-    TipoComando tipo;
-    CodigoError error = ERR_NINGUNO;
+    TipoComando tipo=SIMPLE;
+    CodigoError error;
 
     Boolean esX;
     int num;
@@ -23,7 +23,9 @@ void LoopPrincipal()
 
     while (tipo != SALIR)
     {
-
+        DestruirListaParsing(tokens);
+        tokens = NULL;
+        error = ERR_NINGUNO;
         printf("Ingrese el comando: ");
         scan(linea);
 
@@ -117,7 +119,7 @@ void ReconocerComando(String cmd, TipoComando &tipoComando, CodigoError &codigoE
     Compuesta[8] = 'a';
     Compuesta[9] = '\0';
 
-    Calcular = new char[8];
+    Calcular = new char[9];
     Calcular[0] = 'c';
     Calcular[1] = 'a';
     Calcular[2] = 'l';
@@ -128,7 +130,7 @@ void ReconocerComando(String cmd, TipoComando &tipoComando, CodigoError &codigoE
     Calcular[7] = 'r';
     Calcular[8] = '\0';
 
-    Mostrar = new char[7];
+    Mostrar = new char[8];
     Mostrar[0] = 'm';
     Mostrar[1] = 'o';
     Mostrar[2] = 's';
@@ -138,7 +140,7 @@ void ReconocerComando(String cmd, TipoComando &tipoComando, CodigoError &codigoE
     Mostrar[6] = 'r';
     Mostrar[7] = '\0';
 
-    Guardar = new char[7];
+    Guardar = new char[8];
     Guardar[0] = 'g';
     Guardar[1] = 'u';
     Guardar[2] = 'a';
@@ -148,7 +150,7 @@ void ReconocerComando(String cmd, TipoComando &tipoComando, CodigoError &codigoE
     Guardar[6] = 'r';
     Guardar[7] = '\0';
 
-    Recuperar = new char[9];
+    Recuperar = new char[10];
     Recuperar[0] = 'r';
     Recuperar[1] = 'e';
     Recuperar[2] = 'c';
@@ -160,7 +162,7 @@ void ReconocerComando(String cmd, TipoComando &tipoComando, CodigoError &codigoE
     Recuperar[8] = 'r';
     Recuperar[9] = '\0';
 
-    Iguales = new char[7];
+    Iguales = new char[8];
     Iguales[0] = 'i';
     Iguales[1] = 'g';
     Iguales[2] = 'u';

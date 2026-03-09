@@ -132,6 +132,7 @@ void LevantarInsertarExpresion(ListaExpresiones &lp, FILE *arch)
     Expresion exp;
     LevantarExpresion(exp, arch);
     InsertarExpresionAlFinalL(lp, exp);
+    MostrarExpresion(exp);
 }
 
 void CompararExpresionesPorIndice(ListaExpresiones lp, int idx1, int idx2)

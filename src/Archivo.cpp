@@ -56,6 +56,8 @@ void GuardarExpresionEnArchivo(ListaExpresiones lp, String nombreArchivo, int id
         BajarExpresionEnLista(lp, idx, arch);
         fclose(arch);
     }
+    printf("La expresion se guardo con exito en ");
+    print(nombreCompleto);
 
     strdestruir(extension);
     strdestruir(nombreCompleto);
@@ -83,6 +85,7 @@ void RecuperarInsertarExpresionDesdeArchivo(String nombreArchivo, ListaExpresion
 
     LevantarInsertarExpresion(lp, arch);
     fclose(arch);
+    
 
     remove(nombreCompleto);
 

@@ -29,12 +29,12 @@ void print(String s);
 // Determina si los strings s1 y s2 son iguales
 Boolean streq(String s1, String s2);
 
-// Baja un string de memoria a un file
-// PRECONDICION: El archivo viene abierto para escritura
+// Levanta un string desde un file a memoria                          
+// PRECONDICIÓN: f debe ser un archivo abierto para lectura.          
 void LevantarString(String &s, FILE *f);
 
-// Levanta un string desde un file a memoria
-// PRECONDICION: El archivo viene abierto para lectura
+// Baja un string de memoria a un file                                
+// PRECONDICIÓN: f debe ser un archivo abierto para escritura.        
 void BajarString(String s, FILE *f);
 
 // Crea un String a partir de un rango de otro.

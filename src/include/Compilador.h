@@ -27,18 +27,20 @@ const int POSICION_TOKEN_INDICE_GUARDAR = 1;
 
 //  LOOP PRINCIPAL
 // Ejecuta el ciclo principal del programa. Lee la entrada del usuario, tokeniza, valida y ejecuta comandos.
-// PRECONDICIÓN: La lista de expresiones debe estar correctamente inicializada.
 void LoopPrincipal();
 
 //  RECONOCIMIENTO Y VALIDACIÓN GENERAL
 // Reconoce el comando ingresado y valida sus parámetros. Deja cargados todos los valores necesarios para ejecutar el comando.
+// PRECONDICIÓN: tokens no debe ser NULL y debe contener al menos un elemento (el comando).
 void ReconocerYValidarComando(ListaParsing tokens, ListaExpresiones expresiones, TipoComando &tipoComando, Boolean &esX, int &num, int &idx1, Operacion &operador, int &idx2, int &valorX, String &nombreArchivo, CodigoError &codigoError);
 
 // Este procedimiento identifica el tipo de comando según el primer token.
+//PRECONDICION: cmd no NULL y no vacío.
 void ReconocerComando(String cmd, TipoComando &tipoComando, CodigoError &codigoError);
 
 //  VALIDACIONES ESPECIFICAS POR COMANDO
 // Valida que todos los parámetros sean válidos para posteriormente ejecutar el comando de creación simple.
+//PRECONDICION: tokens no puede ser NULL.
 void ValidarComandoSimple(
     ListaParsing tokens,
     Boolean &esX,
@@ -46,23 +48,29 @@ void ValidarComandoSimple(
     CodigoError &err);
 
 // Valida que todos los parámetros sean válidos para posteriormente ejecutar el comando de creación compuesta.
+//PRECONDICION: tokens no puede ser NULL. expresiones no puede ser NULL. 
 void ValidarComandoCompuesta(ListaParsing tokens, ListaExpresiones expresiones, int &indiceUno, int &indiceDos, Operacion &operacion, CodigoError &codigoError);
 
 // Valida que todos los parámetros sean válidos para posteriormente ejecutar el comando mostrar.
+//PRECONDICION: expresiones no puede ser NULL.
 CodigoError ValidarComandoMostrar(
     ListaParsing tokens,
     ListaExpresiones expresiones);
 
 // Valida que todos los parámetros sean válidos para posteriormente ejecutar el comando calcular.
+// PRECONDICIÓN: tokens no debe ser NULL. expresiones no debe ser NULL.
 void ValidarComandoCalcular(ListaParsing tokens, ListaExpresiones expresiones, int &valor, int &indice, CodigoError &codigoError);
 
 // Valida que todos los parámetros sean válidos para posteriormente ejecutar el comando comparar iguales.
+// PRECONDICIÓN: tokens no debe ser NULL. expresiones no debe ser NULL.
 void ValidarComandoIguales(ListaParsing tokens, ListaExpresiones expresiones, int &indiceUno, int &indiceDos, CodigoError &codigoError);
 
 // Valida que todos los parámetros sean válidos para posteriormente ejecutar el comando guardar.
+// PRECONDICIÓN: tokens no debe ser NULL. expresiones no debe ser NULL.
 void ValidarComandoGuardar(ListaParsing tokens, ListaExpresiones expresiones, int &indice, String &nombreArchivo, CodigoError &error);
 
 // Valida que todos los parámetros sean válidos para posteriormente ejecutar el comando recuperar.
+// PRECONDICIÓN: tokens no debe ser NULL.
 void ValidarComandoRecuperar(
     ListaParsing tokens,
     String &nombreArchivo,
@@ -84,40 +92,5 @@ void EjecutarComando(
     String nombreArchivo,
     ListaExpresiones &lp,
     CodigoError &err);
-
-// Crea una expresión simple y la guarda en la lista.
-// PRECONDICIÓN: Los parámetros deben haber sido validados previamente.
-void CrearYGuardarExpresionSimple(
-    Boolean esX,
-    int num,
-    ListaExpresiones &expresiones,
-    CodigoError &err);
-
-// Crea una expresión compuesta utilizando índices existentes.
-// PRECONDICIÓN: Los parámetros deben haber sido validados previamente.
-void CrearYGuardarExpresionCompuesta(
-    int idx1,
-    Operacion op,
-    int idx2,
-    ListaExpresiones &expresiones,
-    CodigoError &err);
-
-// Calcula el resultado de una expresión guardada en memoria.
-// PRECONDICIÓN: Los parámetros deben haber sido validados previamente.
-void CalcularResultado(
-    int indice,
-    int valorX,
-    ListaExpresiones expresiones,
-    int &resultado,
-    CodigoError &error);
-
-// Compara si dos expresiones guardadas en memoria son iguales.
-// PRECONDICIÓN: Los parámetros deben haber sido validados previamente.
-void CompararExpresionesIguales(
-    int indice1,
-    int indice2,
-    ListaExpresiones expresiones,
-    Boolean &sonIguales,
-    CodigoError &error);
 
 #endif

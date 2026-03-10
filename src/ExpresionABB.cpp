@@ -78,7 +78,6 @@ Boolean ArbolesIdenticos(ExpresionABB a, ExpresionABB b)
 
 void CalcularABB(ExpresionABB nodo, int valorX, Boolean &errorDivision, int &resultado)
 {
-    resultado = 0;
 
     if (nodo != NULL && errorDivision == FALSE)
     {

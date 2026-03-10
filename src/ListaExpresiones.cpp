@@ -119,6 +119,8 @@ void CrearInsertarExpresionCompuesta(ListaExpresiones &lp, Operacion op, int idx
 
 void CalcularExpresionPorIndice(ListaExpresiones lp, int idx1, int num, Boolean &errDiv, int &resultado)
 {
+    resultado = 0;
+    errDiv = FALSE;
     CalcularExpresion(BuscarExpresionPorIndice(lp, idx1), num, errDiv, resultado);
 }
 

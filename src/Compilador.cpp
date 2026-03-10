@@ -30,8 +30,12 @@ void LoopPrincipal()
         scan(linea);
 
         TokenizarEntrada(tokens, linea);
+        if (tokens == NULL)
+        {
+            MostrarError(ERR_COMANDO_VACIO); 
+        }else{
 
-        ReconocerYValidarComando(tokens, expresiones,
+            ReconocerYValidarComando(tokens, expresiones,
                                  tipo, esX, num, idx1, operador, idx2, valorX, nombreArchivo, error);
 
         if (error != ERR_NINGUNO)
@@ -47,6 +51,11 @@ void LoopPrincipal()
             if (error != ERR_NINGUNO)
                 MostrarError(error);
         }
+
+
+        }
+
+        
     }
 
     DestruirListaParsing(tokens);
@@ -481,7 +490,7 @@ void EjecutarComando(TipoComando tipo, Boolean esX, int num, int idx1, Operacion
                      ListaExpresiones &lp, CodigoError &err)
 {
     Expresion exp;
-    Boolean errDiv = FALSE;
+    Boolean errDiv;
     int resultado;
 
     switch (tipo)

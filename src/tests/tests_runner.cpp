@@ -685,7 +685,6 @@ void test_mostrar_error()
     MostrarError(ERR_CANT_PARAMETROS);
     MostrarError(ERR_PARAMETRO_INVALIDO);
     MostrarError(ERR_INDICE_INVALIDO);
-    MostrarError(ERR_INDICE_INEXISTENTE);
     MostrarError(ERR_OPERADOR_INVALIDO);
     MostrarError(ERR_DIVISION_POR_CERO);
     MostrarError(ERR_NOMBRE_ARCHIVO_INVALIDO);
@@ -1147,14 +1146,20 @@ void test_calcular_por_indice()
 {
     ListaExpresiones lp = NULL;
 
-    CrearInsertarExpresionSimple(lp, TRUE, 0);
+    CrearInsertarExpresionSimple(lp, TRUE, 0); 
 
-    Boolean err = FALSE;
-    int res;
+    
+    Boolean errSucio = TRUE;
+    int resSucio = 99999;
 
-    CalcularExpresionPorIndice(lp, 1, 3, err, res);
+    CalcularExpresionPorIndice(lp, 1, 7, errSucio, resSucio);
 
-    printf("OK test_calcular_por_indice\n");
+    if (errSucio == FALSE && resSucio == 7)
+        printf("OK     test_calcular_por_indice\n");
+    else
+        printf("ERROR  test_calcular_por_indice: errDiv=%d resultado=%d\n", errSucio, resSucio);
+
+    DestruirListaExpresiones(lp);
 }
 
 void test_insertar_en_lista_vacia()
@@ -3234,6 +3239,24 @@ void test_loop_division_por_cero()
     remove("entrada_div0.txt");
 }
 
+void test_loop_principal_entrada_vacia()
+{
+    FILE *f = fopen("entrada_vacia.txt", "w");
+
+    fprintf(f, "\n");         
+    fprintf(f, "\n");         
+    fprintf(f, "salir\n");   
+
+    fclose(f);
+
+    freopen("entrada_vacia.txt", "r", stdin);
+
+    LoopPrincipal(); 
+
+    printf("OK test_loop_principal_entrada_vacia\n");
+    remove("entrada_vacia.txt");
+}
+
 void test_guardar_recuperar_verificar_indice()
 {
     ListaExpresiones lista = NULL;
@@ -3463,6 +3486,7 @@ int main()
     test_loop_principal();
     test_loop_principal_error();
     test_loop_division_por_cero();
+    test_loop_principal_entrada_vacia();
     test_guardar_recuperar_verificar_indice();
     printf("---------------------------------------------------------\n\n");
 

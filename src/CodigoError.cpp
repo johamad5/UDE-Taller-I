@@ -26,11 +26,7 @@ void MostrarError(CodigoError e)
         break;
 
     case ERR_INDICE_INVALIDO:
-        printf("ERROR: El indice debe ser un numero entero positivo.\n");
-        break;
-
-    case ERR_INDICE_INEXISTENTE:
-        printf("ERROR: El indice no existe en memoria.\n");
+        printf("ERROR: El indice debe ser un numero entero positivo y existir en la lista de expresiones en memoria.\n");
         break;
 
     case ERR_OPERADOR_INVALIDO:

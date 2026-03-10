@@ -1,0 +1,5 @@
+simple 10
+simple 0
+compuesta 1 / 2
+calcular 3 5
+salir

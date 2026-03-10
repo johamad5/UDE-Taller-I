@@ -14,17 +14,18 @@ typedef NodoP *ListaParsing;
 void ReservarNodoP(ListaParsing &n);
 
 // Inserta una palabra al final de la lista de tokens.
-// PRECONDICIÓN: palabra debe ser un String válido.
+// PRECONDICIÓN: palabra debe ser un String válido (no NULL, terminado en '\0').
 void InsertarAlFinalParsing(ListaParsing &lp, String palabra);
 
 // Destruye la lista de tokens y libera memoria.
 void DestruirListaParsing(ListaParsing &lp);
 
 // Tokeniza una línea y genera la lista de tokens.
+// PRECONDICIÓN: linea debe ser un String válido no NULL, terminado en '\0'.
 void TokenizarEntrada(ListaParsing &lp, String linea);
 
 // Devuelve el token en la posición indicada.
-// PRECONDICIÓN: pos debe ser un valor válido: estar dentro del rango.
+// PRECONDICIÓN: lp no debe ser NULL. pos debe ser un valor válido: estar dentro del rango.
 void TokenEnPosicion(ListaParsing lp, int pos, String &token);
 
 // Devuelve la cantidad total de tokens almacenados en la lista.
